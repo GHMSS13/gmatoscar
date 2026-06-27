@@ -193,15 +193,22 @@ export default function AdminPage() {
             </div>
           </div>
 
+          {!session?.user && (
+            <div className="rounded-xl border border-[#333] bg-[#0f0f0f] p-4 text-sm text-white/80">
+              Faça login com Google para acessar o formulário de criação de posts.
+            </div>
+          )}
+
           {session?.user && !isAdmin && (
             <div className="rounded-xl border border-[#333] bg-[#0f0f0f] p-4 text-sm text-yellow-300">
               Você está logado, mas seu e-mail ainda não está configurado como admin no banco. Insira seu email na tabela <code>admins</code> do Supabase para habilitar a criação de posts.
             </div>
           )}
 
-          <div className="rounded-2xl border border-[#222] bg-[#0b0b0b] p-6">
-            <form onSubmit={handleSubmit} className="grid gap-6">
-              <div className="grid gap-6 lg:grid-cols-2">
+          {session?.user && isAdmin ? (
+            <div className="rounded-2xl border border-[#222] bg-[#0b0b0b] p-6">
+              <form onSubmit={handleSubmit} className="grid gap-6">
+                <div className="grid gap-6 lg:grid-cols-2">
                 <label className="block">
                   <span className="text-white/70 text-sm font-exo">Título</span>
                   <input
