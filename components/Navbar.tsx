@@ -30,69 +30,68 @@ export default function Navbar() {
   }, [pathname]);
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled
-          ? 'bg-[#0a0a0a]/95 backdrop-blur-md shadow-[0_2px_20px_rgba(220,38,38,0.15)] border-b border-[#dc2626]/20'
-          : 'bg-gradient-to-b from-black/80 to-transparent'
-      }`}
-    >
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+      scrolled
+        ? 'bg-[#050505]/95 backdrop-blur-sm border-b border-white/10 shadow-[0_20px_80px_rgba(0,0,0,0.25)]'
+        : 'bg-transparent'
+    }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 md:h-20">
+        <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center group flex-shrink-0">
-            <div className="relative w-40 h-10 md:w-48 md:h-12">
+          <Link href="/" className="flex items-center gap-3">
+            <div className="relative w-36 h-12 md:w-44 md:h-14">
               <Image
                 src="/images/gmatoscar_canal_youtube_carros.png"
                 alt="GMATOSCAR Supercarros"
                 fill
                 className="object-contain object-left transition-all duration-300 group-hover:brightness-110"
                 priority
-                sizes="(max-width: 768px) 160px, 192px"
+                sizes="(max-width: 768px) 140px, 176px"
               />
             </div>
+            <span className="hidden md:inline-block text-xs uppercase tracking-[0.45em] font-bold text-white/70 font-rajdhani">
+              Supercarros
+            </span>
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden md:flex items-center gap-8 text-sm font-semibold uppercase tracking-[0.28em] font-rajdhani">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
               return (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`relative px-4 py-2 text-sm font-semibold uppercase tracking-widest font-rajdhani transition-all duration-300 group ${
-                    isActive
-                      ? 'text-[#dc2626]'
-                      : 'text-white/80 hover:text-white'
+                  className={`relative transition-all duration-300 ${
+                    isActive ? 'text-[#dc2626]' : 'text-white/70 hover:text-white'
                   }`}
                 >
                   {link.label}
                   <span
-                    className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-[#dc2626] transition-all duration-300 ${
-                      isActive ? 'w-full' : 'w-0 group-hover:w-3/4'
+                    className={`absolute left-0 right-0 bottom-[-6px] mx-auto h-0.5 rounded-full bg-[#dc2626] transition-all duration-300 ${
+                      isActive ? 'w-full' : 'w-0 group-hover:w-full'
                     }`}
                   />
                 </Link>
               );
             })}
-            <Link
-              href="/pesquisa"
-              className="ml-3 p-2 rounded-full border border-[#dc2626]/40 text-white/70 hover:text-white hover:border-[#dc2626] hover:bg-[#dc2626]/10 transition-all duration-300"
-              aria-label="Pesquisar"
-            >
-              <Search size={16} />
-            </Link>
           </nav>
 
-          {/* Mobile toggle */}
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-md text-white/80 hover:text-white hover:bg-white/10 transition-colors"
-            aria-label={isOpen ? 'Fechar menu' : 'Abrir menu'}
-          >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/pesquisa"
+              className="hidden md:inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs uppercase tracking-[0.3em] font-semibold text-white/80 transition-all duration-300 hover:border-[#dc2626] hover:text-white hover:bg-[#dc2626]/10"
+            >
+              Buscar
+            </Link>
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="md:hidden p-2 rounded-full bg-white/5 text-white/80 hover:bg-white/10 transition-colors"
+              aria-label={isOpen ? 'Fechar menu' : 'Abrir menu'}
+            >
+              {isOpen ? <X size={22} /> : <Menu size={22} />}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -102,26 +101,29 @@ export default function Navbar() {
           isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
-        <nav className="bg-[#0d0d0d]/98 backdrop-blur-md border-t border-[#dc2626]/20 px-4 py-4 flex flex-col gap-1">
+        <nav className="bg-[#050505]/98 border-t border-white/10 px-4 py-4 flex flex-col gap-2">
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`flex items-center gap-3 px-4 py-3 rounded-lg font-rajdhani font-semibold uppercase tracking-widest text-sm transition-all duration-200 ${
+                className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold uppercase tracking-[0.28em] transition-all duration-200 ${
                   isActive
-                    ? 'text-[#dc2626] bg-[#dc2626]/10 border border-[#dc2626]/30'
+                    ? 'bg-[#dc2626]/10 text-[#dc2626]'
                     : 'text-white/80 hover:text-white hover:bg-white/5'
                 }`}
               >
-                {isActive && (
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#dc2626] flex-shrink-0" />
-                )}
                 {link.label}
               </Link>
             );
           })}
+          <Link
+            href="/pesquisa"
+            className="mt-2 inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 px-4 py-3 text-sm uppercase tracking-[0.3em] font-semibold text-white/80 hover:border-[#dc2626] hover:text-white hover:bg-[#dc2626]/10 transition-all duration-200"
+          >
+            Buscar
+          </Link>
         </nav>
       </div>
     </header>
