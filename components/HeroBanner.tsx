@@ -39,8 +39,8 @@ export default function HeroBanner() {
 
         {/* Main heading */}
         <h1 className="text-5xl sm:text-6xl md:text-8xl font-rajdhani font-bold uppercase tracking-tight mb-4 animate-fade-in-up leading-none">
-          <span className="text-white">GMATOS</span>
-          <span className="text-[#dc2626]">CAR</span>
+          <span className="text-white">GMATOS TESTE</span>
+          <span className="text-[#c2c2c2]">CAR</span>
         </h1>
 
         <p className="text-lg md:text-2xl font-rajdhani font-semibold uppercase tracking-[0.3em] text-white/50 mb-4 animate-fade-in-up">
