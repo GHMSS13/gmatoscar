@@ -205,7 +205,7 @@ export default function AdminPage() {
             </div>
           )}
 
-          {session?.user && isAdmin ? (
+          {session?.user && isAdmin && (
             <div className="rounded-2xl border border-[#222] bg-[#0b0b0b] p-6">
               <form onSubmit={handleSubmit} className="grid gap-6">
                 <div className="grid gap-6 lg:grid-cols-2">
@@ -346,6 +346,7 @@ export default function AdminPage() {
               </button>
             </form>
           </div>
+          )}
 
           <div className="rounded-2xl border border-[#222] bg-[#0f0f0f] p-5 text-sm text-white/70">
             <h2 className="font-semibold text-white mb-3">Configuração manual do admin</h2>
