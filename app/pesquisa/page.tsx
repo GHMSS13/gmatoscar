@@ -7,19 +7,24 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import NewsCard from '@/components/NewsCard';
 import SearchBar from '@/components/SearchBar';
-import { news, categories, type NewsItem } from '@/lib/data';
+import { categories } from '@/lib/data';
+import { type Post, getPosts } from '@/lib/posts';
 
-function PesquisaContent() {
+interface PesquisaContentProps {
+  posts: Post[];
+}
+
+function PesquisaContent({ posts }: PesquisaContentProps) {
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get('q') ?? '';
 
   const [query, setQuery] = useState(initialQuery);
   const [activeCategory, setActiveCategory] = useState('Todos');
-  const [results, setResults] = useState<NewsItem[]>(news);
+  const [results, setResults] = useState<Post[]>(posts);
 
   useEffect(() => {
     const q = query.toLowerCase().trim();
-    let filtered = news;
+    let filtered = posts;
 
     if (q) {
       filtered = filtered.filter(
@@ -35,7 +40,7 @@ function PesquisaContent() {
     }
 
     setResults(filtered);
-  }, [query, activeCategory]);
+  }, [query, activeCategory, posts]);
 
   return (
     <main className="min-h-screen bg-[#0a0a0a]">
@@ -135,10 +140,12 @@ function PesquisaContent() {
   );
 }
 
-export default function PesquisaPage() {
+export default async function PesquisaPage() {
+  const posts = await getPosts();
+
   return (
     <Suspense fallback={<div className="min-h-screen bg-[#0a0a0a]" />}>
-      <PesquisaContent />
+      <PesquisaContent posts={posts} />
     </Suspense>
   );
 }

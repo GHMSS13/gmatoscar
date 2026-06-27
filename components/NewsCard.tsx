@@ -1,10 +1,10 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Clock, ArrowRight, Flame } from 'lucide-react';
-import type { NewsItem } from '@/lib/data';
+import type { Post } from '@/lib/posts';
 
 interface NewsCardProps {
-  item: NewsItem;
+  item: Post;
   variant?: 'default' | 'featured' | 'horizontal';
 }
 
@@ -15,7 +15,7 @@ export default function NewsCard({ item, variant = 'default' }: NewsCardProps) {
         <Link href={`/noticias/${item.slug}`} className="block h-full">
           <div className="relative h-full min-h-[480px] md:min-h-[560px] overflow-hidden">
             <Image
-              src={item.image}
+              src={item.image_url}
               alt={item.title}
               fill
               className="news-img object-cover"
@@ -43,7 +43,7 @@ export default function NewsCard({ item, variant = 'default' }: NewsCardProps) {
                 <div className="flex items-center gap-3 text-xs text-white/40 font-exo">
                   <span>{item.date}</span>
                   <span className="flex items-center gap-1">
-                    <Clock size={12} /> {item.readTime}
+                    <Clock size={12} /> {item.read_time}
                   </span>
                 </div>
                 <span className="flex items-center gap-1 text-[#dc2626] text-sm font-rajdhani font-bold uppercase tracking-wider group-hover:gap-2 transition-all duration-300">
@@ -63,7 +63,7 @@ export default function NewsCard({ item, variant = 'default' }: NewsCardProps) {
         <Link href={`/noticias/${item.slug}`} className="flex gap-4 w-full p-4">
           <div className="relative w-24 h-24 sm:w-32 sm:h-32 flex-shrink-0 rounded-sm overflow-hidden">
             <Image
-              src={item.image}
+              src={item.image_url}
               alt={item.title}
               fill
               className="news-img object-cover"
@@ -79,7 +79,7 @@ export default function NewsCard({ item, variant = 'default' }: NewsCardProps) {
             </div>
             <div className="flex items-center gap-3 text-xs text-white/30 font-exo mt-2">
               <span>{item.date}</span>
-              <span className="flex items-center gap-1"><Clock size={11} /> {item.readTime}</span>
+              <span className="flex items-center gap-1"><Clock size={11} /> {item.read_time}</span>
             </div>
           </div>
         </Link>
@@ -92,7 +92,7 @@ export default function NewsCard({ item, variant = 'default' }: NewsCardProps) {
       <Link href={`/noticias/${item.slug}`} className="flex flex-col h-full">
         <div className="relative aspect-[16/9] overflow-hidden">
           <Image
-            src={item.image}
+            src={item.image_url}
             alt={item.title}
             fill
             className="news-img object-cover"
@@ -118,7 +118,7 @@ export default function NewsCard({ item, variant = 'default' }: NewsCardProps) {
           <div className="flex items-center justify-between border-t border-[#1e1e1e] pt-3 mt-auto">
             <div className="flex items-center gap-3 text-xs text-white/30 font-exo">
               <span>{item.date}</span>
-              <span className="flex items-center gap-1"><Clock size={11} /> {item.readTime}</span>
+              <span className="flex items-center gap-1"><Clock size={11} /> {item.read_time}</span>
             </div>
             <span className="text-[#dc2626] flex items-center gap-1 text-xs font-rajdhani font-bold uppercase tracking-wider group-hover:gap-2 transition-all duration-300">
               Ler <ArrowRight size={12} />

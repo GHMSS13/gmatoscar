@@ -5,19 +5,15 @@ import { ArrowLeft, Clock, Calendar, Tag } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import NewsCard from '@/components/NewsCard';
-import { news } from '@/lib/data';
+import { getPostBySlug, getPosts, type Post } from '@/lib/posts';
 import { notFound } from 'next/navigation';
 
 interface Props {
   params: { slug: string };
 }
 
-export async function generateStaticParams() {
-  return news.map((n) => ({ slug: n.slug }));
-}
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const item = news.find((n) => n.slug === params.slug);
+  const item = await getPostBySlug(params.slug);
   if (!item) return { title: 'Notícia não encontrada' };
   return {
     title: item.title,
@@ -25,17 +21,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: item.title,
       description: item.excerpt,
-      images: [{ url: item.image, alt: item.title }],
+      images: [{ url: item.image_url, alt: item.title }],
     },
   };
 }
 
-export default function NoticiaPage({ params }: Props) {
-  const item = news.find((n) => n.slug === params.slug);
+function renderContent(content: string) {
+  return content.split(/\n{2,}/).map((paragraph, index) => (
+    <p key={index} className="text-white/50 leading-[1.8] font-exo mb-6 whitespace-pre-line">
+      {paragraph}
+    </p>
+  ));
+}
+
+export default async function NoticiaPage({ params }: Props) {
+  const item = await getPostBySlug(params.slug);
   if (!item) notFound();
 
-  const related = news.filter((n) => n.id !== item.id && n.category === item.category).slice(0, 3);
-  const fallbackRelated = news.filter((n) => n.id !== item.id).slice(0, 3);
+  const allPosts = await getPosts();
+  const related = allPosts.filter((n) => n.id !== item.id && n.category === item.category).slice(0, 3);
+  const fallbackRelated = allPosts.filter((n) => n.id !== item.id).slice(0, 3);
   const showRelated = related.length >= 2 ? related : fallbackRelated;
 
   return (
@@ -45,7 +50,7 @@ export default function NoticiaPage({ params }: Props) {
       {/* Hero image */}
       <section className="relative h-[50vh] min-h-[350px] md:h-[60vh] flex items-end overflow-hidden">
         <Image
-          src={item.image}
+          src={item.image_url}
           alt={item.title}
           fill
           className="object-cover opacity-60"
@@ -77,7 +82,7 @@ export default function NoticiaPage({ params }: Props) {
           </div>
           <div className="flex items-center gap-2 text-white/30 text-sm font-exo">
             <Clock size={14} className="text-[#dc2626]" />
-            {item.readTime} de leitura
+            {item.read_time} de leitura
           </div>
           <div className="flex items-center gap-2 text-white/30 text-sm font-exo">
             <Tag size={14} className="text-[#dc2626]" />
@@ -88,15 +93,7 @@ export default function NoticiaPage({ params }: Props) {
         {/* Content */}
         <div className="prose prose-invert max-w-none">
           <p className="text-white/70 text-lg leading-[1.8] font-exo mb-6">{item.excerpt}</p>
-          <p className="text-white/50 leading-[1.8] font-exo mb-6">
-            O mundo dos supercarros nunca para de surpreender. Com avanços tecnológicos constantes e engenharia cada vez mais sofisticada, as montadoras continuam a redefinir os limites do que é possível em um automóvel de alto desempenho.
-          </p>
-          <p className="text-white/50 leading-[1.8] font-exo mb-6">
-            Este modelo representa o estado da arte da indústria automotiva, combinando performance extrema com design arrojado e tecnologia de ponta. Uma verdadeira obra de arte sobre rodas que vai deixar qualquer entusiasta de queixo caído.
-          </p>
-          <p className="text-white/50 leading-[1.8] font-exo">
-            Fique ligado no GMATOSCAR para mais notícias, reviews e rankings sobre os supercarros mais incríveis do mundo. Inscreva-se no canal do YouTube e siga nossas redes sociais para não perder nada!
-          </p>
+          {renderContent(item.content)}
         </div>
       </article>
 

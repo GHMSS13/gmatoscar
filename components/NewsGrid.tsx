@@ -1,12 +1,16 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import NewsCard from './NewsCard';
-import { news } from '@/lib/data';
+import type { Post } from '@/lib/posts';
 
-export default function NewsGrid() {
-  const featured = news.filter((n) => n.featured).slice(0, 2);
-  const rest = news.filter((n) => !n.featured).slice(0, 4);
-  const sideItems = news.filter((n) => !n.featured).slice(4, 7);
+interface NewsGridProps {
+  posts: Post[];
+}
+
+export default function NewsGrid({ posts }: NewsGridProps) {
+  const featured = posts.filter((n) => n.featured).slice(0, 2);
+  const rest = posts.filter((n) => !n.featured).slice(0, 4);
+  const sideItems = posts.filter((n) => !n.featured).slice(4, 7);
 
   return (
     <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
