@@ -46,15 +46,6 @@ export default function AdminPage() {
 
   useEffect(() => {
     const init = async () => {
-      if (
-        window.location.hash.includes('access_token') ||
-        window.location.hash.includes('refresh_token') ||
-        window.location.search.includes('code=')
-      ) {
-        await supabase.auth.getSessionFromUrl({ storeSession: true });
-        window.history.replaceState({}, document.title, window.location.pathname);
-      }
-
       const {
         data: { session },
       } = await supabase.auth.getSession();
