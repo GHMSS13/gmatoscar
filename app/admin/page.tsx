@@ -71,14 +71,7 @@ export default function AdminPage() {
     };
   }, []);
 
-  const getAdminRedirect = () => {
-    const configuredSiteUrl = process.env.NEXT_PUBLIC_SITE_URL;
-    if (configuredSiteUrl) {
-      return `${configuredSiteUrl.replace(/\/$/, '')}/admin`;
-    }
-
-    return `${window.location.origin}/admin`;
-  };
+  const getAdminRedirect = () => `${window.location.origin}/admin`;
 
   const verifyAdmin = async (email: string) => {
     setLoading(true);
