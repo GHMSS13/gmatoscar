@@ -15,7 +15,7 @@ export default function RankingPreview() {
   return (
     <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       {/* Header */}
-      <div className="flex items-end justify-between mb-12">
+      <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 mb-12">
         <div>
           <p className="text-[#dc2626] text-xs font-bold uppercase tracking-[0.3em] font-rajdhani mb-2">
             Os Mais Rapidos
@@ -26,7 +26,7 @@ export default function RankingPreview() {
         </div>
         <Link
           href="/ranking"
-          className="hidden sm:flex items-center gap-2 text-sm text-white/40 hover:text-[#dc2626] font-rajdhani uppercase tracking-wider transition-colors duration-300 group"
+          className="inline-flex items-center gap-2 text-sm text-white/40 hover:text-[#dc2626] font-rajdhani uppercase tracking-wider transition-colors duration-300 group"
         >
           Ranking Completo <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
         </Link>
@@ -37,7 +37,7 @@ export default function RankingPreview() {
         {top5.map((car, idx) => (
           <div
             key={car.position}
-            className="group relative flex items-center gap-4 md:gap-6 bg-[#111] border border-[#1e1e1e] hover:border-[#dc2626]/30 rounded-sm p-4 md:p-5 transition-all duration-300 hover:shadow-[0_0_20px_rgba(220,38,38,0.1)] overflow-hidden"
+            className="group relative flex flex-col sm:flex-row items-start sm:items-center gap-4 md:gap-6 bg-[#111] border border-[#1e1e1e] hover:border-[#dc2626]/30 rounded-sm p-4 md:p-5 transition-all duration-300 hover:shadow-[0_0_20px_rgba(220,38,38,0.1)] overflow-hidden"
             style={{ animationDelay: `${idx * 100}ms` }}
           >
             {/* Position */}
@@ -73,15 +73,15 @@ export default function RankingPreview() {
             {/* Info */}
             <div className="flex-1 min-w-0">
               <div className="flex items-start justify-between gap-2 flex-wrap">
-                <div>
+                <div className="min-w-0">
                   <p className="text-white/40 text-xs font-exo uppercase tracking-widest mb-0.5">
                     {car.brand}
                   </p>
-                  <h3 className="font-rajdhani font-bold text-white text-lg md:text-xl leading-none group-hover:text-[#dc2626] transition-colors duration-300">
+                  <h3 className="font-rajdhani font-bold text-white text-lg md:text-xl leading-none group-hover:text-[#dc2626] transition-colors duration-300 line-clamp-2">
                     {car.name}
                   </h3>
                 </div>
-                <span className="font-rajdhani font-bold text-[#dc2626] text-base md:text-lg flex-shrink-0">
+                <span className="font-rajdhani font-bold text-[#dc2626] text-base md:text-lg flex-shrink-0 self-start sm:self-auto">
                   {car.price}
                 </span>
               </div>

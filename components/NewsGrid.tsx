@@ -15,7 +15,7 @@ export default function NewsGrid({ posts }: NewsGridProps) {
   return (
     <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       {/* Section header */}
-      <div className="flex items-end justify-between mb-10">
+      <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 mb-10">
         <div>
           <p className="text-[#dc2626] text-xs font-bold uppercase tracking-[0.3em] font-rajdhani mb-2">
             Ultimas Noticias
@@ -26,7 +26,7 @@ export default function NewsGrid({ posts }: NewsGridProps) {
         </div>
         <Link
           href="/pesquisa"
-          className="hidden sm:flex items-center gap-2 text-sm text-white/40 hover:text-[#dc2626] font-rajdhani uppercase tracking-wider transition-colors duration-300 group"
+          className="inline-flex items-center gap-2 text-sm text-white/40 hover:text-[#dc2626] font-rajdhani uppercase tracking-wider transition-colors duration-300 group"
         >
           Ver Tudo <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
         </Link>

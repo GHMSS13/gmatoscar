@@ -7,7 +7,7 @@ import SearchBar from './SearchBar';
 
 export default function HeroBanner() {
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
+    <section className="relative min-h-[85vh] md:min-h-screen flex flex-col items-center justify-center overflow-hidden">
       <div className="absolute inset-0 grid-pattern opacity-20" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(220,38,38,0.1)_0%,transparent_70%)]" />
       {/* Content */}
@@ -21,16 +21,16 @@ export default function HeroBanner() {
         </div>
 
         {/* Main heading */}
-        <h1 className="text-5xl sm:text-6xl md:text-8xl font-rajdhani font-bold uppercase tracking-tight mb-4 animate-fade-in-up leading-none">
+        <h1 className="text-4xl sm:text-5xl md:text-7xl font-rajdhani font-bold uppercase tracking-tight mb-4 animate-fade-in-up leading-none">
           <span className="text-white">GMATOS</span>
           <span className="text-[#dc2626]">CAR</span>
         </h1>
 
-        <p className="text-lg md:text-2xl font-rajdhani font-semibold uppercase tracking-[0.3em] text-white/50 mb-4 animate-fade-in-up">
+        <p className="text-base sm:text-lg md:text-2xl font-rajdhani font-semibold uppercase tracking-[0.3em] text-white/50 mb-4 animate-fade-in-up">
           Supercarros
         </p>
 
-        <p className="text-base md:text-lg text-white/60 max-w-2xl mb-10 leading-relaxed font-exo animate-fade-in-up">
+        <p className="text-sm sm:text-base md:text-lg text-white/60 max-w-xl sm:max-w-2xl mx-auto mb-10 leading-relaxed font-exo animate-fade-in-up">
           O maior canal brasileiro sobre supercarros, hypercars e carros de luxo.
           Notícias, rankings e conteúdo exclusivo sobre os carros mais incríveis do mundo.
         </p>
@@ -41,7 +41,7 @@ export default function HeroBanner() {
         </div>
 
         {/* Stats row */}
-        <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16 animate-fade-in-up">
+        <div className="flex flex-wrap items-center justify-center gap-6 md:gap-16 animate-fade-in-up">
           <div className="flex flex-col items-center">
             <Car size={22} className="text-[#dc2626] mb-2" />
             <span className="text-2xl font-bold font-rajdhani text-white">200+</span>
@@ -62,16 +62,16 @@ export default function HeroBanner() {
         </div>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row items-center gap-4 mt-12 animate-fade-in-up">
+        <div className="w-full max-w-2xl flex flex-col sm:flex-row items-center justify-center gap-4 mt-12 animate-fade-in-up">
           <Link
             href="/marcas"
-            className="btn-shine relative inline-flex items-center gap-2 bg-[#dc2626] hover:bg-[#b91c1c] text-white font-rajdhani font-bold uppercase tracking-widest px-8 py-3.5 rounded-sm transition-all duration-300 text-sm shadow-[0_0_20px_rgba(220,38,38,0.4)]"
+            className="btn-shine relative inline-flex w-full sm:w-auto items-center justify-center gap-2 bg-[#dc2626] hover:bg-[#b91c1c] text-white font-rajdhani font-bold uppercase tracking-widest px-6 py-3.5 rounded-sm transition-all duration-300 text-sm shadow-[0_0_20px_rgba(220,38,38,0.4)]"
           >
             Explorar Marcas
           </Link>
           <Link
             href="/ranking"
-            className="inline-flex items-center gap-2 border border-white/20 hover:border-[#dc2626]/60 text-white/80 hover:text-white font-rajdhani font-bold uppercase tracking-widest px-8 py-3.5 rounded-sm transition-all duration-300 text-sm hover:bg-[#dc2626]/10"
+            className="inline-flex w-full sm:w-auto items-center justify-center gap-2 border border-white/20 hover:border-[#dc2626]/60 text-white/80 hover:text-white font-rajdhani font-bold uppercase tracking-widest px-6 py-3.5 rounded-sm transition-all duration-300 text-sm hover:bg-[#dc2626]/10"
           >
             Ver Ranking
           </Link>

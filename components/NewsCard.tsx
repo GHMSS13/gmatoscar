@@ -13,7 +13,7 @@ export default function NewsCard({ item, variant = 'default' }: NewsCardProps) {
     return (
       <article className="news-card relative group h-full rounded-sm overflow-hidden card-glow cursor-pointer bg-[#111]">
         <Link href={`/noticias/${item.slug}`} className="block h-full">
-          <div className="relative h-full min-h-[480px] md:min-h-[560px] overflow-hidden">
+          <div className="relative h-full min-h-[320px] sm:min-h-[420px] md:min-h-[560px] overflow-hidden">
             <Image
               src={item.image_url}
               alt={item.title}
@@ -59,15 +59,15 @@ export default function NewsCard({ item, variant = 'default' }: NewsCardProps) {
 
   if (variant === 'horizontal') {
     return (
-      <article className="news-card group flex gap-4 bg-[#111] border border-[#1e1e1e] rounded-sm overflow-hidden hover:border-[#dc2626]/30 transition-all duration-300 cursor-pointer">
-        <Link href={`/noticias/${item.slug}`} className="flex gap-4 w-full p-4">
-          <div className="relative w-24 h-24 sm:w-32 sm:h-32 flex-shrink-0 rounded-sm overflow-hidden">
+      <article className="news-card group flex flex-col sm:flex-row gap-4 bg-[#111] border border-[#1e1e1e] rounded-sm overflow-hidden hover:border-[#dc2626]/30 transition-all duration-300 cursor-pointer">
+        <Link href={`/noticias/${item.slug}`} className="flex flex-col sm:flex-row gap-4 w-full p-4">
+          <div className="relative w-full h-44 sm:w-32 sm:h-32 flex-shrink-0 rounded-sm overflow-hidden">
             <Image
               src={item.image_url}
               alt={item.title}
               fill
               className="news-img object-cover"
-              sizes="128px"
+              sizes="(max-width: 768px) 100vw, 128px"
             />
           </div>
           <div className="flex-1 min-w-0 flex flex-col justify-between py-1">
