@@ -46,6 +46,15 @@ export default function AdminPage() {
 
   useEffect(() => {
     const init = async () => {
+      if (
+        window.location.hash.includes('access_token') ||
+        window.location.hash.includes('refresh_token') ||
+        window.location.search.includes('code=')
+      ) {
+        await supabase.auth.getSessionFromUrl({ storeSession: true });
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+
       const {
         data: { session },
       } = await supabase.auth.getSession();
@@ -71,6 +80,15 @@ export default function AdminPage() {
     };
   }, []);
 
+  const getAdminRedirect = () => {
+    const configuredSiteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+    if (configuredSiteUrl) {
+      return `${configuredSiteUrl.replace(/\/$/, '')}/admin`;
+    }
+
+    return `${window.location.origin}/admin`;
+  };
+
   const verifyAdmin = async (email: string) => {
     setLoading(true);
     const { data, error } = await supabase
@@ -90,9 +108,10 @@ export default function AdminPage() {
 
   const handleSignIn = async () => {
     setLoading(true);
+    const redirectTo = getAdminRedirect();
     await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: `${window.location.origin}/admin` },
+      options: { redirectTo },
     });
     setLoading(false);
   };
