@@ -28,7 +28,7 @@ export default async function HomePage() {
     <main className="min-h-screen bg-black">
       <Navbar />
 
-      <section className="relative pt-16 overflow-hidden">
+      <section className="relative pt-10 overflow-hidden">
         <div className="absolute inset-0 grid-pattern opacity-10" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(148,163,184,0.08)_0%,transparent_70%)]" />
 

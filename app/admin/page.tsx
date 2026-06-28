@@ -166,15 +166,18 @@ export default function AdminPage() {
               <p className="text-white/50 mt-2 max-w-2xl text-sm font-exo">
                 Faça login com Google e publique artigos diretamente no Supabase. O login não é exigido para a área pública do site.
               </p>
+              <p className="text-white/40 mt-2 max-w-2xl text-sm font-exo">
+                Esta área é exclusiva para contas autorizadas na tabela <code>admins</code> do Supabase.
+              </p>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3 justify-end">
               {session?.user ? (
                 <>
                   <span className="text-white/70 text-sm font-exo">{session.user.email}</span>
                   <button
                     type="button"
                     onClick={handleSignOut}
-                    className="inline-flex items-center gap-2 rounded-full bg-[#dc2626] px-4 py-2 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[#b91c1c]"
+                    className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-[#dc2626] px-4 py-2 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[#b91c1c]"
                   >
                     <LogOut size={16} /> Sair
                   </button>
@@ -184,7 +187,7 @@ export default function AdminPage() {
                   type="button"
                   onClick={handleSignIn}
                   disabled={loading}
-                  className="inline-flex items-center gap-2 rounded-full bg-[#dc2626] px-4 py-2 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[#b91c1c] disabled:cursor-not-allowed disabled:opacity-50"
+                  className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-[#dc2626] px-4 py-2 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[#b91c1c] disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {loading ? <Loader2 size={16} className="animate-spin" /> : <LogIn size={16} />}
                   Entrar com Google
@@ -206,7 +209,7 @@ export default function AdminPage() {
           )}
 
           {session?.user && isAdmin && (
-            <div className="rounded-2xl border border-[#222] bg-[#0b0b0b] p-6">
+            <div className="rounded-2xl border border-[#222] bg-[#0b0b0b] p-4 sm:p-6">
               <form onSubmit={handleSubmit} className="grid gap-6">
                 <div className="grid gap-6 lg:grid-cols-2">
                 <label className="block">
@@ -302,7 +305,7 @@ export default function AdminPage() {
                 />
               </label>
 
-              <div className="grid gap-4 lg:grid-cols-3">
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <label className="inline-flex items-center gap-3 rounded-xl border border-[#222] bg-[#0a0a0a] px-4 py-3">
                   <input
                     type="checkbox"
