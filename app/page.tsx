@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import Navbar from '@/components/Navbar';
-import HeroBanner from '@/components/HeroBanner';
 import NewsGrid from '@/components/NewsGrid';
 import BrandsSection from '@/components/BrandsSection';
 import RankingPreview from '@/components/RankingPreview';
@@ -14,13 +13,30 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const posts = await getPosts();
+  const allPosts = await getPosts();
+  const firstBugattiIndex = allPosts.findIndex((post) =>
+    post.title.toLowerCase().includes('bugatti') ||
+    post.excerpt.toLowerCase().includes('bugatti') ||
+    post.category.toLowerCase().includes('bugatti')
+  );
+  const posts =
+    firstBugattiIndex === -1
+      ? allPosts
+      : [...allPosts.slice(0, firstBugattiIndex), ...allPosts.slice(firstBugattiIndex + 1)];
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a]">
+    <main className="min-h-screen bg-black">
       <Navbar />
-      <HeroBanner />
-      <NewsGrid posts={posts} />
+
+      <section className="relative pt-16 overflow-hidden">
+        <div className="absolute inset-0 grid-pattern opacity-10" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(148,163,184,0.08)_0%,transparent_70%)]" />
+
+        <div className="relative z-10">
+          <NewsGrid posts={posts} />
+        </div>
+      </section>
+
       <BrandsSection />
       <RankingPreview />
       <Footer />

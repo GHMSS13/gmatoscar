@@ -3,6 +3,7 @@ export interface Brand {
   name: string;
   country: string;
   logo: string;
+  topModelImage: string;
   founded: number;
   topModel: string;
   maxSpeed: string;
@@ -25,7 +26,8 @@ export const brands: Brand[] = [
     id: 'ferrari',
     name: 'Ferrari',
     country: 'Italia',
-    logo: 'https://images.pexels.com/photos/1007410/pexels-photo-1007410.jpeg?auto=compress&cs=tinysrgb&w=600',
+    logo: 'https://images.pexels.com/photos/1158963/pexels-photo-1158963.jpeg?auto=compress&cs=tinysrgb&w=600',
+    topModelImage: 'https://images.pexels.com/photos/1627877/pexels-photo-1627877.jpeg?auto=compress&cs=tinysrgb&w=600',
     founded: 1939,
     topModel: 'Ferrari F80',
     maxSpeed: '350+ km/h',
@@ -35,7 +37,8 @@ export const brands: Brand[] = [
     id: 'lamborghini',
     name: 'Lamborghini',
     country: 'Italia',
-    logo: 'https://images.pexels.com/photos/1545743/pexels-photo-1545743.jpeg?auto=compress&cs=tinysrgb&w=600',
+    logo: 'https://images.pexels.com/photos/1321728/pexels-photo-1321728.jpeg?auto=compress&cs=tinysrgb&w=600',
+    topModelImage: 'https://images.pexels.com/photos/1149831/pexels-photo-1149831.jpeg?auto=compress&cs=tinysrgb&w=600',
     founded: 1963,
     topModel: 'Revuelto',
     maxSpeed: '350 km/h',
@@ -46,6 +49,7 @@ export const brands: Brand[] = [
     name: 'Bugatti',
     country: 'Franca',
     logo: 'https://images.pexels.com/photos/3729464/pexels-photo-3729464.jpeg?auto=compress&cs=tinysrgb&w=600',
+    topModelImage: 'https://images.pexels.com/photos/6311656/pexels-photo-6311656.jpeg?auto=compress&cs=tinysrgb&w=600',
     founded: 1909,
     topModel: 'Tourbillon',
     maxSpeed: '445 km/h',
@@ -56,6 +60,7 @@ export const brands: Brand[] = [
     name: 'McLaren',
     country: 'Reino Unido',
     logo: 'https://images.pexels.com/photos/3802510/pexels-photo-3802510.jpeg?auto=compress&cs=tinysrgb&w=600',
+    topModelImage: 'https://images.pexels.com/photos/128794/pexels-photo-128794.jpeg?auto=compress&cs=tinysrgb&w=600',
     founded: 1963,
     topModel: 'McLaren W1',
     maxSpeed: '350 km/h',
@@ -65,7 +70,8 @@ export const brands: Brand[] = [
     id: 'porsche',
     name: 'Porsche',
     country: 'Alemanha',
-    logo: 'https://images.pexels.com/photos/337909/pexels-photo-337909.jpeg?auto=compress&cs=tinysrgb&w=600',
+    logo: 'https://images.pexels.com/photos/210019/pexels-photo-210019.jpeg?auto=compress&cs=tinysrgb&w=600',
+    topModelImage: 'https://images.pexels.com/photos/164634/pexels-photo-164634.jpeg?auto=compress&cs=tinysrgb&w=600',
     founded: 1931,
     topModel: '911 GT3 RS',
     maxSpeed: '296 km/h',
@@ -75,7 +81,8 @@ export const brands: Brand[] = [
     id: 'koenigsegg',
     name: 'Koenigsegg',
     country: 'Suecia',
-    logo: 'https://images.pexels.com/photos/3786091/pexels-photo-3786091.jpeg?auto=compress&cs=tinysrgb&w=600',
+    logo: 'https://images.pexels.com/photos/3207638/pexels-photo-3207638.jpeg?auto=compress&cs=tinysrgb&w=600',
+    topModelImage: 'https://images.pexels.com/photos/1753086/pexels-photo-1753086.jpeg?auto=compress&cs=tinysrgb&w=600',
     founded: 1994,
     topModel: 'Gemera',
     maxSpeed: '400+ km/h',
@@ -85,7 +92,8 @@ export const brands: Brand[] = [
     id: 'pagani',
     name: 'Pagani',
     country: 'Italia',
-    logo: 'https://images.pexels.com/photos/358070/pexels-photo-358070.jpeg?auto=compress&cs=tinysrgb&w=600',
+    logo: 'https://images.pexels.com/photos/2402142/pexels-photo-2402142.jpeg?auto=compress&cs=tinysrgb&w=600',
+    topModelImage: 'https://images.pexels.com/photos/2402142/pexels-photo-2402142.jpeg?auto=compress&cs=tinysrgb&w=600',
     founded: 1992,
     topModel: 'Utopia',
     maxSpeed: '340 km/h',
@@ -95,7 +103,8 @@ export const brands: Brand[] = [
     id: 'rimac',
     name: 'Rimac',
     country: 'Croacia',
-    logo: 'https://images.pexels.com/photos/3786091/pexels-photo-3786091.jpeg?auto=compress&cs=tinysrgb&w=600',
+    logo: 'https://images.pexels.com/photos/1918137/pexels-photo-1918137.jpeg?auto=compress&cs=tinysrgb&w=600',
+    topModelImage: 'https://images.pexels.com/photos/1918137/pexels-photo-1918137.jpeg?auto=compress&cs=tinysrgb&w=600',
     founded: 2009,
     topModel: 'Nevera R',
     maxSpeed: '415 km/h',

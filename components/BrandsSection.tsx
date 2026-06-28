@@ -38,8 +38,8 @@ export default function BrandsSection() {
               {/* Car image */}
               <div className="relative aspect-[4/3] overflow-hidden">
                 <Image
-                  src={brand.logo}
-                  alt={brand.name}
+                  src={brand.topModelImage}
+                  alt={`${brand.topModel} ${brand.name}`}
                   fill
                   className="object-cover transition-transform duration-500 group-hover:scale-110 opacity-60 group-hover:opacity-80"
                   sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"

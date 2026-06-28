@@ -8,25 +8,8 @@ import SearchBar from './SearchBar';
 export default function HeroBanner() {
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
-      {/* Background: full-screen banner image */}
-      <div className="absolute inset-0 z-0">
-        <Image
-          src="/images/gmatoscar_canal_youtube_carros.png"
-          alt="GMATOSCAR Supercarros"
-          fill
-          className="object-cover object-center opacity-40"
-          priority
-          sizes="100vw"
-        />
-        {/* Dark overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/60 via-[#0a0a0a]/50 to-[#0a0a0a]" />
-        {/* Red vignette left */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_left,rgba(220,38,38,0.15)_0%,transparent_60%)]" />
-      </div>
-
-      {/* Grid pattern overlay */}
-      <div className="absolute inset-0 z-0 grid-pattern opacity-30" />
-
+      <div className="absolute inset-0 grid-pattern opacity-20" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(220,38,38,0.1)_0%,transparent_70%)]" />
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center text-center px-4 sm:px-6 max-w-5xl mx-auto pt-24 pb-16">
         {/* Badge */}

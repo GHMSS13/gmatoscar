@@ -44,7 +44,7 @@ export default async function NoticiaPage({ params }: Props) {
   const showRelated = related.length >= 2 ? related : fallbackRelated;
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a]">
+    <main className="min-h-screen bg-black">
       <Navbar />
 
       {/* Hero image */}
@@ -58,6 +58,7 @@ export default async function NoticiaPage({ params }: Props) {
           sizes="100vw"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/40 to-transparent" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(148,163,184,0.08)_0%,transparent_70%)]" />
         <div className="relative z-10 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto w-full pb-10">
           <Link
             href="/"

@@ -104,7 +104,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaOrg) }}
         />
       </head>
-      <body className="bg-[#0a0a0a] text-white antialiased font-exo">
+      <body className="bg-black text-white antialiased font-exo">
         {children}
       </body>
     </html>

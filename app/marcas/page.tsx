@@ -14,13 +14,13 @@ export const metadata: Metadata = {
 
 export default function MarcasPage() {
   return (
-    <main className="min-h-screen bg-[#0a0a0a]">
+    <main className="min-h-screen bg-black">
       <Navbar />
 
       {/* Page Header */}
       <section className="relative pt-36 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
         <div className="absolute inset-0 grid-pattern opacity-20" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(220,38,38,0.1)_0%,transparent_70%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(148,163,184,0.08)_0%,transparent_70%)]" />
         <div className="max-w-7xl mx-auto relative z-10">
           <p className="text-[#dc2626] text-xs font-bold uppercase tracking-[0.3em] font-rajdhani mb-3">
             Fabricantes
@@ -48,8 +48,8 @@ export default function MarcasPage() {
               {/* Car image */}
               <div className="relative aspect-[16/9] overflow-hidden">
                 <Image
-                  src={brand.logo}
-                  alt={brand.name}
+                  src={brand.topModelImage}
+                  alt={`${brand.topModel} ${brand.name}`}
                   fill
                   className="object-cover transition-transform duration-500 group-hover:scale-110 opacity-70 group-hover:opacity-90"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
