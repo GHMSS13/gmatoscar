@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Globe, Zap, Gauge, ArrowRight, Calendar } from 'lucide-react';
+import { Globe, Zap, Gauge, ArrowRight, Calendar, Sparkles } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { brands } from '@/lib/data';
@@ -45,16 +45,25 @@ export default function MarcasPage() {
               className="group bg-[#111] border border-[#1e1e1e] hover:border-[#dc2626]/40 rounded-sm overflow-hidden transition-all duration-300 hover:shadow-[0_0_30px_rgba(220,38,38,0.15)] hover:-translate-y-1"
               style={{ animationDelay: `${idx * 50}ms` }}
             >
-              {/* Car image */}
-              <div className="relative aspect-[16/9] overflow-hidden">
+              {/* Brand banner */}
+              <div className="relative aspect-[16/9] overflow-hidden" style={{ backgroundColor: `${brand.color}22` }}>
                 <Image
-                  src={brand.topModelImage}
-                  alt={`${brand.topModel} ${brand.name}`}
+                  src={brand.logo}
+                  alt={`${brand.name} logo`}
                   fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-110 opacity-70 group-hover:opacity-90"
+                  className="object-contain p-10 transition-transform duration-500 group-hover:scale-105 opacity-95"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#111] via-[#111]/30 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#111] via-[#111]/25 to-transparent" />
+
+                <div className="absolute bottom-3 left-3 right-3 rounded-xl border border-white/10 bg-black/50 backdrop-blur-sm p-3">
+                  <p className="text-[10px] uppercase tracking-[0.3em] text-white/35 font-rajdhani mb-1">
+                    Visão geral
+                  </p>
+                  <p className="text-xs text-white/70 font-exo line-clamp-2">
+                    {brand.description}
+                  </p>
+                </div>
 
                 {/* Country badge */}
                 <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-black/60 backdrop-blur-sm border border-white/10 rounded-sm px-2.5 py-1">
@@ -88,6 +97,10 @@ export default function MarcasPage() {
                     <span className="text-[#dc2626] font-rajdhani font-bold text-sm">{brand.maxSpeed}</span>
                   </div>
                 </div>
+
+                <p className="text-white/40 text-xs leading-relaxed font-exo mb-5 line-clamp-3">
+                  {brand.description}
+                </p>
 
                 <div
                   className="h-0.5 w-full rounded-full mb-4 opacity-30"

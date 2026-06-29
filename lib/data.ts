@@ -2,6 +2,7 @@ export interface Brand {
   id: string;
   name: string;
   country: string;
+  description: string;
   logo: string;
   topModelImage: string;
   founded: number;
@@ -21,13 +22,27 @@ export interface RankingItem {
   acceleration: string;
 }
 
+function createBrandLogo(label: string, background: string) {
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" fill="none">
+      <rect width="1200" height="675" rx="48" fill="${background}"/>
+      <circle cx="600" cy="270" r="112" fill="rgba(255,255,255,0.10)"/>
+      <text x="600" y="290" text-anchor="middle" fill="white" font-family="Arial, Helvetica, sans-serif" font-size="92" font-weight="700" letter-spacing="8">${label}</text>
+      <text x="600" y="382" text-anchor="middle" fill="rgba(255,255,255,0.72)" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="600" letter-spacing="6">SUPERCARS</text>
+    </svg>
+  `;
+
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+}
+
 export const brands: Brand[] = [
   {
     id: 'ferrari',
     name: 'Ferrari',
     country: 'Italia',
-    logo: 'https://images.pexels.com/photos/1158963/pexels-photo-1158963.jpeg?auto=compress&cs=tinysrgb&w=600',
-    topModelImage: 'https://images.pexels.com/photos/1627877/pexels-photo-1627877.jpeg?auto=compress&cs=tinysrgb&w=600',
+    description: 'Referência absoluta em superesportivos italianos, com foco em desempenho, tradição e design.',
+    logo: createBrandLogo('Ferrari', '#ff2800'),
+    topModelImage: 'https://images.pexels.com/photos/1007410/pexels-photo-1007410.jpeg?auto=compress&cs=tinysrgb&w=1200',
     founded: 1939,
     topModel: 'Ferrari F80',
     maxSpeed: '350+ km/h',
@@ -37,8 +52,9 @@ export const brands: Brand[] = [
     id: 'lamborghini',
     name: 'Lamborghini',
     country: 'Italia',
-    logo: 'https://images.pexels.com/photos/1321728/pexels-photo-1321728.jpeg?auto=compress&cs=tinysrgb&w=600',
-    topModelImage: 'https://images.pexels.com/photos/1149831/pexels-photo-1149831.jpeg?auto=compress&cs=tinysrgb&w=600',
+    description: 'Marca conhecida pelo visual agressivo, V12 aspirado e uma identidade muito forte nas pistas e nas ruas.',
+    logo: createBrandLogo('Lamborghini', '#d4af37'),
+    topModelImage: 'https://images.pexels.com/photos/1149831/pexels-photo-1149831.jpeg?auto=compress&cs=tinysrgb&w=1200',
     founded: 1963,
     topModel: 'Revuelto',
     maxSpeed: '350 km/h',
@@ -48,8 +64,9 @@ export const brands: Brand[] = [
     id: 'bugatti',
     name: 'Bugatti',
     country: 'Franca',
-    logo: 'https://images.pexels.com/photos/3729464/pexels-photo-3729464.jpeg?auto=compress&cs=tinysrgb&w=600',
-    topModelImage: 'https://images.pexels.com/photos/6311656/pexels-photo-6311656.jpeg?auto=compress&cs=tinysrgb&w=600',
+    description: 'Hipercarros extremos com foco em velocidade máxima, luxo e engenharia de altíssimo nível.',
+    logo: createBrandLogo('Bugatti', '#003087'),
+    topModelImage: 'https://images.pexels.com/photos/6311656/pexels-photo-6311656.jpeg?auto=compress&cs=tinysrgb&w=1200',
     founded: 1909,
     topModel: 'Tourbillon',
     maxSpeed: '445 km/h',
@@ -59,8 +76,9 @@ export const brands: Brand[] = [
     id: 'mclaren',
     name: 'McLaren',
     country: 'Reino Unido',
-    logo: 'https://images.pexels.com/photos/3802510/pexels-photo-3802510.jpeg?auto=compress&cs=tinysrgb&w=600',
-    topModelImage: 'https://images.pexels.com/photos/128794/pexels-photo-128794.jpeg?auto=compress&cs=tinysrgb&w=600',
+    description: 'Marca britânica famosa pela leveza, aerodinâmica e herança direta da Fórmula 1.',
+    logo: createBrandLogo('McLaren', '#ff8000'),
+    topModelImage: 'https://images.pexels.com/photos/128794/pexels-photo-128794.jpeg?auto=compress&cs=tinysrgb&w=1200',
     founded: 1963,
     topModel: 'McLaren W1',
     maxSpeed: '350 km/h',
@@ -70,8 +88,9 @@ export const brands: Brand[] = [
     id: 'porsche',
     name: 'Porsche',
     country: 'Alemanha',
-    logo: 'https://images.pexels.com/photos/210019/pexels-photo-210019.jpeg?auto=compress&cs=tinysrgb&w=600',
-    topModelImage: 'https://images.pexels.com/photos/164634/pexels-photo-164634.jpeg?auto=compress&cs=tinysrgb&w=600',
+    description: 'Combina tradição de pista, engenharia precisa e um portfólio amplo de esportivos icônicos.',
+    logo: createBrandLogo('Porsche', '#c8102e'),
+    topModelImage: 'https://images.pexels.com/photos/164634/pexels-photo-164634.jpeg?auto=compress&cs=tinysrgb&w=1200',
     founded: 1931,
     topModel: '911 GT3 RS',
     maxSpeed: '296 km/h',
@@ -81,8 +100,9 @@ export const brands: Brand[] = [
     id: 'koenigsegg',
     name: 'Koenigsegg',
     country: 'Suecia',
-    logo: 'https://images.pexels.com/photos/3207638/pexels-photo-3207638.jpeg?auto=compress&cs=tinysrgb&w=600',
-    topModelImage: 'https://images.pexels.com/photos/1753086/pexels-photo-1753086.jpeg?auto=compress&cs=tinysrgb&w=600',
+    description: 'Especialista em hipercarros de produção limitada, recordes e soluções de engenharia ousadas.',
+    logo: createBrandLogo('Koenigsegg', '#1a1a1a'),
+    topModelImage: 'https://images.pexels.com/photos/1753086/pexels-photo-1753086.jpeg?auto=compress&cs=tinysrgb&w=1200',
     founded: 1994,
     topModel: 'Gemera',
     maxSpeed: '400+ km/h',
@@ -92,8 +112,9 @@ export const brands: Brand[] = [
     id: 'pagani',
     name: 'Pagani',
     country: 'Italia',
-    logo: 'https://images.pexels.com/photos/2402142/pexels-photo-2402142.jpeg?auto=compress&cs=tinysrgb&w=600',
-    topModelImage: 'https://images.pexels.com/photos/2402142/pexels-photo-2402142.jpeg?auto=compress&cs=tinysrgb&w=600',
+    description: 'Hipercarros artesanais com acabamento escultural e atenção obsessiva aos detalhes.',
+    logo: createBrandLogo('Pagani', '#c0c0c0'),
+    topModelImage: 'https://images.pexels.com/photos/2402142/pexels-photo-2402142.jpeg?auto=compress&cs=tinysrgb&w=1200',
     founded: 1992,
     topModel: 'Utopia',
     maxSpeed: '340 km/h',
@@ -103,8 +124,9 @@ export const brands: Brand[] = [
     id: 'rimac',
     name: 'Rimac',
     country: 'Croacia',
-    logo: 'https://images.pexels.com/photos/1918137/pexels-photo-1918137.jpeg?auto=compress&cs=tinysrgb&w=600',
-    topModelImage: 'https://images.pexels.com/photos/1918137/pexels-photo-1918137.jpeg?auto=compress&cs=tinysrgb&w=600',
+    description: 'Uma das referências em hiperelétricos, baterias e desempenho instantâneo.',
+    logo: createBrandLogo('Rimac', '#0a84ff'),
+    topModelImage: 'https://images.pexels.com/photos/1918137/pexels-photo-1918137.jpeg?auto=compress&cs=tinysrgb&w=1200',
     founded: 2009,
     topModel: 'Nevera R',
     maxSpeed: '415 km/h',
