@@ -127,31 +127,42 @@ export default function AdminPage() {
     setSaving(true);
     setMessage(null);
 
-    const response = await supabase.from('posts').insert([
-      {
-        title: form.title,
-        slug: form.slug,
-        excerpt: form.excerpt,
-        content: form.content,
-        category: form.category,
+    try {
+      const payload = {
+        title: form.title.trim(),
+        slug: form.slug.trim().toLowerCase(),
+        excerpt: form.excerpt.trim(),
+        content: form.content.trim(),
+        category: form.category.trim(),
         date: form.date,
-        read_time: form.read_time,
-        image_url: form.image_url,
-        external_url: form.external_url || null,
+        read_time: form.read_time.trim(),
+        image_url: form.image_url.trim(),
+        external_url: form.external_url.trim() || null,
         featured: form.featured,
         hot: form.hot,
         published: form.published,
-      },
-    ]);
+      };
 
-    setSaving(false);
-    if (response.error) {
-      setMessage(response.error.message);
-      return;
+      const insertPromise = supabase.from('posts').insert([payload]);
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        setTimeout(() => reject(new Error('Tempo limite ao salvar post. Verifique conexão e policies no Supabase.')), 15000);
+      });
+
+      const response = await Promise.race([insertPromise, timeoutPromise]);
+
+      if (response.error) {
+        setMessage(response.error.message);
+        return;
+      }
+
+      setMessage('Post criado com sucesso!');
+      setForm(initialFormState);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Falha ao criar post.';
+      setMessage(errorMessage);
+    } finally {
+      setSaving(false);
     }
-
-    setMessage('Post criado com sucesso!');
-    setForm(initialFormState);
   };
 
   return (
