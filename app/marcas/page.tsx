@@ -4,17 +4,48 @@ import Link from 'next/link';
 import { Globe, Zap, Gauge, ArrowRight, Calendar, Sparkles } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { brands } from '@/lib/data';
+import { brands, modelPages } from '@/lib/data';
 
 export const metadata: Metadata = {
   title: 'Marcas de Supercarros',
   description:
-    'Explore as maiores marcas de supercarros do mundo: Ferrari, Lamborghini, Bugatti, McLaren, Porsche, Koenigsegg e muito mais.',
+    'Explore marcas e modelos de supercarros com páginas otimizadas para SEO: Ferrari, Lamborghini, Bugatti, McLaren, Porsche, Koenigsegg e muito mais.',
+  keywords: [
+    'marcas de supercarros',
+    'modelos de supercarros',
+    'ferrari',
+    'lamborghini',
+    'bugatti',
+    'mclaren',
+    'porsche',
+    'koenigsegg',
+  ],
+  alternates: {
+    canonical: '/marcas',
+  },
+};
+
+const marcasSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Marcas e Modelos de Supercarros',
+  description:
+    'Hub editorial com páginas de fabricantes e modelos de supercarros, otimizado para pesquisa orgânica.',
+  url: 'https://gmatoscar.com.br/marcas',
+  about: brands.map((brand) => ({
+    '@type': 'Brand',
+    name: brand.name,
+  })),
 };
 
 export default function MarcasPage() {
   return (
     <main className="min-h-screen bg-black">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(marcasSchema) }}
+      />
+
       <Navbar />
 
       {/* Page Header */}
@@ -114,12 +145,43 @@ export default function MarcasPage() {
                   Ver Detalhes
                   <ArrowRight size={14} className="group-hover/link:translate-x-1 transition-transform duration-300" />
                 </Link>
+
+                <Link
+                  href={`/modelos/${brand.famousModels[0].slug}`}
+                  className="mt-2 flex items-center justify-between text-white/30 hover:text-white text-xs font-rajdhani font-bold uppercase tracking-wider transition-colors duration-300"
+                >
+                  Ver Modelos
+                  <ArrowRight size={12} />
+                </Link>
               </div>
 
               {/* Left accent */}
               <div className="absolute top-0 left-0 w-0.5 h-full bg-[#dc2626] scale-y-0 group-hover:scale-y-100 transition-transform duration-300 origin-top" />
             </article>
           ))}
+        </div>
+
+        <div className="mt-16 rounded-2xl border border-[#1e1e1e] bg-[#0f0f0f] p-6">
+          <div className="mb-5">
+            <p className="text-[#dc2626] text-xs font-bold uppercase tracking-[0.35em] font-rajdhani mb-2">
+              Estrutura SEO
+            </p>
+            <h2 className="text-2xl md:text-3xl font-rajdhani font-bold text-white">
+              Páginas de modelos para busca orgânica
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {modelPages.map((model) => (
+              <Link
+                key={model.slug}
+                href={`/modelos/${model.slug}`}
+                className="rounded-xl border border-white/10 bg-black/30 px-4 py-3 hover:border-[#dc2626]/40 transition-colors"
+              >
+                <p className="text-white font-rajdhani font-bold text-lg leading-tight">{model.name}</p>
+                <p className="text-white/40 text-xs font-exo mt-1">{model.year} · {model.category}</p>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 

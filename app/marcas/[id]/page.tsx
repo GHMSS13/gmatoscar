@@ -47,9 +47,27 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const brand = brands.find((b) => b.id === params.id);
   if (!brand) return { title: 'Marca não encontrada' };
+
+  const keywordBase = [
+    brand.name,
+    `${brand.name} história`,
+    `${brand.name} modelos`,
+    `${brand.name} ficha técnica`,
+    ...brand.famousModels.map((model) => `${brand.name} ${model.name}`),
+  ];
+
   return {
     title: `${brand.name} - Supercarros`,
     description: `Conheça a história, os modelos, a linha do tempo e as notícias relacionadas da ${brand.name}. Fundada em ${brand.founded}, com velocidade máxima de ${brand.maxSpeed}.`,
+    keywords: keywordBase,
+    alternates: {
+      canonical: `/marcas/${brand.id}`,
+    },
+    openGraph: {
+      title: `${brand.name} - História, Modelos e Notícias`,
+      description: `Página editorial da ${brand.name} com linha do tempo, modelos famosos e conteúdo atualizado.`,
+      images: [{ url: brand.topModelImage, alt: brand.name }],
+    },
   };
 }
 
@@ -60,8 +78,36 @@ export default async function BrandPage({ params }: Props) {
   const posts = await getPosts();
   const relatedPosts = getRelatedPosts(posts, brand.name);
 
+  const brandSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Brand',
+    name: brand.name,
+    foundingDate: String(brand.founded),
+    description: brand.description,
+    url: `https://gmatoscar.com.br/marcas/${brand.id}`,
+  };
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://gmatoscar.com.br/' },
+      { '@type': 'ListItem', position: 2, name: 'Marcas', item: 'https://gmatoscar.com.br/marcas' },
+      { '@type': 'ListItem', position: 3, name: brand.name, item: `https://gmatoscar.com.br/marcas/${brand.id}` },
+    ],
+  };
+
   return (
     <main className="min-h-screen bg-black">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(brandSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+
       <Navbar />
 
       {/* Hero */}
@@ -243,6 +289,12 @@ export default async function BrandPage({ params }: Props) {
                     </span>
                   </div>
                   <p className="text-white/50 font-exo text-sm leading-relaxed">{model.highlight}</p>
+                  <Link
+                    href={`/modelos/${model.slug}`}
+                    className="mt-3 inline-flex items-center gap-2 text-xs text-white/50 hover:text-[#dc2626] font-rajdhani uppercase tracking-[0.24em] transition-colors"
+                  >
+                    Página do modelo <ArrowLeft size={12} className="rotate-180" />
+                  </Link>
                 </div>
               ))}
             </div>

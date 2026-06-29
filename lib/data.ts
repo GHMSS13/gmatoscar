@@ -15,10 +15,29 @@ export interface Brand {
     description: string;
   }[];
   famousModels: {
+    slug: string;
     name: string;
     year: string;
     highlight: string;
   }[];
+}
+
+export interface ModelPage {
+  slug: string;
+  name: string;
+  brandId: string;
+  year: string;
+  category: string;
+  image: string;
+  description: string;
+  keywords: string[];
+  specs: {
+    power: string;
+    topSpeed: string;
+    acceleration: string;
+    drivetrain: string;
+  };
+  highlights: string[];
 }
 
 export interface RankingItem {
@@ -64,9 +83,9 @@ export const brands: Brand[] = [
       { year: 2024, title: 'Nova geração híbrida', description: 'A marca combina eletrificação com alta performance em uma nova fase tecnológica.' },
     ],
     famousModels: [
-      { name: 'F40', year: '1987', highlight: 'Um dos carros mais lendários da história da marca.' },
-      { name: 'LaFerrari', year: '2013', highlight: 'Hipercarro híbrido que redefiniu o topo da linha.' },
-      { name: 'F80', year: '2024', highlight: 'A nova interpretação da Ferrari para o futuro dos supercarros.' },
+      { slug: 'ferrari-f40', name: 'F40', year: '1987', highlight: 'Um dos carros mais lendários da história da marca.' },
+      { slug: 'ferrari-laferrari', name: 'LaFerrari', year: '2013', highlight: 'Hipercarro híbrido que redefiniu o topo da linha.' },
+      { slug: 'ferrari-f80', name: 'F80', year: '2024', highlight: 'A nova interpretação da Ferrari para o futuro dos supercarros.' },
     ],
   },
   {
@@ -87,9 +106,9 @@ export const brands: Brand[] = [
       { year: 2023, title: 'Era híbrida', description: 'O Revuelto inaugura a nova geração eletrificada da marca.' },
     ],
     famousModels: [
-      { name: 'Miura', year: '1966', highlight: 'Considerado um dos primeiros supercarros modernos.' },
-      { name: 'Countach', year: '1974', highlight: 'Linha angular que virou símbolo da Lamborghini.' },
-      { name: 'Revuelto', year: '2023', highlight: 'Primeiro híbrido V12 da nova fase da marca.' },
+      { slug: 'lamborghini-miura', name: 'Miura', year: '1966', highlight: 'Considerado um dos primeiros supercarros modernos.' },
+      { slug: 'lamborghini-countach', name: 'Countach', year: '1974', highlight: 'Linha angular que virou símbolo da Lamborghini.' },
+      { slug: 'lamborghini-revuelto', name: 'Revuelto', year: '2023', highlight: 'Primeiro híbrido V12 da nova fase da marca.' },
     ],
   },
   {
@@ -110,9 +129,9 @@ export const brands: Brand[] = [
       { year: 2024, title: 'Tourbillon', description: 'A nova era da Bugatti combina design futurista e altíssimo desempenho.' },
     ],
     famousModels: [
-      { name: 'Veyron', year: '2005', highlight: 'Símbolo da corrida pela velocidade máxima.' },
-      { name: 'Chiron', year: '2016', highlight: 'Consolidou a Bugatti como referência em hipercarros.' },
-      { name: 'Tourbillon', year: '2024', highlight: 'Nova geração com foco em luxo e tecnologia.' },
+      { slug: 'bugatti-veyron', name: 'Veyron', year: '2005', highlight: 'Símbolo da corrida pela velocidade máxima.' },
+      { slug: 'bugatti-chiron', name: 'Chiron', year: '2016', highlight: 'Consolidou a Bugatti como referência em hipercarros.' },
+      { slug: 'bugatti-tourbillon', name: 'Tourbillon', year: '2024', highlight: 'Nova geração com foco em luxo e tecnologia.' },
     ],
   },
   {
@@ -133,9 +152,9 @@ export const brands: Brand[] = [
       { year: 2024, title: 'W1', description: 'Nova referência da McLaren para a próxima geração de hypercars.' },
     ],
     famousModels: [
-      { name: 'F1', year: '1992', highlight: 'Ícone absoluto entre os supercarros de rua.' },
-      { name: 'P1', year: '2013', highlight: 'Parte da era híbrida das hypercars de elite.' },
-      { name: 'W1', year: '2024', highlight: 'Novo topo da marca, com foco em aerodinâmica e leveza.' },
+      { slug: 'mclaren-f1', name: 'F1', year: '1992', highlight: 'Ícone absoluto entre os supercarros de rua.' },
+      { slug: 'mclaren-p1', name: 'P1', year: '2013', highlight: 'Parte da era híbrida das hypercars de elite.' },
+      { slug: 'mclaren-w1', name: 'W1', year: '2024', highlight: 'Novo topo da marca, com foco em aerodinâmica e leveza.' },
     ],
   },
   {
@@ -156,9 +175,9 @@ export const brands: Brand[] = [
       { year: 2020, title: 'Eletrificação esportiva', description: 'A marca expande a performance com tecnologia híbrida e elétrica.' },
     ],
     famousModels: [
-      { name: '911', year: '1963', highlight: 'O esportivo mais reconhecível da Porsche.' },
-      { name: '911 GT3 RS', year: '2023', highlight: 'Foco total em pista e precisão dinâmica.' },
-      { name: 'Taycan', year: '2019', highlight: 'Mostra a evolução elétrica da marca.' },
+      { slug: 'porsche-911', name: '911', year: '1963', highlight: 'O esportivo mais reconhecível da Porsche.' },
+      { slug: 'porsche-911-gt3-rs', name: '911 GT3 RS', year: '2023', highlight: 'Foco total em pista e precisão dinâmica.' },
+      { slug: 'porsche-taycan', name: 'Taycan', year: '2019', highlight: 'Mostra a evolução elétrica da marca.' },
     ],
   },
   {
@@ -179,9 +198,9 @@ export const brands: Brand[] = [
       { year: 2024, title: 'Nova geração de recordes', description: 'Modelos recentes reforçam a obsessão por performance e eficiência.' },
     ],
     famousModels: [
-      { name: 'Agera RS', year: '2017', highlight: 'Um marco entre os carros de produção mais rápidos.' },
-      { name: 'Jesko', year: '2019', highlight: 'Hipercarro com foco extremo em velocidade e pista.' },
-      { name: 'Gemera', year: '2020', highlight: 'A proposta de 4 lugares da Koenigsegg.' },
+      { slug: 'koenigsegg-agera-rs', name: 'Agera RS', year: '2017', highlight: 'Um marco entre os carros de produção mais rápidos.' },
+      { slug: 'koenigsegg-jesko', name: 'Jesko', year: '2019', highlight: 'Hipercarro com foco extremo em velocidade e pista.' },
+      { slug: 'koenigsegg-gemera', name: 'Gemera', year: '2020', highlight: 'A proposta de 4 lugares da Koenigsegg.' },
     ],
   },
   {
@@ -202,9 +221,9 @@ export const brands: Brand[] = [
       { year: 2022, title: 'Utopia', description: 'Novo capítulo com foco em leveza, emoção e acabamento artesanal.' },
     ],
     famousModels: [
-      { name: 'Zonda', year: '1999', highlight: 'Modelo que colocou a Pagani entre os grandes nomes.' },
-      { name: 'Huayra', year: '2011', highlight: 'Mistura de arte, velocidade e engenharia.' },
-      { name: 'Utopia', year: '2022', highlight: 'Símbolo atual da filosofia da marca.' },
+      { slug: 'pagani-zonda', name: 'Zonda', year: '1999', highlight: 'Modelo que colocou a Pagani entre os grandes nomes.' },
+      { slug: 'pagani-huayra', name: 'Huayra', year: '2011', highlight: 'Mistura de arte, velocidade e engenharia.' },
+      { slug: 'pagani-utopia', name: 'Utopia', year: '2022', highlight: 'Símbolo atual da filosofia da marca.' },
     ],
   },
   {
@@ -225,10 +244,73 @@ export const brands: Brand[] = [
       { year: 2024, title: 'Nevera R', description: 'Evolução extrema do carro que mudou o debate sobre elétricos de alta velocidade.' },
     ],
     famousModels: [
-      { name: 'Concept One', year: '2011', highlight: 'Primeira grande prova de conceito da marca.' },
-      { name: 'Nevera', year: '2021', highlight: 'Hipercarro elétrico que colocou a Rimac no topo do segmento.' },
-      { name: 'Nevera R', year: '2024', highlight: 'Evolução mais agressiva do projeto elétrico.' },
+      { slug: 'rimac-concept-one', name: 'Concept One', year: '2011', highlight: 'Primeira grande prova de conceito da marca.' },
+      { slug: 'rimac-nevera', name: 'Nevera', year: '2021', highlight: 'Hipercarro elétrico que colocou a Rimac no topo do segmento.' },
+      { slug: 'rimac-nevera-r', name: 'Nevera R', year: '2024', highlight: 'Evolução mais agressiva do projeto elétrico.' },
     ],
+  },
+];
+
+export const modelPages: ModelPage[] = [
+  {
+    slug: 'ferrari-f40',
+    name: 'Ferrari F40',
+    brandId: 'ferrari',
+    year: '1987',
+    category: 'Supercarro clássico',
+    image: 'https://images.pexels.com/photos/1007410/pexels-photo-1007410.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    description: 'A Ferrari F40 é um dos modelos mais icônicos da história dos supercarros e um marco da engenharia dos anos 80.',
+    keywords: ['ferrari f40', 'f40 ficha tecnica', 'ferrari classica'],
+    specs: { power: '478 cv', topSpeed: '324 km/h', acceleration: '3.8 s', drivetrain: 'RWD' },
+    highlights: ['Último modelo aprovado por Enzo Ferrari', 'Construção focada em baixo peso', 'Design agressivo e atemporal'],
+  },
+  {
+    slug: 'ferrari-enzo',
+    name: 'Ferrari Enzo',
+    brandId: 'ferrari',
+    year: '2002',
+    category: 'Hypercars',
+    image: 'https://images.pexels.com/photos/1627877/pexels-photo-1627877.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    description: 'A Ferrari Enzo trouxe tecnologias derivadas da Fórmula 1 para um carro de rua em uma edição extremamente limitada.',
+    keywords: ['ferrari enzo', 'enzo ferrari carro', 'ferrari enzo especificacoes'],
+    specs: { power: '660 cv', topSpeed: '350 km/h', acceleration: '3.6 s', drivetrain: 'RWD' },
+    highlights: ['Produção limitada e alta exclusividade', 'DNA de Fórmula 1 no conjunto mecânico', 'Modelo de transição para a era moderna da Ferrari'],
+  },
+  {
+    slug: 'ferrari-laferrari',
+    name: 'Ferrari LaFerrari',
+    brandId: 'ferrari',
+    year: '2013',
+    category: 'Hypercars híbridos',
+    image: 'https://images.pexels.com/photos/210019/pexels-photo-210019.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    description: 'A LaFerrari marca a entrada da fabricante italiana no universo híbrido com foco absoluto em performance.',
+    keywords: ['laferrari', 'ferrari hibrida', 'laferrari ficha tecnica'],
+    specs: { power: '963 cv', topSpeed: '350+ km/h', acceleration: '2.8 s', drivetrain: 'RWD' },
+    highlights: ['Sistema híbrido com foco em desempenho', 'Uma das Ferrari mais desejadas da década', 'Combina eletrificação e motor V12 aspirado'],
+  },
+  {
+    slug: 'ferrari-sf90-stradale',
+    name: 'Ferrari SF90 Stradale',
+    brandId: 'ferrari',
+    year: '2019',
+    category: 'Supercarro híbrido plug-in',
+    image: 'https://images.pexels.com/photos/3729464/pexels-photo-3729464.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    description: 'A SF90 Stradale representa a evolução da Ferrari em eficiência, tração integral e aceleração brutal.',
+    keywords: ['ferrari sf90', 'sf90 stradale', 'ferrari sf90 performance'],
+    specs: { power: '1000 cv', topSpeed: '340 km/h', acceleration: '2.5 s', drivetrain: 'AWD' },
+    highlights: ['Primeiro PHEV de produção em série da Ferrari', 'Tração integral em um novo pacote dinâmico', 'Top performance com usabilidade no dia a dia'],
+  },
+  {
+    slug: 'ferrari-purosangue',
+    name: 'Ferrari Purosangue',
+    brandId: 'ferrari',
+    year: '2022',
+    category: 'Crossover de alta performance',
+    image: 'https://images.pexels.com/photos/6311656/pexels-photo-6311656.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    description: 'A Ferrari Purosangue expande o portfólio da marca sem abrir mão do foco em performance e comportamento esportivo.',
+    keywords: ['ferrari purosangue', 'ferrari suv', 'purosangue especificacoes'],
+    specs: { power: '725 cv', topSpeed: '310 km/h', acceleration: '3.3 s', drivetrain: 'AWD' },
+    highlights: ['Primeiro modelo de 4 portas da marca', 'Motor V12 naturalmente aspirado', 'Mistura de espaço, luxo e performance'],
   },
 ];
 
