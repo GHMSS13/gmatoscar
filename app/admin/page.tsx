@@ -179,7 +179,23 @@ export default function AdminPage() {
         published: form.published,
       };
 
-      const insertPromise = supabase.from('posts').insert([payload]);
+      const insertPromise = fetch('/api/admin/posts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          post: payload,
+          accessToken: session.access_token,
+        }),
+      }).then(async (res) => {
+        const data = await res.json();
+        if (!res.ok) {
+          return { error: { message: data.error ?? 'Falha ao criar post.' } };
+        }
+        return { error: null };
+      });
+
       const timeoutPromise = new Promise<never>((_, reject) => {
         setTimeout(() => reject(new Error('Tempo limite ao salvar post. Verifique conexão e policies no Supabase.')), 15000);
       });
