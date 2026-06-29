@@ -27,7 +27,7 @@ export default async function HomePage() {
       : [...allPosts.slice(0, firstBugattiIndex), ...allPosts.slice(firstBugattiIndex + 1)];
 
   return (
-    <main className="min-h-screen bg-black">
+    <main className="min-h-screen bg-white">
       <Navbar />
 
       <section className="relative pt-10 overflow-hidden">
@@ -35,12 +35,12 @@ export default async function HomePage() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(148,163,184,0.08)_0%,transparent_70%)]" />
 
         <div className="relative z-10">
-          <NewsGrid posts={posts} />
+          <NewsGrid posts={posts} theme="light" />
         </div>
       </section>
 
       <BrandsSection />
-      <RankingPreview />
+      <RankingPreview theme="light" />
       <Footer />
     </main>
   );

@@ -1,15 +1,15 @@
-import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, Globe } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { brands } from '@/lib/data';
 
+const featuredBrands = ['ferrari', 'lamborghini', 'porsche', 'bugatti', 'pagani', 'mclaren', 'koenigsegg'];
+
 export default function BrandsSection() {
-  const preview = brands.slice(0, 6);
+  const items = brands.filter((brand) => featuredBrands.includes(brand.id));
 
   return (
     <section className="py-14 sm:py-20 bg-[#0d0d0d] border-y border-[#1e1e1e]">
       <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        {/* Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-3 mb-8 sm:mb-12">
           <div>
             <p className="text-[#dc2626] text-xs font-bold uppercase tracking-[0.3em] font-rajdhani mb-2">
@@ -27,54 +27,21 @@ export default function BrandsSection() {
           </Link>
         </div>
 
-        {/* Brands grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {preview.map((brand) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-4">
+          {items.map((brand) => (
             <Link
               key={brand.id}
               href={`/marcas/${brand.id}`}
-              className="group relative bg-[#111] border border-[#1e1e1e] hover:border-[#dc2626]/40 rounded-sm overflow-hidden transition-all duration-300 hover:shadow-[0_0_20px_rgba(220,38,38,0.15)]"
+              className="group rounded-sm border border-[#1e1e1e] bg-[#111] hover:border-[#dc2626]/40 p-4 transition-all duration-300"
             >
-              {/* Car image */}
-              <div className="relative aspect-[4/3] overflow-hidden">
-                <Image
-                  src={brand.topModelImage}
-                  alt={`${brand.topModel} ${brand.name}`}
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-110 opacity-60 group-hover:opacity-80"
-                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#111] via-[#111]/40 to-transparent" />
-              </div>
-
-              {/* Info */}
-              <div className="p-4">
-                <h3 className="font-rajdhani font-bold text-white text-base group-hover:text-[#dc2626] transition-colors duration-300 mb-1 line-clamp-1">
-                  {brand.name}
-                </h3>
-                <div className="flex items-center gap-1 text-white/30 text-xs font-exo mb-2">
-                  <Globe size={10} />
-                  <span>{brand.country}</span>
-                </div>
-                <p className="text-[10px] text-white/20 font-exo uppercase tracking-wider">
-                  {brand.topModel}
-                </p>
-              </div>
-
-              {/* Red left accent on hover */}
-              <div className="absolute top-0 left-0 w-0.5 h-full bg-[#dc2626] scale-y-0 group-hover:scale-y-100 transition-transform duration-300 origin-top" />
+              <p className="text-white font-rajdhani font-bold text-lg group-hover:text-[#dc2626] transition-colors line-clamp-1">
+                {brand.name}
+              </p>
+              <p className="text-white/45 text-xs font-exo mt-2 line-clamp-2">
+                {brand.description}
+              </p>
             </Link>
           ))}
-        </div>
-
-        {/* Mobile link */}
-        <div className="sm:hidden mt-8 text-center">
-          <Link
-            href="/marcas"
-            className="inline-flex items-center gap-2 text-sm text-white/40 hover:text-[#dc2626] font-rajdhani uppercase tracking-wider transition-colors"
-          >
-            Ver Todas as Marcas <ArrowRight size={14} />
-          </Link>
         </div>
       </div>
     </section>

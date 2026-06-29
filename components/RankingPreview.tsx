@@ -9,7 +9,12 @@ const medalColors: Record<number, string> = {
   3: '#CD7F32',
 };
 
-export default function RankingPreview() {
+interface RankingPreviewProps {
+  theme?: 'dark' | 'light';
+}
+
+export default function RankingPreview({ theme = 'dark' }: RankingPreviewProps) {
+  const isLight = theme === 'light';
   const top5 = rankings.slice(0, 5);
 
   return (
@@ -20,13 +25,13 @@ export default function RankingPreview() {
           <p className="text-[#dc2626] text-xs font-bold uppercase tracking-[0.3em] font-rajdhani mb-2">
             Os Mais Rapidos
           </p>
-          <h2 className="text-3xl md:text-4xl font-rajdhani font-bold text-white red-line">
+          <h2 className={`text-3xl md:text-4xl font-bold red-line ${isLight ? 'font-serif text-[#111]' : 'font-rajdhani text-white'}`}>
             Top 5 Supercarros
           </h2>
         </div>
         <Link
           href="/ranking"
-          className="inline-flex items-center gap-2 text-sm text-white/40 hover:text-[#dc2626] font-rajdhani uppercase tracking-wider transition-colors duration-300 group"
+          className={`inline-flex items-center gap-2 text-sm hover:text-[#dc2626] font-rajdhani uppercase tracking-wider transition-colors duration-300 group ${isLight ? 'text-[#4b5563]' : 'text-white/40'}`}
         >
           Ranking Completo <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
         </Link>
@@ -118,7 +123,7 @@ export default function RankingPreview() {
       <div className="mt-8 text-center">
         <Link
           href="/ranking"
-          className="inline-flex items-center gap-2 bg-[#111] border border-[#dc2626]/30 hover:border-[#dc2626] hover:bg-[#dc2626]/10 text-white/70 hover:text-[#dc2626] rounded-sm px-8 py-3.5 font-rajdhani font-bold uppercase tracking-widest text-sm transition-all duration-300 group"
+          className={`inline-flex items-center gap-2 hover:border-[#dc2626] rounded-sm px-8 py-3.5 font-rajdhani font-bold uppercase tracking-widest text-sm transition-all duration-300 group ${isLight ? 'bg-white border border-[#d1d5db] text-[#374151] hover:text-[#dc2626] hover:bg-[#fff5f5]' : 'bg-[#111] border border-[#dc2626]/30 text-white/70 hover:text-[#dc2626] hover:bg-[#dc2626]/10'}`}
         >
           Ver Ranking Completo <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
         </Link>
