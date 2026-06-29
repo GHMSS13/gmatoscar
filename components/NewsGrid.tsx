@@ -8,9 +8,12 @@ interface NewsGridProps {
 }
 
 export default function NewsGrid({ posts }: NewsGridProps) {
-  const featured = posts.filter((n) => n.featured).slice(0, 2);
-  const rest = posts.filter((n) => !n.featured).slice(0, 4);
-  const sideItems = posts.filter((n) => !n.featured).slice(4, 7);
+  const featuredCandidates = posts.filter((n) => n.featured).slice(0, 2);
+  const hasFeaturedRow = featuredCandidates.length === 2;
+  const featured = hasFeaturedRow ? featuredCandidates : [];
+  const feedPosts = hasFeaturedRow ? posts.filter((n) => !n.featured) : posts;
+  const rest = feedPosts.slice(0, 4);
+  const sideItems = feedPosts.slice(4, 7);
 
   return (
     <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
