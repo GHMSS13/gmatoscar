@@ -43,6 +43,10 @@ export default function AdminPage() {
   const [message, setMessage] = useState<string | null>(null);
   const [form, setForm] = useState<PostFormState>(initialFormState);
   const router = useRouter();
+  const isMissingPostsSchema =
+    message?.toLowerCase().includes('public.posts') ||
+    message?.toLowerCase().includes('schema cache') ||
+    false;
   const allowedAdminEmails = (process.env.NEXT_PUBLIC_ADMIN_EMAILS ?? 'gustavohmssilva13@gmail.com')
     .split(',')
     .map((email) => email.trim().toLowerCase())
@@ -283,6 +287,18 @@ export default function AdminPage() {
           {message && (
             <div className="rounded-xl border border-[#333] bg-[#0f0f0f] p-4 text-sm text-white/80">
               {message}
+            </div>
+          )}
+
+          {isMissingPostsSchema && (
+            <div className="rounded-2xl border border-[#3a2a2a] bg-[#140f0f] p-5 text-sm text-white/80">
+              <h2 className="font-semibold text-white mb-3">Correção rápida: criar tabela de posts</h2>
+              <p className="mb-3">
+                Abra o SQL Editor do Supabase e execute o conteúdo de <code className="text-[#dc2626]">supabase/posts_schema.sql</code>.
+              </p>
+              <p>
+                Depois, atualize esta página e tente publicar novamente.
+              </p>
             </div>
           )}
 

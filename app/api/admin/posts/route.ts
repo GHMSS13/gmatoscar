@@ -52,6 +52,34 @@ export async function POST(request: Request) {
     const { error } = await supabase.from('posts').insert([post]);
 
     if (error) {
+      const missingPostsTable =
+        error.code === 'PGRST205' ||
+        (error.message.toLowerCase().includes('public.posts') &&
+          error.message.toLowerCase().includes('schema cache'));
+
+      if (missingPostsTable) {
+        return NextResponse.json(
+          {
+            error:
+              "Tabela public.posts nao encontrada no Supabase. Execute o script supabase/posts_schema.sql no SQL Editor e tente novamente.",
+          },
+          { status: 500 }
+        );
+      }
+
+      const rlsDenied =
+        error.code === '42501' || error.message.toLowerCase().includes('row-level security');
+
+      if (rlsDenied) {
+        return NextResponse.json(
+          {
+            error:
+              'Permissao negada para inserir post. Verifique se seu email esta na tabela admins e se as policies RLS da tabela posts foram aplicadas.',
+          },
+          { status: 403 }
+        );
+      }
+
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
