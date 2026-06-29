@@ -12,6 +12,8 @@ export const metadata: Metadata = {
     'Notícias atualizadas, rankings e tudo sobre supercarros, hypercars e carros de luxo. O maior canal brasileiro sobre automóveis de alta performance.',
 };
 
+export const dynamic = 'force-dynamic';
+
 export default async function HomePage() {
   const allPosts = await getPosts();
   const firstBugattiIndex = allPosts.findIndex((post) =>
