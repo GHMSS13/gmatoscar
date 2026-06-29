@@ -74,15 +74,23 @@ export default function AdminPage() {
   const getAdminRedirect = () => `${window.location.origin}/admin`;
 
   const verifyAdmin = async (email: string) => {
+    const normalizedEmail = email.trim().toLowerCase();
     setLoading(true);
     const { data, error } = await supabase
       .from('admins')
-      .select('role')
-      .eq('email', email)
-      .single();
+      .select('email, role')
+      .ilike('email', normalizedEmail)
+      .limit(1)
+      .maybeSingle();
 
     setLoading(false);
     if (error) {
+      setIsAdmin(false);
+      setMessage(`Falha ao validar admin: ${error.message}`);
+      return;
+    }
+
+    if (!data) {
       setIsAdmin(false);
       return;
     }
