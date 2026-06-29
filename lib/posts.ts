@@ -24,7 +24,8 @@ export async function getPosts() {
     .order('date', { ascending: false });
 
   if (error) {
-    throw new Error(error.message);
+    console.error('[getPosts] Supabase error:', error.message);
+    return [] as Post[];
   }
 
   return (data as Post[]) ?? [];
@@ -37,7 +38,8 @@ export async function getPostSlugs() {
     .eq('published', true);
 
   if (error) {
-    throw new Error(error.message);
+    console.error('[getPostSlugs] Supabase error:', error.message);
+    return [];
   }
 
   return data ?? [];
@@ -52,7 +54,8 @@ export async function getPostBySlug(slug: string) {
     .maybeSingle();
 
   if (error) {
-    throw new Error(error.message);
+    console.error('[getPostBySlug] Supabase error:', error.message);
+    return null;
   }
 
   return data as Post | null;
