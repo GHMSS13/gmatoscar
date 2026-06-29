@@ -35,7 +35,9 @@ function PesquisaContent({ posts }: PesquisaContentProps) {
         (item) =>
           item.title.toLowerCase().includes(q) ||
           item.excerpt.toLowerCase().includes(q) ||
-          item.category.toLowerCase().includes(q)
+          item.content.toLowerCase().includes(q) ||
+          item.category.toLowerCase().includes(q) ||
+          item.slug.toLowerCase().includes(q)
       );
     }
 
