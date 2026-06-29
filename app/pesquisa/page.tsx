@@ -49,7 +49,7 @@ function PesquisaContent({ posts }: PesquisaContentProps) {
   }, [query, activeCategory, posts]);
 
   return (
-    <main className="min-h-screen bg-black">
+    <main className="min-h-screen bg-white">
       <Navbar />
 
       {/* Header */}
@@ -60,7 +60,7 @@ function PesquisaContent({ posts }: PesquisaContentProps) {
           <p className="text-[#dc2626] text-xs font-bold uppercase tracking-[0.3em] font-rajdhani mb-3">
             Pesquisar
           </p>
-          <h1 className="text-4xl md:text-5xl font-rajdhani font-bold text-white mb-6">
+          <h1 className="text-4xl md:text-5xl font-serif font-semibold text-[#111827] mb-6">
             Encontre seu Supercarro
           </h1>
 
@@ -78,8 +78,8 @@ function PesquisaContent({ posts }: PesquisaContentProps) {
       {/* Filters */}
       <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto mb-8">
         <div className="flex items-center gap-2 mb-4">
-          <Filter size={14} className="text-white/30" />
-          <span className="text-white/30 text-xs font-exo uppercase tracking-widest">Filtrar por categoria</span>
+          <Filter size={14} className="text-[#9ca3af]" />
+          <span className="text-[#9ca3af] text-xs font-exo uppercase tracking-widest">Filtrar por categoria</span>
         </div>
         <div className="flex flex-wrap gap-2">
           {categories.map((cat) => (
@@ -89,7 +89,7 @@ function PesquisaContent({ posts }: PesquisaContentProps) {
               className={`px-4 py-1.5 rounded-sm text-xs font-rajdhani font-bold uppercase tracking-widest transition-all duration-200 ${
                 activeCategory === cat
                   ? 'bg-[#dc2626] text-white'
-                  : 'bg-[#111] border border-[#2a2a2a] text-white/40 hover:text-white hover:border-[#dc2626]/40'
+                  : 'bg-white border border-[#d1d5db] text-[#6b7280] hover:text-[#111827] hover:border-[#dc2626]/40'
               }`}
             >
               {cat}
@@ -102,12 +102,12 @@ function PesquisaContent({ posts }: PesquisaContentProps) {
       <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto pb-20">
         {/* Results count */}
         <div className="flex items-center justify-between mb-6">
-          <p className="text-white/30 text-sm font-exo">
+          <p className="text-[#6b7280] text-sm font-exo">
             {results.length === 0
               ? 'Nenhum resultado encontrado'
               : `${results.length} resultado${results.length !== 1 ? 's' : ''} encontrado${results.length !== 1 ? 's' : ''}`}
             {query && (
-              <span className="text-white/50">
+              <span className="text-[#6b7280]">
                 {' '}para <span className="text-[#dc2626]">&quot;{query}&quot;</span>
               </span>
             )}
@@ -115,7 +115,7 @@ function PesquisaContent({ posts }: PesquisaContentProps) {
           {(query || activeCategory !== 'Todos') && (
             <button
               onClick={() => { setQuery(''); setActiveCategory('Todos'); }}
-              className="flex items-center gap-1.5 text-white/30 hover:text-[#dc2626] text-xs font-exo transition-colors"
+              className="flex items-center gap-1.5 text-[#6b7280] hover:text-[#dc2626] text-xs font-exo transition-colors"
             >
               <X size={12} /> Limpar filtros
             </button>
@@ -124,18 +124,18 @@ function PesquisaContent({ posts }: PesquisaContentProps) {
 
         {results.length === 0 ? (
           <div className="py-24 text-center">
-            <Search size={48} className="text-white/10 mx-auto mb-4" />
-            <h2 className="font-rajdhani font-bold text-white text-2xl mb-2">
+            <Search size={48} className="text-[#d1d5db] mx-auto mb-4" />
+            <h2 className="font-rajdhani font-bold text-[#111827] text-2xl mb-2">
               Nenhum resultado encontrado
             </h2>
-            <p className="text-white/30 font-exo text-sm">
+            <p className="text-[#6b7280] font-exo text-sm">
               Tente pesquisar por outra marca ou modelo.
             </p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {results.map((item) => (
-              <NewsCard key={item.id} item={item} />
+              <NewsCard key={item.id} item={item} theme="light" />
             ))}
           </div>
         )}
@@ -150,7 +150,7 @@ export default async function PesquisaPage() {
   const posts = await getPosts();
 
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#0a0a0a]" />}>
+    <Suspense fallback={<div className="min-h-screen bg-white" />}>
       <PesquisaContent posts={posts} />
     </Suspense>
   );

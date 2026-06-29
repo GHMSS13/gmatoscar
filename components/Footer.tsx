@@ -60,12 +60,12 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-[#0d0d0d] border-t border-[#1e1e1e]">
+    <footer className="bg-white border-t border-[#e5e7eb]">
       {/* Social strip */}
-      <div className="bg-[#111] border-b border-[#1e1e1e]">
+      <div className="bg-[#f9fafb] border-b border-[#e5e7eb]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
-            <p className="text-white/40 text-sm font-exo">
+            <p className="text-[#6b7280] text-sm font-exo">
               Siga o GMATOSCAR nas redes sociais:
             </p>
             <div className="flex flex-wrap items-center gap-2 sm:gap-3">
@@ -78,12 +78,12 @@ export default function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={s.label}
-                    className="flex items-center gap-2 bg-[#1a1a1a] hover:bg-[#222] border border-[#2a2a2a] hover:border-[#dc2626]/30 rounded-sm px-3 py-2 transition-all duration-300 group"
+                    className="flex items-center gap-2 bg-white hover:bg-[#fff5f5] border border-[#e5e7eb] hover:border-[#dc2626]/30 rounded-sm px-3 py-2 transition-all duration-300 group"
                   >
                     <span style={{ color: s.color }} className="transition-transform duration-300 group-hover:scale-110">
                       <Icon size={16} />
                     </span>
-                    <span className="text-white/50 group-hover:text-white/80 text-xs font-rajdhani font-semibold hidden sm:block transition-colors">
+                    <span className="text-[#6b7280] group-hover:text-[#111827] text-xs font-rajdhani font-semibold hidden sm:block transition-colors">
                       {s.label}
                     </span>
                   </a>
@@ -110,7 +110,7 @@ export default function Footer() {
                 />
               </div>
             </Link>
-            <p className="text-white/40 text-sm leading-relaxed mb-6 max-w-sm font-exo">
+            <p className="text-[#6b7280] text-sm leading-relaxed mb-6 max-w-sm font-exo">
               O maior canal brasileiro dedicado ao universo dos supercarros, hypercars e automóveis de alto desempenho. Notícias, rankings e conteúdo exclusivo sobre os carros mais incríveis do mundo.
             </p>
 
@@ -125,7 +125,7 @@ export default function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={s.label}
-                    className="w-10 h-10 flex items-center justify-center rounded-sm bg-[#1a1a1a] border border-[#2a2a2a] hover:border-[#dc2626]/50 text-white/40 hover:text-white transition-all duration-300 hover:shadow-[0_0_10px_rgba(220,38,38,0.2)]"
+                    className="w-10 h-10 flex items-center justify-center rounded-sm bg-white border border-[#e5e7eb] hover:border-[#dc2626]/50 text-[#6b7280] hover:text-[#111827] transition-all duration-300 hover:shadow-[0_0_10px_rgba(220,38,38,0.12)]"
                     style={{ '--hover-color': s.color } as React.CSSProperties}
                   >
                     <Icon size={18} />
@@ -137,7 +137,7 @@ export default function Footer() {
 
           {/* Navigation */}
           <div>
-            <h4 className="font-rajdhani font-bold uppercase tracking-[0.2em] text-white text-sm mb-5 flex items-center gap-2">
+            <h4 className="font-rajdhani font-bold uppercase tracking-[0.2em] text-[#111827] text-sm mb-5 flex items-center gap-2">
               <span className="w-4 h-0.5 bg-[#dc2626]" />
               Navegação
             </h4>
@@ -146,7 +146,7 @@ export default function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-white/40 hover:text-[#dc2626] text-sm font-exo transition-colors duration-300 flex items-center gap-2 group"
+                    className="text-[#6b7280] hover:text-[#dc2626] text-sm font-exo transition-colors duration-300 flex items-center gap-2 group"
                   >
                     <span className="w-0 h-px bg-[#dc2626] group-hover:w-3 transition-all duration-300" />
                     {link.label}
@@ -158,7 +158,7 @@ export default function Footer() {
 
           {/* Categories */}
           <div>
-            <h4 className="font-rajdhani font-bold uppercase tracking-[0.2em] text-white text-sm mb-5 flex items-center gap-2">
+            <h4 className="font-rajdhani font-bold uppercase tracking-[0.2em] text-[#111827] text-sm mb-5 flex items-center gap-2">
               <span className="w-4 h-0.5 bg-[#dc2626]" />
               Marcas
             </h4>
@@ -167,7 +167,7 @@ export default function Footer() {
                 <li key={cat.href}>
                   <Link
                     href={cat.href}
-                    className="text-white/40 hover:text-[#dc2626] text-sm font-exo transition-colors duration-300 flex items-center gap-2 group"
+                    className="text-[#6b7280] hover:text-[#dc2626] text-sm font-exo transition-colors duration-300 flex items-center gap-2 group"
                   >
                     <span className="w-0 h-px bg-[#dc2626] group-hover:w-3 transition-all duration-300" />
                     {cat.label}
@@ -180,14 +180,14 @@ export default function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t border-[#1e1e1e]">
+      <div className="border-t border-[#e5e7eb]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-3">
-          <p className="text-white/25 text-xs font-exo text-center sm:text-left">
+          <p className="text-[#9ca3af] text-xs font-exo text-center sm:text-left">
             &copy; {year} GMATOSCAR Supercarros. Todos os direitos reservados.
           </p>
           <div className="flex items-center gap-1">
             <span className="w-2 h-2 rounded-full bg-[#dc2626] animate-pulse" />
-            <span className="text-white/25 text-xs font-exo">Powered by passion for supercars</span>
+            <span className="text-[#9ca3af] text-xs font-exo">Powered by passion for supercars</span>
           </div>
         </div>
       </div>

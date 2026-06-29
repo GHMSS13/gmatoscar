@@ -228,28 +228,28 @@ export default function AdminPage() {
   }, [session?.user]);
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a] pb-20 pt-28">
+    <main className="min-h-screen bg-white pb-20 pt-28">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col gap-6 bg-[#111] border border-[#222] rounded-2xl p-8 shadow-xl">
+        <div className="flex flex-col gap-6 bg-white border border-[#e5e7eb] rounded-2xl p-8 shadow-xl">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
               <p className="text-[#dc2626] text-xs uppercase tracking-[0.35em] font-bold font-rajdhani mb-3">
                 Área administrativa
               </p>
-              <h1 className="text-3xl sm:text-4xl font-rajdhani font-bold text-white">
+              <h1 className="text-3xl sm:text-4xl font-rajdhani font-bold text-[#111827]">
                 Criar novo post
               </h1>
-              <p className="text-white/50 mt-2 max-w-2xl text-sm font-exo">
+              <p className="text-[#4b5563] mt-2 max-w-2xl text-sm font-exo">
                 Faça login com Google e publique artigos diretamente no Supabase. O login não é exigido para a área pública do site.
               </p>
-              <p className="text-white/40 mt-2 max-w-2xl text-sm font-exo">
+              <p className="text-[#6b7280] mt-2 max-w-2xl text-sm font-exo">
                 Esta área é exclusiva para contas autorizadas na tabela <code>admins</code> do Supabase.
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-3 justify-end">
               {session?.user ? (
                 <>
-                  <span className="text-white/70 text-sm font-exo">{session.user.email}</span>
+                  <span className="text-[#374151] text-sm font-exo">{session.user.email}</span>
                   <button
                     type="button"
                     onClick={handleSignOut}
@@ -273,26 +273,26 @@ export default function AdminPage() {
           </div>
 
           {!session?.user && (
-            <div className="rounded-xl border border-[#333] bg-[#0f0f0f] p-4 text-sm text-white/80">
+            <div className="rounded-xl border border-[#e5e7eb] bg-[#f9fafb] p-4 text-sm text-[#4b5563]">
               Faça login com Google para acessar o formulário de criação de posts.
             </div>
           )}
 
           {session?.user && !isAdmin && (
-            <div className="rounded-xl border border-[#333] bg-[#0f0f0f] p-4 text-sm text-yellow-300">
+            <div className="rounded-xl border border-[#fde68a] bg-[#fffbeb] p-4 text-sm text-[#92400e]">
               Você está logado, mas seu e-mail ainda não está configurado como admin no banco. Insira seu email na tabela <code>admins</code> do Supabase para habilitar a criação de posts.
             </div>
           )}
 
           {message && (
-            <div className="rounded-xl border border-[#333] bg-[#0f0f0f] p-4 text-sm text-white/80">
+            <div className="rounded-xl border border-[#e5e7eb] bg-[#f9fafb] p-4 text-sm text-[#4b5563]">
               {message}
             </div>
           )}
 
           {isMissingPostsSchema && (
-            <div className="rounded-2xl border border-[#3a2a2a] bg-[#140f0f] p-5 text-sm text-white/80">
-              <h2 className="font-semibold text-white mb-3">Correção rápida: criar tabela de posts</h2>
+            <div className="rounded-2xl border border-[#fecaca] bg-[#fff1f2] p-5 text-sm text-[#7f1d1d]">
+              <h2 className="font-semibold text-[#7f1d1d] mb-3">Correção rápida: criar tabela de posts</h2>
               <p className="mb-3">
                 Abra o SQL Editor do Supabase e execute o conteúdo de <code className="text-[#dc2626]">supabase/posts_schema.sql</code>.
               </p>
@@ -303,24 +303,24 @@ export default function AdminPage() {
           )}
 
           {session?.user && isAdmin && (
-            <div className="rounded-2xl border border-[#222] bg-[#0b0b0b] p-4 sm:p-6">
+            <div className="rounded-2xl border border-[#e5e7eb] bg-[#f9fafb] p-4 sm:p-6">
               <form onSubmit={handleSubmit} className="grid gap-6">
                 <div className="grid gap-6 lg:grid-cols-2">
                 <label className="block">
-                  <span className="text-white/70 text-sm font-exo">Título</span>
+                  <span className="text-[#374151] text-sm font-exo">Título</span>
                   <input
                     value={form.title}
                     onChange={(event) => handleInput('title', event.target.value)}
-                    className="mt-2 w-full rounded-xl border border-[#222] bg-[#0a0a0a] px-4 py-3 text-white outline-none transition-all focus:border-[#dc2626]"
+                    className="mt-2 w-full rounded-xl border border-[#d1d5db] bg-white px-4 py-3 text-[#111827] outline-none transition-all focus:border-[#dc2626]"
                     required
                   />
                 </label>
                 <label className="block">
-                  <span className="text-white/70 text-sm font-exo">Slug</span>
+                  <span className="text-[#374151] text-sm font-exo">Slug</span>
                   <input
                     value={form.slug}
                     onChange={(event) => handleInput('slug', event.target.value)}
-                    className="mt-2 w-full rounded-xl border border-[#222] bg-[#0a0a0a] px-4 py-3 text-white outline-none transition-all focus:border-[#dc2626]"
+                    className="mt-2 w-full rounded-xl border border-[#d1d5db] bg-white px-4 py-3 text-[#111827] outline-none transition-all focus:border-[#dc2626]"
                     required
                     placeholder="ex: ferrari-f80-1200cv"
                   />
@@ -329,21 +329,21 @@ export default function AdminPage() {
 
               <div className="grid gap-6 lg:grid-cols-2">
                 <label className="block">
-                  <span className="text-white/70 text-sm font-exo">Categoria</span>
+                  <span className="text-[#374151] text-sm font-exo">Categoria</span>
                   <input
                     value={form.category}
                     onChange={(event) => handleInput('category', event.target.value)}
-                    className="mt-2 w-full rounded-xl border border-[#222] bg-[#0a0a0a] px-4 py-3 text-white outline-none transition-all focus:border-[#dc2626]"
+                    className="mt-2 w-full rounded-xl border border-[#d1d5db] bg-white px-4 py-3 text-[#111827] outline-none transition-all focus:border-[#dc2626]"
                     required
                   />
                 </label>
                 <label className="block">
-                  <span className="text-white/70 text-sm font-exo">Data</span>
+                  <span className="text-[#374151] text-sm font-exo">Data</span>
                   <input
                     type="date"
                     value={form.date}
                     onChange={(event) => handleInput('date', event.target.value)}
-                    className="mt-2 w-full rounded-xl border border-[#222] bg-[#0a0a0a] px-4 py-3 text-white outline-none transition-all focus:border-[#dc2626]"
+                    className="mt-2 w-full rounded-xl border border-[#d1d5db] bg-white px-4 py-3 text-[#111827] outline-none transition-all focus:border-[#dc2626]"
                     required
                   />
                 </label>
@@ -351,72 +351,72 @@ export default function AdminPage() {
 
               <div className="grid gap-6 lg:grid-cols-2">
                 <label className="block">
-                  <span className="text-white/70 text-sm font-exo">Tempo de leitura</span>
+                  <span className="text-[#374151] text-sm font-exo">Tempo de leitura</span>
                   <input
                     value={form.read_time}
                     onChange={(event) => handleInput('read_time', event.target.value)}
-                    className="mt-2 w-full rounded-xl border border-[#222] bg-[#0a0a0a] px-4 py-3 text-white outline-none transition-all focus:border-[#dc2626]"
+                    className="mt-2 w-full rounded-xl border border-[#d1d5db] bg-white px-4 py-3 text-[#111827] outline-none transition-all focus:border-[#dc2626]"
                     required
                   />
                 </label>
                 <label className="block">
-                  <span className="text-white/70 text-sm font-exo">Imagem URL</span>
+                  <span className="text-[#374151] text-sm font-exo">Imagem URL</span>
                   <input
                     value={form.image_url}
                     onChange={(event) => handleInput('image_url', event.target.value)}
-                    className="mt-2 w-full rounded-xl border border-[#222] bg-[#0a0a0a] px-4 py-3 text-white outline-none transition-all focus:border-[#dc2626]"
+                    className="mt-2 w-full rounded-xl border border-[#d1d5db] bg-white px-4 py-3 text-[#111827] outline-none transition-all focus:border-[#dc2626]"
                     placeholder="https://..."
                   />
                 </label>
               </div>
 
               <label className="block">
-                <span className="text-white/70 text-sm font-exo">URL externa (opcional)</span>
+                <span className="text-[#374151] text-sm font-exo">URL externa (opcional)</span>
                 <input
                   value={form.external_url}
                   onChange={(event) => handleInput('external_url', event.target.value)}
-                  className="mt-2 w-full rounded-xl border border-[#222] bg-[#0a0a0a] px-4 py-3 text-white outline-none transition-all focus:border-[#dc2626]"
+                  className="mt-2 w-full rounded-xl border border-[#d1d5db] bg-white px-4 py-3 text-[#111827] outline-none transition-all focus:border-[#dc2626]"
                   placeholder="https://..."
                 />
               </label>
               <label className="block">
-                <span className="text-white/70 text-sm font-exo">Resumo / Excerpt</span>
+                <span className="text-[#374151] text-sm font-exo">Resumo / Excerpt</span>
                 <textarea
                   value={form.excerpt}
                   onChange={(event) => handleInput('excerpt', event.target.value)}
-                  className="mt-2 w-full min-h-[120px] rounded-2xl border border-[#222] bg-[#0a0a0a] px-4 py-3 text-white outline-none transition-all focus:border-[#dc2626]"
+                  className="mt-2 w-full min-h-[120px] rounded-2xl border border-[#d1d5db] bg-white px-4 py-3 text-[#111827] outline-none transition-all focus:border-[#dc2626]"
                   required
                 />
               </label>
               <label className="block">
-                <span className="text-white/70 text-sm font-exo">Conteúdo (Markdown)</span>
+                <span className="text-[#374151] text-sm font-exo">Conteúdo (Markdown)</span>
                 <textarea
                   value={form.content}
                   onChange={(event) => handleInput('content', event.target.value)}
-                  className="mt-2 w-full min-h-[220px] rounded-2xl border border-[#222] bg-[#0a0a0a] px-4 py-3 text-white outline-none transition-all focus:border-[#dc2626]"
+                  className="mt-2 w-full min-h-[220px] rounded-2xl border border-[#d1d5db] bg-white px-4 py-3 text-[#111827] outline-none transition-all focus:border-[#dc2626]"
                   required
                   placeholder="Use markdown para formatar texto e links."
                 />
               </label>
 
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
-                <label className="inline-flex items-center gap-3 rounded-xl border border-[#222] bg-[#0a0a0a] px-4 py-3">
+                <label className="inline-flex items-center gap-3 rounded-xl border border-[#d1d5db] bg-white px-4 py-3">
                   <input
                     type="checkbox"
                     checked={form.hot}
                     onChange={(event) => handleInput('hot', event.target.checked)}
                     className="h-4 w-4 rounded border-[#444] bg-[#111] text-[#dc2626] focus:ring-[#dc2626]"
                   />
-                  <span className="text-white/80 text-sm font-exo">Hot</span>
+                  <span className="text-[#374151] text-sm font-exo">Hot</span>
                 </label>
-                <label className="inline-flex items-center gap-3 rounded-xl border border-[#222] bg-[#0a0a0a] px-4 py-3">
+                <label className="inline-flex items-center gap-3 rounded-xl border border-[#d1d5db] bg-white px-4 py-3">
                   <input
                     type="checkbox"
                     checked={form.published}
                     onChange={(event) => handleInput('published', event.target.checked)}
                     className="h-4 w-4 rounded border-[#444] bg-[#111] text-[#dc2626] focus:ring-[#dc2626]"
                   />
-                  <span className="text-white/80 text-sm font-exo">Publicado</span>
+                  <span className="text-[#374151] text-sm font-exo">Publicado</span>
                 </label>
               </div>
 
@@ -432,12 +432,12 @@ export default function AdminPage() {
           </div>
           )}
 
-          <div className="rounded-2xl border border-[#222] bg-[#0f0f0f] p-5 text-sm text-white/70">
-            <h2 className="font-semibold text-white mb-3">Configuração manual do admin</h2>
+          <div className="rounded-2xl border border-[#e5e7eb] bg-[#f9fafb] p-5 text-sm text-[#4b5563]">
+            <h2 className="font-semibold text-[#111827] mb-3">Configuração manual do admin</h2>
             <p className="mb-3">
               Insira o email do Google do administrador diretamente na tabela <code className="text-[#dc2626]">admins</code> do Supabase.
             </p>
-            <pre className="overflow-x-auto rounded-xl bg-[#111] p-4 text-xs text-white/70">
+            <pre className="overflow-x-auto rounded-xl bg-white border border-[#e5e7eb] p-4 text-xs text-[#4b5563]">
 {`insert into public.admins (email) values ('seu-email@gmail.com');`}
             </pre>
             <p className="mt-3">
@@ -449,3 +449,4 @@ export default function AdminPage() {
     </main>
   );
 }
+

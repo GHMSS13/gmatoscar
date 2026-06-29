@@ -41,7 +41,7 @@ const schema = {
 
 export default function MarcasPage() {
   return (
-    <main className="min-h-screen bg-black">
+    <main className="min-h-screen bg-white">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
@@ -55,10 +55,10 @@ export default function MarcasPage() {
           <p className="text-[#dc2626] text-xs font-bold uppercase tracking-[0.3em] font-rajdhani mb-3">
             Fase 1
           </p>
-          <h1 className="text-4xl md:text-6xl font-rajdhani font-bold text-white mb-4">
+          <h1 className="text-4xl md:text-6xl font-serif font-semibold text-[#111827] mb-4">
             Hub de Marcas para SEO
           </h1>
-          <p className="text-white/55 text-sm sm:text-base md:text-lg max-w-3xl font-exo leading-relaxed">
+          <p className="text-[#4b5563] text-sm sm:text-base md:text-lg max-w-3xl font-exo leading-relaxed">
             Esta página concentra as marcas estratégicas para ranqueamento orgânico e distribui autoridade para as páginas individuais de cada fabricante.
           </p>
         </div>
@@ -70,18 +70,18 @@ export default function MarcasPage() {
             <Link
               key={brand.id}
               href={`/marcas/${brand.id}`}
-              className="rounded-2xl border border-[#1e1e1e] bg-[#0f0f0f] p-6 hover:border-[#dc2626]/50 transition-colors"
+              className="rounded-2xl border border-[#e5e7eb] bg-white p-6 hover:border-[#dc2626]/50 transition-colors"
             >
               <p className="text-[#dc2626] text-xs uppercase tracking-[0.35em] font-bold font-rajdhani mb-2">
                 {brand.country}
               </p>
-              <h2 className="text-3xl font-rajdhani font-bold text-white mb-3">
+              <h2 className="text-3xl font-rajdhani font-bold text-[#111827] mb-3">
                 {brand.name}
               </h2>
-              <p className="text-white/50 text-sm font-exo leading-relaxed mb-5">
+              <p className="text-[#6b7280] text-sm font-exo leading-relaxed mb-5">
                 {brand.description}
               </p>
-              <div className="flex items-center justify-between text-xs font-exo text-white/40">
+              <div className="flex items-center justify-between text-xs font-exo text-[#9ca3af]">
                 <span>Fundada em {brand.founded}</span>
                 <span className="text-[#dc2626] font-rajdhani font-bold uppercase tracking-wider">Ver página</span>
               </div>

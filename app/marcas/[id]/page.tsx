@@ -83,7 +83,7 @@ export default async function BrandPage({ params }: Props) {
   };
 
   return (
-    <main className="min-h-screen bg-black">
+    <main className="min-h-screen bg-white">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(brandSchema) }}
@@ -96,30 +96,30 @@ export default async function BrandPage({ params }: Props) {
       <Navbar />
 
       <section className="pt-28 pb-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <Link href="/marcas" className="text-white/45 hover:text-white text-sm font-exo transition-colors">
+        <Link href="/marcas" className="text-[#6b7280] hover:text-[#111827] text-sm font-exo transition-colors">
           Voltar para Marcas
         </Link>
 
-        <div className="mt-6 rounded-3xl border border-[#1e1e1e] bg-[#0f0f0f] p-6 sm:p-8">
+        <div className="mt-6 rounded-3xl border border-[#e5e7eb] bg-white p-6 sm:p-8">
           <p className="text-[#dc2626] text-xs font-bold uppercase tracking-[0.35em] font-rajdhani mb-3">Fase 2</p>
-          <h1 className="text-4xl md:text-6xl font-rajdhani font-bold text-white mb-4">{brand.name}</h1>
-          <p className="text-white/60 font-exo leading-relaxed max-w-3xl mb-8">{brand.description}</p>
+          <h1 className="text-4xl md:text-6xl font-serif font-semibold text-[#111827] mb-4">{brand.name}</h1>
+          <p className="text-[#4b5563] font-exo leading-relaxed max-w-3xl mb-8">{brand.description}</p>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="rounded-xl border border-white/10 bg-black/30 p-4">
-              <p className="text-white/35 text-xs uppercase tracking-[0.3em] font-rajdhani mb-2">Fundação</p>
-              <p className="text-white font-rajdhani text-2xl font-bold">{brand.founded}</p>
+            <div className="rounded-xl border border-[#e5e7eb] bg-[#f9fafb] p-4">
+              <p className="text-[#9ca3af] text-xs uppercase tracking-[0.3em] font-rajdhani mb-2">Fundação</p>
+              <p className="text-[#111827] font-rajdhani text-2xl font-bold">{brand.founded}</p>
             </div>
-            <div className="rounded-xl border border-white/10 bg-black/30 p-4">
-              <p className="text-white/35 text-xs uppercase tracking-[0.3em] font-rajdhani mb-2">País</p>
-              <p className="text-white font-rajdhani text-2xl font-bold">{brand.country}</p>
+            <div className="rounded-xl border border-[#e5e7eb] bg-[#f9fafb] p-4">
+              <p className="text-[#9ca3af] text-xs uppercase tracking-[0.3em] font-rajdhani mb-2">País</p>
+              <p className="text-[#111827] font-rajdhani text-2xl font-bold">{brand.country}</p>
             </div>
-            <div className="rounded-xl border border-white/10 bg-black/30 p-4">
-              <p className="text-white/35 text-xs uppercase tracking-[0.3em] font-rajdhani mb-2">Modelo Top</p>
-              <p className="text-white font-rajdhani text-2xl font-bold">{brand.topModel}</p>
+            <div className="rounded-xl border border-[#e5e7eb] bg-[#f9fafb] p-4">
+              <p className="text-[#9ca3af] text-xs uppercase tracking-[0.3em] font-rajdhani mb-2">Modelo Top</p>
+              <p className="text-[#111827] font-rajdhani text-2xl font-bold">{brand.topModel}</p>
             </div>
-            <div className="rounded-xl border border-white/10 bg-black/30 p-4">
-              <p className="text-white/35 text-xs uppercase tracking-[0.3em] font-rajdhani mb-2">Velocidade</p>
+            <div className="rounded-xl border border-[#e5e7eb] bg-[#f9fafb] p-4">
+              <p className="text-[#9ca3af] text-xs uppercase tracking-[0.3em] font-rajdhani mb-2">Velocidade</p>
               <p className="text-[#dc2626] font-rajdhani text-2xl font-bold">{brand.maxSpeed}</p>
             </div>
           </div>
@@ -128,29 +128,29 @@ export default async function BrandPage({ params }: Props) {
 
       <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto pb-12">
         <div className="grid gap-6 lg:grid-cols-2">
-          <div className="rounded-2xl border border-[#1e1e1e] bg-[#0f0f0f] p-6">
-            <h2 className="text-white font-rajdhani font-bold text-2xl mb-4">Linha do tempo</h2>
+          <div className="rounded-2xl border border-[#e5e7eb] bg-white p-6">
+            <h2 className="text-[#111827] font-rajdhani font-bold text-2xl mb-4">Linha do tempo</h2>
             <div className="space-y-4">
               {brand.timeline.map((item) => (
                 <div key={`${item.year}-${item.title}`} className="border-l-2 border-[#dc2626]/30 pl-4">
                   <p className="text-[#dc2626] text-xs uppercase tracking-[0.3em] font-rajdhani font-bold">{item.year}</p>
-                  <h3 className="text-white font-rajdhani font-bold text-lg">{item.title}</h3>
-                  <p className="text-white/50 text-sm font-exo leading-relaxed">{item.description}</p>
+                  <h3 className="text-[#111827] font-rajdhani font-bold text-lg">{item.title}</h3>
+                  <p className="text-[#6b7280] text-sm font-exo leading-relaxed">{item.description}</p>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="rounded-2xl border border-[#1e1e1e] bg-[#0f0f0f] p-6">
-            <h2 className="text-white font-rajdhani font-bold text-2xl mb-4">Modelos famosos</h2>
+          <div className="rounded-2xl border border-[#e5e7eb] bg-white p-6">
+            <h2 className="text-[#111827] font-rajdhani font-bold text-2xl mb-4">Modelos famosos</h2>
             <div className="space-y-4">
               {brand.famousModels.map((item) => (
-                <div key={item.slug} className="rounded-xl border border-white/10 bg-black/30 p-4">
+                <div key={item.slug} className="rounded-xl border border-[#e5e7eb] bg-[#f9fafb] p-4">
                   <div className="flex items-center justify-between gap-3">
-                    <h3 className="text-white font-rajdhani font-bold text-xl">{item.name}</h3>
+                    <h3 className="text-[#111827] font-rajdhani font-bold text-xl">{item.name}</h3>
                     <span className="text-[#dc2626] text-xs uppercase tracking-[0.3em] font-rajdhani font-bold">{item.year}</span>
                   </div>
-                  <p className="text-white/50 text-sm font-exo mt-2">{item.highlight}</p>
+                  <p className="text-[#6b7280] text-sm font-exo mt-2">{item.highlight}</p>
                 </div>
               ))}
             </div>
@@ -159,15 +159,15 @@ export default async function BrandPage({ params }: Props) {
       </section>
 
       <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto pb-20">
-        <h2 className="text-white font-rajdhani font-bold text-3xl mb-6">Notícias relacionadas</h2>
+        <h2 className="text-[#111827] font-rajdhani font-bold text-3xl mb-6">Notícias relacionadas</h2>
         {relatedPosts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {relatedPosts.map((post) => (
-              <NewsCard key={post.id} item={post} />
+              <NewsCard key={post.id} item={post} theme="light" />
             ))}
           </div>
         ) : (
-          <div className="rounded-xl border border-white/10 bg-[#0f0f0f] p-5 text-white/55 font-exo text-sm">
+          <div className="rounded-xl border border-[#e5e7eb] bg-white p-5 text-[#6b7280] font-exo text-sm">
             Ainda não temos notícias específicas para esta marca.
           </div>
         )}

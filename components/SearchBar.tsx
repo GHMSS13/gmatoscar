@@ -74,14 +74,14 @@ export default function SearchBar({
       <form onSubmit={handleSubmit} className="relative">
         <Search
           size={16}
-          className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30 pointer-events-none"
+          className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9ca3af] pointer-events-none"
         />
         <input
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Pesquisar..."
-          className="w-full bg-[#1a1a1a] border border-[#2a2a2a] focus:border-[#dc2626]/50 text-white placeholder-white/30 pl-10 pr-4 py-2.5 rounded-sm outline-none transition-all duration-300 font-exo text-sm"
+          className="w-full bg-white border border-[#d1d5db] focus:border-[#dc2626]/50 text-[#111827] placeholder-[#9ca3af] pl-10 pr-4 py-2.5 rounded-sm outline-none transition-all duration-300 font-exo text-sm"
         />
       </form>
     );
@@ -92,20 +92,20 @@ export default function SearchBar({
       <div className="relative flex items-center">
         <Search
           size={18}
-          className="absolute left-4 text-white/40 group-focus-within:text-[#dc2626] transition-colors duration-300"
+          className="absolute left-4 text-[#9ca3af] group-focus-within:text-[#dc2626] transition-colors duration-300"
         />
         <input
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Pesquisar supercarros..."
-          className="w-full bg-[#1a1a1a] border border-[#2a2a2a] focus:border-[#dc2626]/50 text-white placeholder-white/30 pl-11 pr-28 py-3 rounded-sm outline-none transition-all duration-300 font-exo text-sm"
+          className="w-full bg-white border border-[#d1d5db] focus:border-[#dc2626]/50 text-[#111827] placeholder-[#9ca3af] pl-11 pr-28 py-3 rounded-sm outline-none transition-all duration-300 font-exo text-sm"
         />
         {query && (
           <button
             type="button"
             onClick={handleClear}
-            className="absolute right-24 text-white/30 hover:text-white/60 transition-colors"
+            className="absolute right-24 text-[#9ca3af] hover:text-[#4b5563] transition-colors"
           >
             <X size={15} />
           </button>

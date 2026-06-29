@@ -42,7 +42,7 @@ export default function RankingPreview({ theme = 'dark' }: RankingPreviewProps) 
         {top5.map((car, idx) => (
           <div
             key={car.position}
-            className="group relative flex flex-col sm:flex-row items-start sm:items-center gap-3 md:gap-6 bg-[#111] border border-[#1e1e1e] hover:border-[#dc2626]/30 rounded-sm p-3 sm:p-4 md:p-5 transition-all duration-300 hover:shadow-[0_0_20px_rgba(220,38,38,0.1)] overflow-hidden"
+            className={`group relative flex flex-col sm:flex-row items-start sm:items-center gap-3 md:gap-6 rounded-sm p-3 sm:p-4 md:p-5 transition-all duration-300 hover:shadow-[0_0_20px_rgba(220,38,38,0.1)] overflow-hidden ${isLight ? 'bg-white border border-[#e5e7eb] hover:border-[#dc2626]/30' : 'bg-[#111] border border-[#1e1e1e] hover:border-[#dc2626]/30'}`}
             style={{ animationDelay: `${idx * 100}ms` }}
           >
             {/* Position */}
@@ -52,8 +52,10 @@ export default function RankingPreview({ theme = 'dark' }: RankingPreviewProps) 
                 color: medalColors[car.position] ?? '#555',
                 backgroundColor: medalColors[car.position]
                   ? `${medalColors[car.position]}15`
-                  : '#1a1a1a',
-                border: `1px solid ${medalColors[car.position] ? `${medalColors[car.position]}30` : '#2a2a2a'}`,
+                  : isLight
+                    ? '#f9fafb'
+                    : '#1a1a1a',
+                border: `1px solid ${medalColors[car.position] ? `${medalColors[car.position]}30` : isLight ? '#e5e7eb' : '#2a2a2a'}`,
               }}
             >
               {car.position <= 3 ? (
@@ -72,21 +74,21 @@ export default function RankingPreview({ theme = 'dark' }: RankingPreviewProps) 
                 className="object-cover transition-transform duration-500 group-hover:scale-110"
                 sizes="(max-width: 768px) 80px, 112px"
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#111]/20" />
+              <div className={`absolute inset-0 bg-gradient-to-r from-transparent ${isLight ? 'to-white/20' : 'to-[#111]/20'}`} />
             </div>
 
             {/* Info */}
             <div className="flex-1 min-w-0">
               <div className="flex items-start justify-between gap-2 flex-wrap">
                 <div className="min-w-0">
-                  <p className="text-white/40 text-xs font-exo uppercase tracking-widest mb-0.5">
+                  <p className={`text-xs font-exo uppercase tracking-widest mb-0.5 ${isLight ? 'text-[#6b7280]' : 'text-white/40'}`}>
                     {car.brand}
                   </p>
-                  <h3 className="font-rajdhani font-bold text-base sm:text-lg md:text-xl leading-none group-hover:text-[#dc2626] transition-colors duration-300 line-clamp-2">
+                  <h3 className={`font-bold text-base sm:text-lg md:text-xl leading-none group-hover:text-[#dc2626] transition-colors duration-300 line-clamp-2 ${isLight ? 'font-serif text-[#111]' : 'font-rajdhani text-white'}`}>
                     {car.name}
                   </h3>
                 </div>
-                <span className="font-rajdhani font-bold text-sm sm:text-base md:text-lg flex-shrink-0 self-start sm:self-auto">
+                <span className={`font-rajdhani font-bold text-sm sm:text-base md:text-lg flex-shrink-0 self-start sm:self-auto ${isLight ? 'text-[#374151]' : 'text-white'}`}>
                   {car.price}
                 </span>
               </div>
@@ -95,15 +97,15 @@ export default function RankingPreview({ theme = 'dark' }: RankingPreviewProps) 
               <div className="flex flex-wrap items-center gap-3 mt-2 sm:mt-3">
                 <div className="flex items-center gap-1.5 text-sm">
                   <Gauge size={13} className="text-[#dc2626]" />
-                  <span className="text-white/70 font-exo">{car.topSpeed}</span>
+                  <span className={`font-exo ${isLight ? 'text-[#4b5563]' : 'text-white/70'}`}>{car.topSpeed}</span>
                 </div>
                 <div className="flex items-center gap-1.5 text-sm">
                   <Zap size={13} className="text-[#dc2626]" />
-                  <span className="text-white/70 font-exo">{car.horsepower}</span>
+                  <span className={`font-exo ${isLight ? 'text-[#4b5563]' : 'text-white/70'}`}>{car.horsepower}</span>
                 </div>
                 <div className="hidden sm:flex items-center gap-1.5 text-sm">
-                  <span className="text-white/30 font-exo text-xs">0–100:</span>
-                  <span className="text-white/70 font-exo">{car.acceleration}</span>
+                  <span className={`font-exo text-xs ${isLight ? 'text-[#9ca3af]' : 'text-white/30'}`}>0–100:</span>
+                  <span className={`font-exo ${isLight ? 'text-[#4b5563]' : 'text-white/70'}`}>{car.acceleration}</span>
                 </div>
               </div>
             </div>
