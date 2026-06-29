@@ -79,6 +79,7 @@ export default function AdminPage() {
 
   const verifyAdmin = async (email: string) => {
     const normalizedEmail = email.trim().toLowerCase();
+    const isFallbackAdmin = allowedAdminEmails.includes(normalizedEmail);
     setLoading(true);
     const { data, error } = await supabase
       .from('admins')
@@ -89,13 +90,14 @@ export default function AdminPage() {
 
     setLoading(false);
     if (error) {
-      setIsAdmin(false);
-      setMessage(`Falha ao validar admin: ${error.message}`);
+      setIsAdmin(isFallbackAdmin);
+      if (!isFallbackAdmin) {
+        setMessage(`Falha ao validar admin: ${error.message}`);
+      }
       return;
     }
 
     if (!data) {
-      const isFallbackAdmin = allowedAdminEmails.includes(normalizedEmail);
       setIsAdmin(isFallbackAdmin);
       if (!isFallbackAdmin) {
         setMessage('Seu e-mail não foi encontrado na lista de admins. Verifique tabela admins e policies RLS no Supabase.');
@@ -118,19 +120,24 @@ export default function AdminPage() {
 
   const handleSignOut = async () => {
     setLoading(true);
-    const { error } = await supabase.auth.signOut();
-
     const authStorageKey = (supabase.auth as any).storageKey as string | undefined;
     if (authStorageKey) {
       localStorage.removeItem(authStorageKey);
     }
+
+    // Update UI immediately so logout feels instant even if network calls hang.
     setSession(null);
     setIsAdmin(false);
+    setMessage(null);
+
+    supabase.auth.signOut().catch(() => {
+      // Session is already cleared locally.
+    });
+
     setLoading(false);
 
-    if (error) {
-      setMessage(`Falha ao sair: ${error.message}`);
-      return;
+    if (authStorageKey) {
+      localStorage.removeItem(`${authStorageKey}-code-verifier`);
     }
 
     router.replace('/admin');
