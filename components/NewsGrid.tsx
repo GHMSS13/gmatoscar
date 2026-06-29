@@ -16,9 +16,9 @@ export default function NewsGrid({ posts }: NewsGridProps) {
   const sideItems = feedPosts.slice(4, 7);
 
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <section className="py-14 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       {/* Section header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 mb-10">
+      <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-3 sm:gap-4 mb-8 sm:mb-10">
         <div>
           <p className="text-[#dc2626] text-xs font-bold uppercase tracking-[0.3em] font-rajdhani mb-2">
             Ultimas Noticias
@@ -37,7 +37,7 @@ export default function NewsGrid({ posts }: NewsGridProps) {
 
       {/* Featured row: two large cards */}
       {featured.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-4 sm:mb-6">
           {featured.map((item) => (
             <NewsCard key={item.id} item={item} variant="featured" />
           ))}
@@ -45,9 +45,9 @@ export default function NewsGrid({ posts }: NewsGridProps) {
       )}
 
       {/* Main grid + sidebar */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         {/* Cards grid */}
-        <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
           {rest.map((item) => (
             <NewsCard key={item.id} item={item} />
           ))}

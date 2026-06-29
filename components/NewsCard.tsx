@@ -13,7 +13,7 @@ export default function NewsCard({ item, variant = 'default' }: NewsCardProps) {
     return (
       <article className="news-card relative group h-full rounded-sm overflow-hidden card-glow cursor-pointer bg-[#111]">
         <Link href={`/noticias/${item.slug}`} className="block h-full">
-          <div className="relative h-full min-h-[320px] sm:min-h-[420px] md:min-h-[560px] overflow-hidden">
+          <div className="relative h-full min-h-[250px] sm:min-h-[320px] md:min-h-[430px] overflow-hidden">
             <Image
               src={item.image_url}
               alt={item.title}
@@ -24,7 +24,7 @@ export default function NewsCard({ item, variant = 'default' }: NewsCardProps) {
             <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/60 to-transparent" />
 
             {/* Content overlay */}
-            <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
+            <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
               <div className="flex items-center gap-3 mb-3">
                 <span className="tag-badge bg-[#dc2626] text-white">{item.category}</span>
                 {item.hot && (
@@ -33,10 +33,10 @@ export default function NewsCard({ item, variant = 'default' }: NewsCardProps) {
                   </span>
                 )}
               </div>
-              <h2 className="font-rajdhani text-2xl md:text-3xl font-bold text-white leading-tight mb-3 group-hover:text-[#dc2626] transition-colors duration-300">
+              <h2 className="font-rajdhani text-xl md:text-2xl font-bold text-white leading-tight mb-2 group-hover:text-[#dc2626] transition-colors duration-300 line-clamp-2">
                 {item.title}
               </h2>
-              <p className="text-white/60 text-sm leading-relaxed mb-4 line-clamp-2 font-exo">
+              <p className="text-white/60 text-sm leading-relaxed mb-3 line-clamp-2 font-exo">
                 {item.excerpt}
               </p>
               <div className="flex items-center justify-between">
@@ -108,14 +108,14 @@ export default function NewsCard({ item, variant = 'default' }: NewsCardProps) {
             )}
           </div>
         </div>
-        <div className="flex flex-col flex-1 p-5">
-          <h3 className="font-rajdhani text-lg font-bold text-white leading-tight mb-3 group-hover:text-[#dc2626] transition-colors duration-300 line-clamp-2">
+        <div className="flex flex-col flex-1 p-4 sm:p-5">
+          <h3 className="font-rajdhani text-base sm:text-lg font-bold text-white leading-tight mb-2 sm:mb-3 group-hover:text-[#dc2626] transition-colors duration-300 line-clamp-2">
             {item.title}
           </h3>
-          <p className="text-white/50 text-sm leading-relaxed mb-4 flex-1 line-clamp-3 font-exo">
+          <p className="text-white/50 text-sm leading-relaxed mb-3 sm:mb-4 flex-1 line-clamp-2 sm:line-clamp-3 font-exo">
             {item.excerpt}
           </p>
-          <div className="flex items-center justify-between border-t border-[#1e1e1e] pt-3 mt-auto">
+          <div className="flex items-center justify-between border-t border-[#1e1e1e] pt-2 sm:pt-3 mt-auto">
             <div className="flex items-center gap-3 text-xs text-white/30 font-exo">
               <span>{item.date}</span>
               <span className="flex items-center gap-1"><Clock size={11} /> {item.read_time}</span>

@@ -63,12 +63,12 @@ export default function Footer() {
     <footer className="bg-[#0d0d0d] border-t border-[#1e1e1e]">
       {/* Social strip */}
       <div className="bg-[#111] border-b border-[#1e1e1e]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
             <p className="text-white/40 text-sm font-exo">
               Siga o GMATOSCAR nas redes sociais:
             </p>
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
               {socialLinks.map((s) => {
                 const Icon = s.icon;
                 return (
@@ -95,12 +95,12 @@ export default function Footer() {
       </div>
 
       {/* Main footer content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-14">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10">
           {/* Brand */}
           <div className="lg:col-span-2">
             <Link href="/" className="inline-block mb-5">
-              <div className="relative w-48 h-12">
+              <div className="relative w-44 sm:w-48 h-11 sm:h-12">
                 <Image
                   src="/images/gmatoscar_canal_youtube_carros.png"
                   alt="GMATOSCAR Supercarros"
@@ -115,7 +115,7 @@ export default function Footer() {
             </p>
 
             {/* Social icons large */}
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3">
               {socialLinks.map((s) => {
                 const Icon = s.icon;
                 return (
@@ -181,7 +181,7 @@ export default function Footer() {
 
       {/* Bottom bar */}
       <div className="border-t border-[#1e1e1e]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-3">
           <p className="text-white/25 text-xs font-exo text-center sm:text-left">
             &copy; {year} GMATOSCAR Supercarros. Todos os direitos reservados.
           </p>

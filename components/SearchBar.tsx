@@ -37,30 +37,30 @@ export default function SearchBar({
   if (variant === 'hero') {
     return (
       <form onSubmit={handleSubmit} className="relative group">
-        <div className="relative flex items-center">
+        <div className="relative flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-0">
           <Search
             size={18}
-            className="absolute left-5 text-white/40 group-focus-within:text-[#dc2626] transition-colors duration-300 z-10"
+            className="absolute left-5 top-4 sm:top-1/2 sm:-translate-y-1/2 text-white/40 group-focus-within:text-[#dc2626] transition-colors duration-300 z-10"
           />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Pesquise por marcas, modelos, categorias..."
-            className="w-full bg-white/5 backdrop-blur-sm border border-white/15 focus:border-[#dc2626]/60 text-white placeholder-white/30 pl-12 pr-32 py-4 rounded-sm outline-none transition-all duration-300 font-exo text-sm focus:bg-white/8 focus:shadow-[0_0_20px_rgba(220,38,38,0.15)]"
+            className="w-full bg-white/5 backdrop-blur-sm border border-white/15 focus:border-[#dc2626]/60 text-white placeholder-white/30 pl-12 pr-4 sm:pr-32 py-4 rounded-sm outline-none transition-all duration-300 font-exo text-sm focus:bg-white/8 focus:shadow-[0_0_20px_rgba(220,38,38,0.15)]"
           />
           {query && (
             <button
               type="button"
               onClick={handleClear}
-              className="absolute right-24 text-white/30 hover:text-white/70 transition-colors"
+              className="absolute right-3 top-4 sm:top-1/2 sm:-translate-y-1/2 sm:right-24 text-white/30 hover:text-white/70 transition-colors"
             >
               <X size={16} />
             </button>
           )}
           <button
             type="submit"
-            className="absolute right-2 bg-[#dc2626] hover:bg-[#b91c1c] text-white font-rajdhani font-bold uppercase tracking-widest px-5 py-2.5 rounded-sm transition-all duration-300 text-xs"
+            className="w-full sm:absolute sm:right-2 bg-[#dc2626] hover:bg-[#b91c1c] text-white font-rajdhani font-bold uppercase tracking-widest px-5 py-3 sm:py-2.5 rounded-sm transition-all duration-300 text-xs"
           >
             Buscar
           </button>

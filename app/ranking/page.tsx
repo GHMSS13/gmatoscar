@@ -23,26 +23,26 @@ export default function RankingPage() {
       <Navbar />
 
       {/* Header */}
-      <section className="relative pt-36 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      <section className="relative pt-24 sm:pt-36 pb-12 sm:pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
         <div className="absolute inset-0 grid-pattern opacity-20" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(148,163,184,0.08)_0%,transparent_70%)]" />
         <div className="max-w-7xl mx-auto relative z-10">
           <p className="text-[#dc2626] text-xs font-bold uppercase tracking-[0.3em] font-rajdhani mb-3">
             Os Mais Rapidos
           </p>
-          <h1 className="text-4xl md:text-6xl font-rajdhani font-bold text-white mb-4">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl font-rajdhani font-bold text-white mb-3 sm:mb-4">
             Ranking de Supercarros
           </h1>
-          <p className="text-white/50 text-base md:text-lg max-w-xl font-exo leading-relaxed">
+          <p className="text-white/50 text-sm sm:text-base md:text-lg max-w-xl font-exo leading-relaxed">
             Os supercarros mais rápidos, poderosos e impressionantes do planeta, classificados por desempenho e tecnologia.
           </p>
-          <div className="mt-6 w-20 h-1 bg-[#dc2626] rounded-full" />
+          <div className="mt-5 sm:mt-6 w-20 h-1 bg-[#dc2626] rounded-full" />
         </div>
       </section>
 
       {/* Stats summary */}
       <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto mb-12">
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
           {[
             { label: 'Modelos', value: rankings.length.toString(), icon: Trophy },
             { label: 'Vel. Max', value: '445 km/h', icon: Gauge },

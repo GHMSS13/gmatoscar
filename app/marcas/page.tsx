@@ -18,21 +18,21 @@ export default function MarcasPage() {
       <Navbar />
 
       {/* Page Header */}
-      <section className="relative pt-36 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      <section className="relative pt-24 sm:pt-36 pb-12 sm:pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
         <div className="absolute inset-0 grid-pattern opacity-20" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(148,163,184,0.08)_0%,transparent_70%)]" />
         <div className="max-w-7xl mx-auto relative z-10">
           <p className="text-[#dc2626] text-xs font-bold uppercase tracking-[0.3em] font-rajdhani mb-3">
             Fabricantes
           </p>
-          <h1 className="text-4xl md:text-6xl font-rajdhani font-bold text-white mb-4">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl font-rajdhani font-bold text-white mb-3 sm:mb-4">
             Marcas Icônicas
           </h1>
-          <p className="text-white/50 text-base md:text-lg max-w-xl font-exo leading-relaxed">
+          <p className="text-white/50 text-sm sm:text-base md:text-lg max-w-xl font-exo leading-relaxed">
             Conheça a história, os modelos e os recordes das marcas mais respeitadas e desejadas do mundo dos supercarros.
           </p>
           {/* Red accent line */}
-          <div className="mt-6 w-20 h-1 bg-[#dc2626] rounded-full" />
+          <div className="mt-5 sm:mt-6 w-20 h-1 bg-[#dc2626] rounded-full" />
         </div>
       </section>
 

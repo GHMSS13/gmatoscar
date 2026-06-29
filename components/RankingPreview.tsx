@@ -13,9 +13,9 @@ export default function RankingPreview() {
   const top5 = rankings.slice(0, 5);
 
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <section className="py-14 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 mb-12">
+      <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-3 sm:gap-4 mb-8 sm:mb-12">
         <div>
           <p className="text-[#dc2626] text-xs font-bold uppercase tracking-[0.3em] font-rajdhani mb-2">
             Os Mais Rapidos
@@ -33,16 +33,16 @@ export default function RankingPreview() {
       </div>
 
       {/* Ranking list */}
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         {top5.map((car, idx) => (
           <div
             key={car.position}
-            className="group relative flex flex-col sm:flex-row items-start sm:items-center gap-4 md:gap-6 bg-[#111] border border-[#1e1e1e] hover:border-[#dc2626]/30 rounded-sm p-4 md:p-5 transition-all duration-300 hover:shadow-[0_0_20px_rgba(220,38,38,0.1)] overflow-hidden"
+            className="group relative flex flex-col sm:flex-row items-start sm:items-center gap-3 md:gap-6 bg-[#111] border border-[#1e1e1e] hover:border-[#dc2626]/30 rounded-sm p-3 sm:p-4 md:p-5 transition-all duration-300 hover:shadow-[0_0_20px_rgba(220,38,38,0.1)] overflow-hidden"
             style={{ animationDelay: `${idx * 100}ms` }}
           >
             {/* Position */}
             <div
-              className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-sm font-rajdhani font-bold text-xl md:text-2xl"
+              className="flex-shrink-0 w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center rounded-sm font-rajdhani font-bold text-lg sm:text-xl md:text-2xl"
               style={{
                 color: medalColors[car.position] ?? '#555',
                 backgroundColor: medalColors[car.position]
@@ -59,7 +59,7 @@ export default function RankingPreview() {
             </div>
 
             {/* Car image */}
-            <div className="flex-shrink-0 relative w-20 h-14 md:w-28 md:h-20 rounded-sm overflow-hidden">
+            <div className="flex-shrink-0 relative w-full sm:w-20 h-40 sm:h-14 md:w-28 md:h-20 rounded-sm overflow-hidden">
               <Image
                 src={car.image}
                 alt={`${car.brand} ${car.name}`}
@@ -77,17 +77,17 @@ export default function RankingPreview() {
                   <p className="text-white/40 text-xs font-exo uppercase tracking-widest mb-0.5">
                     {car.brand}
                   </p>
-                  <h3 className="font-rajdhani font-bold text-white text-lg md:text-xl leading-none group-hover:text-[#dc2626] transition-colors duration-300 line-clamp-2">
+                  <h3 className="font-rajdhani font-bold text-base sm:text-lg md:text-xl leading-none group-hover:text-[#dc2626] transition-colors duration-300 line-clamp-2">
                     {car.name}
                   </h3>
                 </div>
-                <span className="font-rajdhani font-bold text-[#dc2626] text-base md:text-lg flex-shrink-0 self-start sm:self-auto">
+                <span className="font-rajdhani font-bold text-sm sm:text-base md:text-lg flex-shrink-0 self-start sm:self-auto">
                   {car.price}
                 </span>
               </div>
 
               {/* Stats */}
-              <div className="flex flex-wrap items-center gap-4 mt-3">
+              <div className="flex flex-wrap items-center gap-3 mt-2 sm:mt-3">
                 <div className="flex items-center gap-1.5 text-sm">
                   <Gauge size={13} className="text-[#dc2626]" />
                   <span className="text-white/70 font-exo">{car.topSpeed}</span>

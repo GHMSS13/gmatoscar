@@ -60,24 +60,24 @@ export default function SobrePage() {
       <Navbar />
 
       {/* Hero */}
-      <section className="relative pt-36 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      <section className="relative pt-24 sm:pt-36 pb-12 sm:pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
         <div className="absolute inset-0 grid-pattern opacity-20" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(148,163,184,0.08)_0%,transparent_60%)]" />
 
         <div className="max-w-7xl mx-auto relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center">
             <div>
               <p className="text-[#dc2626] text-xs font-bold uppercase tracking-[0.3em] font-rajdhani mb-4">
                 Sobre nos
               </p>
-              <h1 className="text-4xl md:text-6xl font-rajdhani font-bold text-white leading-tight mb-6">
+              <h1 className="text-3xl sm:text-4xl md:text-6xl font-rajdhani font-bold text-white leading-tight mb-5 sm:mb-6">
                 O Canal Referência em{' '}
                 <span className="text-[#dc2626]">Supercarros</span> no Brasil
               </h1>
-              <p className="text-white/50 text-base leading-relaxed font-exo mb-6">
+              <p className="text-white/50 text-sm sm:text-base leading-relaxed font-exo mb-5 sm:mb-6">
                 O GMATOSCAR nasceu da paixão por automóveis extraordinários. Desde o início, nosso objetivo é trazer para o público brasileiro o melhor conteúdo sobre supercarros, hypercars e automóveis de alto desempenho do mundo todo.
               </p>
-              <p className="text-white/40 text-base leading-relaxed font-exo mb-8">
+              <p className="text-white/40 text-sm sm:text-base leading-relaxed font-exo mb-7 sm:mb-8">
                 Com uma comunidade apaixonada em crescimento, produzimos notícias, rankings, reviews e comparativos dos veículos mais incríveis do planeta — sempre com rigor técnico e paixão genuína pela velocidade.
               </p>
               <div className="w-20 h-1 bg-[#dc2626] rounded-full" />

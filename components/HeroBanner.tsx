@@ -7,13 +7,13 @@ import SearchBar from './SearchBar';
 
 export default function HeroBanner() {
   return (
-    <section className="relative min-h-[85vh] md:min-h-screen flex flex-col items-center justify-center overflow-hidden">
+    <section className="relative min-h-[78vh] md:min-h-screen flex flex-col items-center justify-center overflow-hidden">
       <div className="absolute inset-0 grid-pattern opacity-20" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(220,38,38,0.1)_0%,transparent_70%)]" />
       {/* Content */}
-      <div className="relative z-10 flex flex-col items-center text-center px-4 sm:px-6 max-w-5xl mx-auto pt-24 pb-16">
+      <div className="relative z-10 flex flex-col items-center text-center px-4 sm:px-6 max-w-5xl mx-auto pt-20 sm:pt-24 pb-12 sm:pb-16">
         {/* Badge */}
-        <div className="inline-flex items-center gap-2 bg-[#dc2626]/15 border border-[#dc2626]/40 rounded-full px-4 py-1.5 mb-8 animate-fade-in">
+        <div className="inline-flex items-center gap-2 bg-[#dc2626]/15 border border-[#dc2626]/40 rounded-full px-3 sm:px-4 py-1.5 mb-6 sm:mb-8 animate-fade-in">
           <Zap size={14} className="text-[#dc2626]" fill="currentColor" />
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#dc2626] font-rajdhani">
             Canal de Supercarros
@@ -21,43 +21,41 @@ export default function HeroBanner() {
         </div>
 
         {/* Main heading */}
-        <h1 className="text-4xl sm:text-5xl md:text-7xl font-rajdhani font-bold uppercase tracking-tight mb-4 animate-fade-in-up leading-none">
+        <h1 className="text-3xl sm:text-5xl md:text-7xl font-rajdhani font-bold uppercase tracking-tight mb-3 sm:mb-4 animate-fade-in-up leading-none">
           <span className="text-white">GMATOS</span>
           <span className="text-[#dc2626]">CAR</span>
         </h1>
 
-        <p className="text-base sm:text-lg md:text-2xl font-rajdhani font-semibold uppercase tracking-[0.3em] text-white/50 mb-4 animate-fade-in-up">
+        <p className="text-sm sm:text-lg md:text-2xl font-rajdhani font-semibold uppercase tracking-[0.22em] sm:tracking-[0.3em] text-white/50 mb-3 sm:mb-4 animate-fade-in-up">
           Supercarros
         </p>
 
-        <p className="text-sm sm:text-base md:text-lg text-white/60 max-w-xl sm:max-w-2xl mx-auto mb-10 leading-relaxed font-exo animate-fade-in-up">
+        <p className="text-sm sm:text-base md:text-lg text-white/60 max-w-xl sm:max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed font-exo animate-fade-in-up">
           O maior canal brasileiro sobre supercarros, hypercars e carros de luxo.
           Notícias, rankings e conteúdo exclusivo sobre os carros mais incríveis do mundo.
         </p>
 
         {/* Search bar */}
-        <div className="w-full max-w-2xl mb-12 animate-fade-in-up">
+        <div className="w-full max-w-2xl mb-8 sm:mb-12 animate-fade-in-up">
           <SearchBar variant="hero" />
         </div>
 
         {/* Stats row */}
-        <div className="flex flex-wrap items-center justify-center gap-6 md:gap-16 animate-fade-in-up">
+        <div className="grid grid-cols-3 gap-3 sm:flex sm:flex-wrap items-center justify-center sm:gap-6 md:gap-16 animate-fade-in-up">
           <div className="flex flex-col items-center">
-            <Car size={22} className="text-[#dc2626] mb-2" />
-            <span className="text-2xl font-bold font-rajdhani text-white">200+</span>
-            <span className="text-xs text-white/40 uppercase tracking-widest font-exo">Modelos</span>
+            <Car size={20} className="text-[#dc2626] mb-2" />
+            <span className="text-xl sm:text-2xl font-bold font-rajdhani text-white">200+</span>
+            <span className="text-[10px] sm:text-xs text-white/40 uppercase tracking-widest font-exo text-center">Modelos</span>
           </div>
-          <div className="w-px h-10 bg-white/10 hidden md:block" />
           <div className="flex flex-col items-center">
-            <Trophy size={22} className="text-[#dc2626] mb-2" />
-            <span className="text-2xl font-bold font-rajdhani text-white">50+</span>
-            <span className="text-xs text-white/40 uppercase tracking-widest font-exo">Rankings</span>
+            <Trophy size={20} className="text-[#dc2626] mb-2" />
+            <span className="text-xl sm:text-2xl font-bold font-rajdhani text-white">50+</span>
+            <span className="text-[10px] sm:text-xs text-white/40 uppercase tracking-widest font-exo text-center">Rankings</span>
           </div>
-          <div className="w-px h-10 bg-white/10 hidden md:block" />
           <div className="flex flex-col items-center">
-            <Zap size={22} className="text-[#dc2626] mb-2" />
-            <span className="text-2xl font-bold font-rajdhani text-white">500+</span>
-            <span className="text-xs text-white/40 uppercase tracking-widest font-exo">Notícias</span>
+            <Zap size={20} className="text-[#dc2626] mb-2" />
+            <span className="text-xl sm:text-2xl font-bold font-rajdhani text-white">500+</span>
+            <span className="text-[10px] sm:text-xs text-white/40 uppercase tracking-widest font-exo text-center">Notícias</span>
           </div>
         </div>
 

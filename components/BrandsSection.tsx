@@ -7,10 +7,10 @@ export default function BrandsSection() {
   const preview = brands.slice(0, 6);
 
   return (
-    <section className="py-20 bg-[#0d0d0d] border-y border-[#1e1e1e]">
+    <section className="py-14 sm:py-20 bg-[#0d0d0d] border-y border-[#1e1e1e]">
       <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex items-end justify-between mb-12">
+        <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-3 mb-8 sm:mb-12">
           <div>
             <p className="text-[#dc2626] text-xs font-bold uppercase tracking-[0.3em] font-rajdhani mb-2">
               Fabricantes
@@ -28,7 +28,7 @@ export default function BrandsSection() {
         </div>
 
         {/* Brands grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {preview.map((brand) => (
             <Link
               key={brand.id}
@@ -49,7 +49,7 @@ export default function BrandsSection() {
 
               {/* Info */}
               <div className="p-4">
-                <h3 className="font-rajdhani font-bold text-white text-base group-hover:text-[#dc2626] transition-colors duration-300 mb-1">
+                <h3 className="font-rajdhani font-bold text-white text-base group-hover:text-[#dc2626] transition-colors duration-300 mb-1 line-clamp-1">
                   {brand.name}
                 </h3>
                 <div className="flex items-center gap-1 text-white/30 text-xs font-exo mb-2">

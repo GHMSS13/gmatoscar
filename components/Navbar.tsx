@@ -34,8 +34,8 @@ export default function Navbar() {
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-[#050505] border-b border-white/10 shadow-[0_20px_80px_rgba(0,0,0,0.25)]`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 md:h-20">
-          <Link href="/" className="text-lg md:text-xl font-bold uppercase tracking-[0.4em] text-white font-rajdhani">
+        <div className="flex items-center justify-between h-14 sm:h-16 md:h-20">
+          <Link href="/" className="text-base sm:text-lg md:text-xl font-bold uppercase tracking-[0.28em] sm:tracking-[0.4em] text-white font-rajdhani whitespace-nowrap">
             GMATOS
             <span className="text-[#dc2626]">CAR</span>
           </Link>
@@ -62,22 +62,22 @@ export default function Navbar() {
             })}
           </nav>
 
-          <div className="flex items-center gap-3 relative">
+          <div className="flex items-center gap-2 sm:gap-3 relative">
             <button
               onClick={() => setShowSearch((state) => !state)}
-              className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 p-2 text-white/80 hover:bg-white/10 transition-colors"
+              className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 p-1.5 sm:p-2 text-white/80 hover:bg-white/10 transition-colors"
               aria-label={showSearch ? 'Fechar pesquisa' : 'Abrir pesquisa'}
             >
               <Search size={18} />
             </button>
 
-            <div className={`absolute right-0 top-full z-50 mt-2 w-[calc(100vw-2rem)] max-w-sm rounded-2xl border border-white/10 bg-[#050505]/95 p-3 shadow-[0_20px_80px_rgba(0,0,0,0.35)] transition-all duration-300 backdrop-blur-sm ${showSearch ? 'opacity-100 visible scale-100' : 'opacity-0 invisible scale-95'}`}>
+            <div className={`absolute right-0 top-full z-50 mt-2 w-[calc(100vw-1rem)] sm:w-[calc(100vw-2rem)] max-w-sm rounded-2xl border border-white/10 bg-[#050505]/95 p-2.5 sm:p-3 shadow-[0_20px_80px_rgba(0,0,0,0.35)] transition-all duration-300 backdrop-blur-sm ${showSearch ? 'opacity-100 visible scale-100' : 'opacity-0 invisible scale-95'}`}>
               <SearchBar variant="inline" />
             </div>
 
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden p-2 rounded-full bg-white/5 text-white/80 hover:bg-white/10 transition-colors"
+              className="md:hidden p-1.5 sm:p-2 rounded-full bg-white/5 text-white/80 hover:bg-white/10 transition-colors"
               aria-label={isOpen ? 'Fechar menu' : 'Abrir menu'}
             >
               {isOpen ? <X size={22} /> : <Menu size={22} />}
@@ -92,7 +92,7 @@ export default function Navbar() {
           isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
-        <nav className="bg-[#050505]/98 border-t border-white/10 px-4 py-4 flex flex-col gap-2">
+        <nav className="bg-[#050505]/98 border-t border-white/10 px-3 sm:px-4 py-3 sm:py-4 flex flex-col gap-1.5 sm:gap-2">
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
