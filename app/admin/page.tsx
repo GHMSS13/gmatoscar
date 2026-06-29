@@ -110,11 +110,19 @@ export default function AdminPage() {
 
   const handleSignOut = async () => {
     setLoading(true);
-    await supabase.auth.signOut();
+    const { error } = await supabase.auth.signOut();
     setSession(null);
     setIsAdmin(false);
     setLoading(false);
-    router.push('/');
+
+    if (error) {
+      setMessage(`Falha ao sair: ${error.message}`);
+      return;
+    }
+
+    router.replace('/admin');
+    router.refresh();
+    window.location.href = '/admin';
   };
 
   const handleInput = (field: keyof PostFormState, value: string | boolean) => {
@@ -173,6 +181,12 @@ export default function AdminPage() {
     }
   };
 
+  useEffect(() => {
+    if (!session?.user) {
+      setMessage(null);
+    }
+  }, [session?.user]);
+
   return (
     <main className="min-h-screen bg-[#0a0a0a] pb-20 pt-28">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -227,6 +241,12 @@ export default function AdminPage() {
           {session?.user && !isAdmin && (
             <div className="rounded-xl border border-[#333] bg-[#0f0f0f] p-4 text-sm text-yellow-300">
               Você está logado, mas seu e-mail ainda não está configurado como admin no banco. Insira seu email na tabela <code>admins</code> do Supabase para habilitar a criação de posts.
+            </div>
+          )}
+
+          {message && (
+            <div className="rounded-xl border border-[#333] bg-[#0f0f0f] p-4 text-sm text-white/80">
+              {message}
             </div>
           )}
 
@@ -356,10 +376,6 @@ export default function AdminPage() {
                   <span className="text-white/80 text-sm font-exo">Publicado</span>
                 </label>
               </div>
-
-              {message && (
-                <p className="text-sm text-white/80">{message}</p>
-              )}
 
               <button
                 disabled={saving || !isAdmin}
