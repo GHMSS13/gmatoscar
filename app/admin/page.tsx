@@ -43,6 +43,10 @@ export default function AdminPage() {
   const [message, setMessage] = useState<string | null>(null);
   const [form, setForm] = useState<PostFormState>(initialFormState);
   const router = useRouter();
+  const allowedAdminEmails = (process.env.NEXT_PUBLIC_ADMIN_EMAILS ?? 'gustavohmssilva13@gmail.com')
+    .split(',')
+    .map((email) => email.trim().toLowerCase())
+    .filter(Boolean);
 
   useEffect(() => {
     const init = async () => {
@@ -91,7 +95,11 @@ export default function AdminPage() {
     }
 
     if (!data) {
-      setIsAdmin(false);
+      const isFallbackAdmin = allowedAdminEmails.includes(normalizedEmail);
+      setIsAdmin(isFallbackAdmin);
+      if (!isFallbackAdmin) {
+        setMessage('Seu e-mail não foi encontrado na lista de admins. Verifique tabela admins e policies RLS no Supabase.');
+      }
       return;
     }
 
@@ -111,6 +119,11 @@ export default function AdminPage() {
   const handleSignOut = async () => {
     setLoading(true);
     const { error } = await supabase.auth.signOut();
+
+    const authStorageKey = (supabase.auth as any).storageKey as string | undefined;
+    if (authStorageKey) {
+      localStorage.removeItem(authStorageKey);
+    }
     setSession(null);
     setIsAdmin(false);
     setLoading(false);
@@ -122,7 +135,7 @@ export default function AdminPage() {
 
     router.replace('/admin');
     router.refresh();
-    window.location.href = '/admin';
+    window.location.assign('/admin');
   };
 
   const handleInput = (field: keyof PostFormState, value: string | boolean) => {
