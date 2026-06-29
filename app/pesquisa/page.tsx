@@ -23,6 +23,10 @@ function PesquisaContent({ posts }: PesquisaContentProps) {
   const [results, setResults] = useState<Post[]>(posts);
 
   useEffect(() => {
+    setQuery(initialQuery);
+  }, [initialQuery]);
+
+  useEffect(() => {
     const q = query.toLowerCase().trim();
     let filtered = posts;
 
