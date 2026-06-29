@@ -4,11 +4,40 @@ import Link from 'next/link';
 import { ArrowLeft, Globe, Gauge, Zap, Calendar, Trophy, Sparkles, Camera } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import NewsCard from '@/components/NewsCard';
 import { brands } from '@/lib/data';
+import { getPosts, type Post } from '@/lib/posts';
 import { notFound } from 'next/navigation';
+
+export const dynamic = 'force-dynamic';
 
 interface Props {
   params: { id: string };
+}
+
+function normalizeText(value: string) {
+  return value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+}
+
+function getRelatedPosts(posts: Post[], brandName: string) {
+  const normalizedName = normalizeText(brandName);
+
+  return posts
+    .filter((post) => {
+      const haystack = normalizeText([
+        post.title,
+        post.excerpt,
+        post.content,
+        post.category,
+        post.slug,
+      ].join(' '));
+
+      return haystack.includes(normalizedName);
+    })
+    .slice(0, 3);
 }
 
 export async function generateStaticParams() {
@@ -20,13 +49,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!brand) return { title: 'Marca não encontrada' };
   return {
     title: `${brand.name} - Supercarros`,
-    description: `Conheça os modelos, história e records da ${brand.name}. Fundada em ${brand.founded}, com velocidade máxima de ${brand.maxSpeed}.`,
+    description: `Conheça a história, os modelos, a linha do tempo e as notícias relacionadas da ${brand.name}. Fundada em ${brand.founded}, com velocidade máxima de ${brand.maxSpeed}.`,
   };
 }
 
-export default function BrandPage({ params }: Props) {
+export default async function BrandPage({ params }: Props) {
   const brand = brands.find((b) => b.id === params.id);
   if (!brand) notFound();
+
+  const posts = await getPosts();
+  const relatedPosts = getRelatedPosts(posts, brand.name);
 
   return (
     <main className="min-h-screen bg-black">
@@ -175,6 +207,63 @@ export default function BrandPage({ params }: Props) {
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="grid gap-6 lg:grid-cols-2 mb-14">
+          <div className="rounded-2xl border border-[#1e1e1e] bg-[#0f0f0f] p-6">
+            <p className="text-[#dc2626] text-xs uppercase tracking-[0.35em] font-bold font-rajdhani mb-4">
+              Linha do tempo
+            </p>
+            <div className="space-y-5">
+              {brand.timeline.map((item, index) => (
+                <div key={`${item.year}-${item.title}`} className="relative pl-8">
+                  <div className="absolute left-0 top-1.5 h-4 w-4 rounded-full bg-[#dc2626] shadow-[0_0_0_4px_rgba(220,38,38,0.15)]" />
+                  {index < brand.timeline.length - 1 && <div className="absolute left-[7px] top-6 h-full w-px bg-white/10" />}
+                  <div className="text-[#dc2626] text-xs font-bold uppercase tracking-[0.35em] font-rajdhani mb-1">
+                    {item.year}
+                  </div>
+                  <h3 className="text-white font-rajdhani font-bold text-lg mb-1">{item.title}</h3>
+                  <p className="text-white/50 font-exo text-sm leading-relaxed">{item.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-[#1e1e1e] bg-[#0f0f0f] p-6">
+            <p className="text-[#dc2626] text-xs uppercase tracking-[0.35em] font-bold font-rajdhani mb-4">
+              Modelos famosos
+            </p>
+            <div className="grid gap-4">
+              {brand.famousModels.map((model) => (
+                <div key={`${model.name}-${model.year}`} className="rounded-xl border border-white/5 bg-black/30 p-4">
+                  <div className="flex items-start justify-between gap-3 mb-2">
+                    <h3 className="text-white font-rajdhani font-bold text-xl">{model.name}</h3>
+                    <span className="text-[#dc2626] text-xs uppercase tracking-[0.3em] font-bold font-rajdhani">
+                      {model.year}
+                    </span>
+                  </div>
+                  <p className="text-white/50 font-exo text-sm leading-relaxed">{model.highlight}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="mb-14 rounded-2xl border border-[#1e1e1e] bg-[#0f0f0f] p-6">
+          <p className="text-[#dc2626] text-xs uppercase tracking-[0.35em] font-bold font-rajdhani mb-4">
+            Notícias relacionadas
+          </p>
+          {relatedPosts.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              {relatedPosts.map((post) => (
+                <NewsCard key={post.id} item={post} />
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-xl border border-white/5 bg-black/30 p-5 text-white/45 font-exo text-sm">
+              Ainda não há notícias publicadas que mencionem diretamente esta marca.
+            </div>
+          )}
         </div>
 
         <div className="text-center py-12 text-white/20 font-exo">

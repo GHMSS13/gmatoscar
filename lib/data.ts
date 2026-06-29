@@ -9,6 +9,16 @@ export interface Brand {
   topModel: string;
   maxSpeed: string;
   color: string;
+  timeline: {
+    year: number;
+    title: string;
+    description: string;
+  }[];
+  famousModels: {
+    name: string;
+    year: string;
+    highlight: string;
+  }[];
 }
 
 export interface RankingItem {
@@ -47,6 +57,17 @@ export const brands: Brand[] = [
     topModel: 'Ferrari F80',
     maxSpeed: '350+ km/h',
     color: '#ff2800',
+    timeline: [
+      { year: 1939, title: 'Fundação da Auto Avio Costruzioni', description: 'Enzo Ferrari inicia a operação que mais tarde se tornaria a Ferrari.' },
+      { year: 1947, title: 'Primeiro carro com o nome Ferrari', description: 'O 125 S marca o nascimento oficial da marca como fabricante de automóveis.' },
+      { year: 1987, title: 'Era dos ícones V8 e V12', description: 'Modelos como F40 consolidam a Ferrari como referência de desejo e performance.' },
+      { year: 2024, title: 'Nova geração híbrida', description: 'A marca combina eletrificação com alta performance em uma nova fase tecnológica.' },
+    ],
+    famousModels: [
+      { name: 'F40', year: '1987', highlight: 'Um dos carros mais lendários da história da marca.' },
+      { name: 'LaFerrari', year: '2013', highlight: 'Hipercarro híbrido que redefiniu o topo da linha.' },
+      { name: 'F80', year: '2024', highlight: 'A nova interpretação da Ferrari para o futuro dos supercarros.' },
+    ],
   },
   {
     id: 'lamborghini',
@@ -59,6 +80,17 @@ export const brands: Brand[] = [
     topModel: 'Revuelto',
     maxSpeed: '350 km/h',
     color: '#ffd700',
+    timeline: [
+      { year: 1963, title: 'Nascimento da marca', description: 'Ferruccio Lamborghini funda a empresa para criar esportivos mais ousados.' },
+      { year: 1974, title: 'Miura e Countach', description: 'A Lamborghini ganha fama mundial com carros de desenho radical.' },
+      { year: 2011, title: 'V12 como assinatura', description: 'A marca reforça sua identidade com modelos como o Aventador.' },
+      { year: 2023, title: 'Era híbrida', description: 'O Revuelto inaugura a nova geração eletrificada da marca.' },
+    ],
+    famousModels: [
+      { name: 'Miura', year: '1966', highlight: 'Considerado um dos primeiros supercarros modernos.' },
+      { name: 'Countach', year: '1974', highlight: 'Linha angular que virou símbolo da Lamborghini.' },
+      { name: 'Revuelto', year: '2023', highlight: 'Primeiro híbrido V12 da nova fase da marca.' },
+    ],
   },
   {
     id: 'bugatti',
@@ -71,6 +103,17 @@ export const brands: Brand[] = [
     topModel: 'Tourbillon',
     maxSpeed: '445 km/h',
     color: '#003087',
+    timeline: [
+      { year: 1909, title: 'Fundação da Bugatti', description: 'Ettore Bugatti cria uma marca ligada à elegância e à engenharia refinada.' },
+      { year: 1998, title: 'Retorno da lenda', description: 'A marca renasce no universo dos supercarros modernos.' },
+      { year: 2005, title: 'Veyron quebra paradigmas', description: 'A Bugatti entra para a história com velocidade e luxo extremos.' },
+      { year: 2024, title: 'Tourbillon', description: 'A nova era da Bugatti combina design futurista e altíssimo desempenho.' },
+    ],
+    famousModels: [
+      { name: 'Veyron', year: '2005', highlight: 'Símbolo da corrida pela velocidade máxima.' },
+      { name: 'Chiron', year: '2016', highlight: 'Consolidou a Bugatti como referência em hipercarros.' },
+      { name: 'Tourbillon', year: '2024', highlight: 'Nova geração com foco em luxo e tecnologia.' },
+    ],
   },
   {
     id: 'mclaren',
@@ -83,6 +126,17 @@ export const brands: Brand[] = [
     topModel: 'McLaren W1',
     maxSpeed: '350 km/h',
     color: '#ff8000',
+    timeline: [
+      { year: 1963, title: 'Origem nas pistas', description: 'Bruce McLaren funda a empresa com forte DNA de competição.' },
+      { year: 1992, title: 'McLaren F1', description: 'Um dos supercarros mais reverenciados de todos os tempos entra em cena.' },
+      { year: 2011, title: 'Linha moderna de rua', description: 'A marca amplia a presença fora das pistas com a família de supercarros modernos.' },
+      { year: 2024, title: 'W1', description: 'Nova referência da McLaren para a próxima geração de hypercars.' },
+    ],
+    famousModels: [
+      { name: 'F1', year: '1992', highlight: 'Ícone absoluto entre os supercarros de rua.' },
+      { name: 'P1', year: '2013', highlight: 'Parte da era híbrida das hypercars de elite.' },
+      { name: 'W1', year: '2024', highlight: 'Novo topo da marca, com foco em aerodinâmica e leveza.' },
+    ],
   },
   {
     id: 'porsche',
@@ -95,6 +149,17 @@ export const brands: Brand[] = [
     topModel: '911 GT3 RS',
     maxSpeed: '296 km/h',
     color: '#c8102e',
+    timeline: [
+      { year: 1931, title: 'Fundação da Porsche', description: 'Ferdinand Porsche cria a base para a futura fabricante de esportivos.' },
+      { year: 1948, title: 'Primeiro Porsche de rua', description: 'O 356 inaugura a identidade da marca em carros esportivos de produção.' },
+      { year: 1963, title: 'Nascimento do 911', description: 'O modelo define a assinatura visual e técnica da Porsche por décadas.' },
+      { year: 2020, title: 'Eletrificação esportiva', description: 'A marca expande a performance com tecnologia híbrida e elétrica.' },
+    ],
+    famousModels: [
+      { name: '911', year: '1963', highlight: 'O esportivo mais reconhecível da Porsche.' },
+      { name: '911 GT3 RS', year: '2023', highlight: 'Foco total em pista e precisão dinâmica.' },
+      { name: 'Taycan', year: '2019', highlight: 'Mostra a evolução elétrica da marca.' },
+    ],
   },
   {
     id: 'koenigsegg',
@@ -107,6 +172,17 @@ export const brands: Brand[] = [
     topModel: 'Gemera',
     maxSpeed: '400+ km/h',
     color: '#1a1a1a',
+    timeline: [
+      { year: 1994, title: 'Fundação em Ängelholm', description: 'Christian von Koenigsegg cria uma das marcas mais inovadoras do setor.' },
+      { year: 2002, title: 'Primeiros hypercars', description: 'A marca começa a desafiar nomes muito maiores em desempenho.' },
+      { year: 2014, title: 'Regras próprias de engenharia', description: 'A Koenigsegg mostra soluções exclusivas em aerodinâmica e transmissão.' },
+      { year: 2024, title: 'Nova geração de recordes', description: 'Modelos recentes reforçam a obsessão por performance e eficiência.' },
+    ],
+    famousModels: [
+      { name: 'Agera RS', year: '2017', highlight: 'Um marco entre os carros de produção mais rápidos.' },
+      { name: 'Jesko', year: '2019', highlight: 'Hipercarro com foco extremo em velocidade e pista.' },
+      { name: 'Gemera', year: '2020', highlight: 'A proposta de 4 lugares da Koenigsegg.' },
+    ],
   },
   {
     id: 'pagani',
@@ -119,6 +195,17 @@ export const brands: Brand[] = [
     topModel: 'Utopia',
     maxSpeed: '340 km/h',
     color: '#c0c0c0',
+    timeline: [
+      { year: 1992, title: 'Fundação da Pagani', description: 'Horacio Pagani leva a visão de design artesanal para o mundo dos supercarros.' },
+      { year: 1999, title: 'Zonda', description: 'O primeiro grande ícone da marca coloca a Pagani no radar mundial.' },
+      { year: 2011, title: 'Huayra', description: 'A Pagani aprofunda o trabalho em aerodinâmica e materiais exóticos.' },
+      { year: 2022, title: 'Utopia', description: 'Novo capítulo com foco em leveza, emoção e acabamento artesanal.' },
+    ],
+    famousModels: [
+      { name: 'Zonda', year: '1999', highlight: 'Modelo que colocou a Pagani entre os grandes nomes.' },
+      { name: 'Huayra', year: '2011', highlight: 'Mistura de arte, velocidade e engenharia.' },
+      { name: 'Utopia', year: '2022', highlight: 'Símbolo atual da filosofia da marca.' },
+    ],
   },
   {
     id: 'rimac',
@@ -131,6 +218,17 @@ export const brands: Brand[] = [
     topModel: 'Nevera R',
     maxSpeed: '415 km/h',
     color: '#0a84ff',
+    timeline: [
+      { year: 2009, title: 'Fundação da Rimac', description: 'A empresa nasce voltada para tecnologia de eletrificação e performance.' },
+      { year: 2018, title: 'Nevera ganha forma', description: 'A Rimac apresenta sua visão de hipercarro elétrico de produção.' },
+      { year: 2021, title: 'Reconhecimento global', description: 'A marca se consolida como uma das maiores referências em EVs de alta performance.' },
+      { year: 2024, title: 'Nevera R', description: 'Evolução extrema do carro que mudou o debate sobre elétricos de alta velocidade.' },
+    ],
+    famousModels: [
+      { name: 'Concept One', year: '2011', highlight: 'Primeira grande prova de conceito da marca.' },
+      { name: 'Nevera', year: '2021', highlight: 'Hipercarro elétrico que colocou a Rimac no topo do segmento.' },
+      { name: 'Nevera R', year: '2024', highlight: 'Evolução mais agressiva do projeto elétrico.' },
+    ],
   },
 ];
 
