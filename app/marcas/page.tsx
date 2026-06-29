@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Globe, Zap, Gauge, ArrowRight, Calendar, Sparkles } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { brands, modelPages } from '@/lib/data';
+import { getBrands, getModels } from '@/lib/brands';
 
 export const metadata: Metadata = {
   title: 'Marcas de Supercarros',
@@ -32,18 +32,28 @@ const marcasSchema = {
   description:
     'Hub editorial com páginas de fabricantes e modelos de supercarros, otimizado para pesquisa orgânica.',
   url: 'https://gmatoscar.com.br/marcas',
-  about: brands.map((brand) => ({
-    '@type': 'Brand',
-    name: brand.name,
-  })),
+  about: [],
 };
 
-export default function MarcasPage() {
+export const dynamic = 'force-dynamic';
+
+export default async function MarcasPage() {
+  const [brands, models] = await Promise.all([getBrands(), getModels()]);
+
+  const schema = {
+    ...marcasSchema,
+    about: brands.map((brand) => ({
+      '@type': 'Brand',
+      name: brand.name,
+      url: `https://gmatoscar.com.br/marcas/${brand.slug}`,
+    })),
+  };
+
   return (
     <main className="min-h-screen bg-black">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(marcasSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       />
 
       <Navbar />
@@ -69,17 +79,23 @@ export default function MarcasPage() {
 
       {/* Brands grid */}
       <section className="px-4 sm:px-6 lg:px-8 pb-20 max-w-7xl mx-auto">
+        {brands.length === 0 && (
+          <div className="mb-8 rounded-2xl border border-[#2a2a2a] bg-[#0f0f0f] p-5 text-white/70 font-exo text-sm">
+            Nenhuma marca publicada no Supabase ainda. Cadastre dados nas tabelas `brands`, `brand_timeline` e `brand_models` para preencher esta página.
+          </div>
+        )}
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {brands.map((brand, idx) => (
             <article
-              key={brand.id}
+              key={brand.slug}
               className="group bg-[#111] border border-[#1e1e1e] hover:border-[#dc2626]/40 rounded-sm overflow-hidden transition-all duration-300 hover:shadow-[0_0_30px_rgba(220,38,38,0.15)] hover:-translate-y-1"
               style={{ animationDelay: `${idx * 50}ms` }}
             >
               {/* Brand banner */}
               <div className="relative aspect-[16/9] overflow-hidden" style={{ backgroundColor: `${brand.color}22` }}>
                 <Image
-                  src={brand.logo}
+                  src={brand.logo_url}
                   alt={`${brand.name} logo`}
                   fill
                   className="object-contain p-10 transition-transform duration-500 group-hover:scale-105 opacity-95"
@@ -118,14 +134,14 @@ export default function MarcasPage() {
                 <div className="space-y-2 mb-5">
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-white/30 font-exo text-xs">Modelo Top</span>
-                    <span className="text-white/70 font-exo text-xs font-medium">{brand.topModel}</span>
+                    <span className="text-white/70 font-exo text-xs font-medium">{brand.top_model}</span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
                     <div className="flex items-center gap-1 text-white/30">
                       <Gauge size={11} />
                       <span className="text-xs font-exo">Vel. Máx.</span>
                     </div>
-                    <span className="text-[#dc2626] font-rajdhani font-bold text-sm">{brand.maxSpeed}</span>
+                    <span className="text-[#dc2626] font-rajdhani font-bold text-sm">{brand.max_speed}</span>
                   </div>
                 </div>
 
@@ -139,20 +155,22 @@ export default function MarcasPage() {
                 />
 
                 <Link
-                  href={`/marcas/${brand.id}`}
+                  href={`/marcas/${brand.slug}`}
                   className="flex items-center justify-between text-white/40 hover:text-[#dc2626] text-sm font-rajdhani font-bold uppercase tracking-wider transition-colors duration-300 group/link"
                 >
                   Ver Detalhes
                   <ArrowRight size={14} className="group-hover/link:translate-x-1 transition-transform duration-300" />
                 </Link>
 
-                <Link
-                  href={`/modelos/${brand.famousModels[0].slug}`}
-                  className="mt-2 flex items-center justify-between text-white/30 hover:text-white text-xs font-rajdhani font-bold uppercase tracking-wider transition-colors duration-300"
-                >
-                  Ver Modelos
-                  <ArrowRight size={12} />
-                </Link>
+                {brand.models.length > 0 && (
+                  <Link
+                    href={`/modelos/${brand.models[0].slug}`}
+                    className="mt-2 flex items-center justify-between text-white/30 hover:text-white text-xs font-rajdhani font-bold uppercase tracking-wider transition-colors duration-300"
+                  >
+                    Ver Modelos
+                    <ArrowRight size={12} />
+                  </Link>
+                )}
               </div>
 
               {/* Left accent */}
@@ -171,7 +189,7 @@ export default function MarcasPage() {
             </h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {modelPages.map((model) => (
+            {models.map((model) => (
               <Link
                 key={model.slug}
                 href={`/modelos/${model.slug}`}

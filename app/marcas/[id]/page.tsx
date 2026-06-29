@@ -5,7 +5,7 @@ import { ArrowLeft, Globe, Gauge, Zap, Calendar, Trophy, Sparkles, Camera } from
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import NewsCard from '@/components/NewsCard';
-import { brands } from '@/lib/data';
+import { getBrandBySlug } from '@/lib/brands';
 import { getPosts, type Post } from '@/lib/posts';
 import { notFound } from 'next/navigation';
 
@@ -40,12 +40,8 @@ function getRelatedPosts(posts: Post[], brandName: string) {
     .slice(0, 3);
 }
 
-export async function generateStaticParams() {
-  return brands.map((b) => ({ id: b.id }));
-}
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const brand = brands.find((b) => b.id === params.id);
+  const brand = await getBrandBySlug(params.id);
   if (!brand) return { title: 'Marca não encontrada' };
 
   const keywordBase = [
@@ -53,26 +49,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     `${brand.name} história`,
     `${brand.name} modelos`,
     `${brand.name} ficha técnica`,
-    ...brand.famousModels.map((model) => `${brand.name} ${model.name}`),
+    ...brand.models.map((model) => `${brand.name} ${model.name}`),
   ];
 
   return {
     title: `${brand.name} - Supercarros`,
-    description: `Conheça a história, os modelos, a linha do tempo e as notícias relacionadas da ${brand.name}. Fundada em ${brand.founded}, com velocidade máxima de ${brand.maxSpeed}.`,
+    description: `Conheça a história, os modelos, a linha do tempo e as notícias relacionadas da ${brand.name}. Fundada em ${brand.founded}, com velocidade máxima de ${brand.max_speed}.`,
     keywords: keywordBase,
     alternates: {
-      canonical: `/marcas/${brand.id}`,
+      canonical: `/marcas/${brand.slug}`,
     },
     openGraph: {
       title: `${brand.name} - História, Modelos e Notícias`,
       description: `Página editorial da ${brand.name} com linha do tempo, modelos famosos e conteúdo atualizado.`,
-      images: [{ url: brand.topModelImage, alt: brand.name }],
+      images: [{ url: brand.hero_image_url, alt: brand.name }],
     },
   };
 }
 
 export default async function BrandPage({ params }: Props) {
-  const brand = brands.find((b) => b.id === params.id);
+  const brand = await getBrandBySlug(params.id);
   if (!brand) notFound();
 
   const posts = await getPosts();
@@ -84,7 +80,7 @@ export default async function BrandPage({ params }: Props) {
     name: brand.name,
     foundingDate: String(brand.founded),
     description: brand.description,
-    url: `https://gmatoscar.com.br/marcas/${brand.id}`,
+    url: `https://gmatoscar.com.br/marcas/${brand.slug}`,
   };
 
   const breadcrumbSchema = {
@@ -93,7 +89,7 @@ export default async function BrandPage({ params }: Props) {
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://gmatoscar.com.br/' },
       { '@type': 'ListItem', position: 2, name: 'Marcas', item: 'https://gmatoscar.com.br/marcas' },
-      { '@type': 'ListItem', position: 3, name: brand.name, item: `https://gmatoscar.com.br/marcas/${brand.id}` },
+      { '@type': 'ListItem', position: 3, name: brand.name, item: `https://gmatoscar.com.br/marcas/${brand.slug}` },
     ],
   };
 
@@ -151,8 +147,8 @@ export default async function BrandPage({ params }: Props) {
             <div className="rounded-3xl border border-white/10 bg-[#0f0f0f] p-5 shadow-[0_20px_80px_rgba(0,0,0,0.35)]">
               <div className="relative overflow-hidden rounded-2xl aspect-[16/10] mb-4 bg-[#111]">
                 <Image
-                  src={brand.topModelImage}
-                  alt={`${brand.topModel} - imagem de destaque`}
+                  src={brand.hero_image_url}
+                  alt={`${brand.top_model} - imagem de destaque`}
                   fill
                   className="object-cover opacity-85"
                   priority
@@ -170,7 +166,7 @@ export default async function BrandPage({ params }: Props) {
                     Modelo em destaque
                   </p>
                   <h2 className="text-2xl font-rajdhani font-bold text-white mb-1">
-                    {brand.topModel}
+                    {brand.top_model}
                   </h2>
                   <p className="text-white/45 text-sm font-exo">
                     A imagem serve como referência visual da marca e do carro mais representativo da linha.
@@ -181,7 +177,7 @@ export default async function BrandPage({ params }: Props) {
                     Vel. máx.
                   </p>
                   <div className="text-[#dc2626] text-xl font-rajdhani font-bold">
-                    {brand.maxSpeed}
+                    {brand.max_speed}
                   </div>
                 </div>
               </div>
@@ -194,8 +190,8 @@ export default async function BrandPage({ params }: Props) {
       <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto py-12">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
           {[
-            { label: 'Modelo Top', value: brand.topModel, icon: Trophy },
-            { label: 'Vel. Máxima', value: brand.maxSpeed, icon: Gauge },
+            { label: 'Modelo Top', value: brand.top_model, icon: Trophy },
+            { label: 'Vel. Máxima', value: brand.max_speed, icon: Gauge },
             { label: 'País', value: brand.country, icon: Globe },
             { label: 'Fundação', value: String(brand.founded), icon: Calendar },
           ].map((stat) => {
@@ -245,11 +241,11 @@ export default async function BrandPage({ params }: Props) {
               </div>
               <div className="flex items-center justify-between border-b border-white/5 pb-3">
                 <span className="text-white/35 text-xs uppercase tracking-widest font-exo">Modelo principal</span>
-                <span className="text-white/80 font-exo">{brand.topModel}</span>
+                <span className="text-white/80 font-exo">{brand.top_model}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-white/35 text-xs uppercase tracking-widest font-exo">Velocidade</span>
-                <span className="text-[#dc2626] font-rajdhani font-bold">{brand.maxSpeed}</span>
+                <span className="text-[#dc2626] font-rajdhani font-bold">{brand.max_speed}</span>
               </div>
             </div>
           </div>
@@ -280,7 +276,7 @@ export default async function BrandPage({ params }: Props) {
               Modelos famosos
             </p>
             <div className="grid gap-4">
-              {brand.famousModels.map((model) => (
+              {brand.models.map((model) => (
                 <div key={`${model.name}-${model.year}`} className="rounded-xl border border-white/5 bg-black/30 p-4">
                   <div className="flex items-start justify-between gap-3 mb-2">
                     <h3 className="text-white font-rajdhani font-bold text-xl">{model.name}</h3>

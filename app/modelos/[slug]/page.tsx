@@ -5,7 +5,7 @@ import { ArrowLeft, Gauge, Timer, Zap, Car, Calendar } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import NewsCard from '@/components/NewsCard';
-import { brands, modelPages } from '@/lib/data';
+import { getModelBySlug } from '@/lib/brands';
 import { getPosts, type Post } from '@/lib/posts';
 import { notFound } from 'next/navigation';
 
@@ -41,16 +41,10 @@ function getRelatedPosts(posts: Post[], modelName: string, brandName: string) {
     .slice(0, 3);
 }
 
-export async function generateStaticParams() {
-  return modelPages.map((model) => ({ slug: model.slug }));
-}
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const model = modelPages.find((item) => item.slug === params.slug);
+  const model = await getModelBySlug(params.slug);
   if (!model) return { title: 'Modelo não encontrado' };
-
-  const brand = brands.find((item) => item.id === model.brandId);
-  if (!brand) return { title: 'Modelo não encontrado' };
+  const brand = model.brands;
 
   return {
     title: `${model.name} - ${brand.name}`,
@@ -59,7 +53,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       model.name,
       `${model.name} ficha técnica`,
       `${brand.name} ${model.name}`,
-      ...model.keywords,
+      `${model.name} velocidade máxima`,
+      `${model.name} 0-100`,
     ],
     alternates: {
       canonical: `/modelos/${model.slug}`,
@@ -67,17 +62,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: `${model.name} - Ficha técnica e notícias`,
       description: model.description,
-      images: [{ url: model.image, alt: model.name }],
+      images: [{ url: model.image_url, alt: model.name }],
     },
   };
 }
 
 export default async function ModeloPage({ params }: Props) {
-  const model = modelPages.find((item) => item.slug === params.slug);
+  const model = await getModelBySlug(params.slug);
   if (!model) notFound();
-
-  const brand = brands.find((item) => item.id === model.brandId);
-  if (!brand) notFound();
+  const brand = model.brands;
 
   const posts = await getPosts();
   const relatedPosts = getRelatedPosts(posts, model.name, brand.name);
@@ -91,12 +84,12 @@ export default async function ModeloPage({ params }: Props) {
       name: brand.name,
     },
     description: model.description,
-    image: model.image,
+    image: model.image_url,
     additionalProperty: [
-      { '@type': 'PropertyValue', name: 'Potência', value: model.specs.power },
-      { '@type': 'PropertyValue', name: 'Velocidade máxima', value: model.specs.topSpeed },
-      { '@type': 'PropertyValue', name: '0-100 km/h', value: model.specs.acceleration },
-      { '@type': 'PropertyValue', name: 'Tração', value: model.specs.drivetrain },
+      { '@type': 'PropertyValue', name: 'Potência', value: model.power },
+      { '@type': 'PropertyValue', name: 'Velocidade máxima', value: model.top_speed },
+      { '@type': 'PropertyValue', name: '0-100 km/h', value: model.acceleration },
+      { '@type': 'PropertyValue', name: 'Tração', value: model.drivetrain },
     ],
   };
 
@@ -115,7 +108,7 @@ export default async function ModeloPage({ params }: Props) {
 
         <div className="max-w-7xl mx-auto relative z-10">
           <Link
-            href={`/marcas/${brand.id}`}
+            href={`/marcas/${brand.slug}`}
             className="inline-flex items-center gap-2 text-white/40 hover:text-white text-sm font-exo mb-6 transition-colors"
           >
             <ArrowLeft size={14} /> Voltar para {brand.name}
@@ -147,7 +140,7 @@ export default async function ModeloPage({ params }: Props) {
 
             <div className="relative aspect-[16/10] rounded-2xl overflow-hidden border border-white/10 bg-[#111]">
               <Image
-                src={model.image}
+                src={model.image_url}
                 alt={model.name}
                 fill
                 className="object-cover"
@@ -163,22 +156,22 @@ export default async function ModeloPage({ params }: Props) {
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-10">
           <div className="rounded-xl border border-[#1e1e1e] bg-[#0f0f0f] p-5">
             <p className="text-white/35 text-xs uppercase tracking-[0.3em] font-rajdhani mb-2">Potência</p>
-            <p className="text-white font-rajdhani text-2xl font-bold">{model.specs.power}</p>
+            <p className="text-white font-rajdhani text-2xl font-bold">{model.power}</p>
           </div>
           <div className="rounded-xl border border-[#1e1e1e] bg-[#0f0f0f] p-5">
             <p className="text-white/35 text-xs uppercase tracking-[0.3em] font-rajdhani mb-2">Velocidade</p>
-            <p className="text-white font-rajdhani text-2xl font-bold">{model.specs.topSpeed}</p>
+            <p className="text-white font-rajdhani text-2xl font-bold">{model.top_speed}</p>
           </div>
           <div className="rounded-xl border border-[#1e1e1e] bg-[#0f0f0f] p-5">
             <p className="text-white/35 text-xs uppercase tracking-[0.3em] font-rajdhani mb-2">0-100 km/h</p>
             <p className="text-white font-rajdhani text-2xl font-bold inline-flex items-center gap-2">
-              <Timer size={18} className="text-[#dc2626]" /> {model.specs.acceleration}
+              <Timer size={18} className="text-[#dc2626]" /> {model.acceleration}
             </p>
           </div>
           <div className="rounded-xl border border-[#1e1e1e] bg-[#0f0f0f] p-5">
             <p className="text-white/35 text-xs uppercase tracking-[0.3em] font-rajdhani mb-2">Tração</p>
             <p className="text-white font-rajdhani text-2xl font-bold inline-flex items-center gap-2">
-              <Gauge size={18} className="text-[#dc2626]" /> {model.specs.drivetrain}
+              <Gauge size={18} className="text-[#dc2626]" /> {model.drivetrain}
             </p>
           </div>
         </div>
@@ -186,11 +179,12 @@ export default async function ModeloPage({ params }: Props) {
         <div className="rounded-2xl border border-[#1e1e1e] bg-[#0f0f0f] p-6 mb-10">
           <p className="text-[#dc2626] text-xs uppercase tracking-[0.35em] font-bold font-rajdhani mb-4">Destaques do modelo</p>
           <ul className="space-y-3">
-            {model.highlights.map((item) => (
-              <li key={item} className="text-white/60 font-exo text-sm leading-relaxed border-l-2 border-[#dc2626]/40 pl-3">
-                {item}
-              </li>
-            ))}
+            <li className="text-white/60 font-exo text-sm leading-relaxed border-l-2 border-[#dc2626]/40 pl-3">
+              {model.highlight}
+            </li>
+            <li className="text-white/60 font-exo text-sm leading-relaxed border-l-2 border-[#dc2626]/20 pl-3">
+              Categoria: {model.category}
+            </li>
           </ul>
         </div>
 

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { modelPages } from '@/lib/data';
+import { getModels } from '@/lib/brands';
 
 export const metadata: Metadata = {
   title: 'Modelos de Supercarros',
@@ -15,7 +15,11 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ModelosPage() {
+export const dynamic = 'force-dynamic';
+
+export default async function ModelosPage() {
+  const models = await getModels();
+
   return (
     <main className="min-h-screen bg-black">
       <Navbar />
@@ -31,8 +35,14 @@ export default function ModelosPage() {
       </section>
 
       <section className="pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        {models.length === 0 && (
+          <div className="mb-6 rounded-2xl border border-[#2a2a2a] bg-[#0f0f0f] p-5 text-white/70 font-exo text-sm">
+            Nenhum modelo publicado no Supabase ainda. Adicione registros na tabela `brand_models` para preencher este hub.
+          </div>
+        )}
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {modelPages.map((model) => (
+          {models.map((model) => (
             <Link
               key={model.slug}
               href={`/modelos/${model.slug}`}
