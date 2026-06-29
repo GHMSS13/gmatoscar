@@ -174,7 +174,7 @@ export default function AdminPage() {
         read_time: form.read_time.trim(),
         image_url: form.image_url.trim(),
         external_url: form.external_url.trim() || null,
-        featured: form.featured,
+        featured: false,
         hot: form.hot,
         published: form.published,
       };
@@ -383,16 +383,7 @@ export default function AdminPage() {
                 />
               </label>
 
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                <label className="inline-flex items-center gap-3 rounded-xl border border-[#222] bg-[#0a0a0a] px-4 py-3">
-                  <input
-                    type="checkbox"
-                    checked={form.featured}
-                    onChange={(event) => handleInput('featured', event.target.checked)}
-                    className="h-4 w-4 rounded border-[#444] bg-[#111] text-[#dc2626] focus:ring-[#dc2626]"
-                  />
-                  <span className="text-white/80 text-sm font-exo">Destaque</span>
-                </label>
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
                 <label className="inline-flex items-center gap-3 rounded-xl border border-[#222] bg-[#0a0a0a] px-4 py-3">
                   <input
                     type="checkbox"
