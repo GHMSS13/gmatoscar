@@ -27,11 +27,82 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 function renderContent(content: string) {
-  return content.split(/\n{2,}/).map((paragraph, index) => (
-    <p key={index} className="text-[#4b5563] leading-[1.8] font-exo mb-6 whitespace-pre-line">
-      {paragraph}
-    </p>
-  ));
+  const lines = content.split('\n');
+
+  const imageMarkdownRegex = /^!\[(.*?)\]\((https?:\/\/[^\s)]+)\)$/i;
+  const imageUrlOnlyRegex = /^https?:\/\/\S+\.(?:png|jpe?g|webp|gif|avif)(?:\?\S*)?$/i;
+  const inlineLinkRegex = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/gi;
+
+  return lines.map((line, index) => {
+    const trimmed = line.trim();
+
+    if (!trimmed) {
+      return <div key={`sp-${index}`} className="h-3" />;
+    }
+
+    const markdownImg = trimmed.match(imageMarkdownRegex);
+    if (markdownImg) {
+      const alt = markdownImg[1] || 'Imagem do artigo';
+      const src = markdownImg[2];
+      return (
+        <figure key={`img-md-${index}`} className="my-6 overflow-hidden rounded-xl border border-[#e5e7eb] bg-white">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={src} alt={alt} className="w-full h-auto object-cover" loading="lazy" />
+          {alt ? <figcaption className="px-4 py-3 text-xs text-[#6b7280] font-exo">{alt}</figcaption> : null}
+        </figure>
+      );
+    }
+
+    if (imageUrlOnlyRegex.test(trimmed)) {
+      return (
+        <figure key={`img-url-${index}`} className="my-6 overflow-hidden rounded-xl border border-[#e5e7eb] bg-white">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={trimmed} alt="Imagem do artigo" className="w-full h-auto object-cover" loading="lazy" />
+        </figure>
+      );
+    }
+
+    const parts: React.ReactNode[] = [];
+    let lastIdx = 0;
+
+    const linkRegex = new RegExp(inlineLinkRegex.source, inlineLinkRegex.flags);
+    let match = linkRegex.exec(trimmed);
+
+    while (match) {
+      const text = match[1];
+      const href = match[2];
+      const start = match.index ?? 0;
+
+      if (start > lastIdx) {
+        parts.push(trimmed.slice(lastIdx, start));
+      }
+
+      parts.push(
+        <a
+          key={`link-${index}-${start}`}
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[#dc2626] underline underline-offset-2 hover:text-[#b91c1c]"
+        >
+          {text}
+        </a>
+      );
+
+      lastIdx = start + match[0].length;
+      match = linkRegex.exec(trimmed);
+    }
+
+    if (lastIdx < trimmed.length) {
+      parts.push(trimmed.slice(lastIdx));
+    }
+
+    return (
+      <p key={`p-${index}`} className="text-[#4b5563] leading-[1.8] font-exo mb-4">
+        {parts.length > 0 ? parts : trimmed}
+      </p>
+    );
+  });
 }
 
 export default async function NoticiaPage({ params }: Props) {
