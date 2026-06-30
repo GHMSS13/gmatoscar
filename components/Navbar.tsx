@@ -9,7 +9,6 @@ import SearchBar from './SearchBar';
 const navLinks = [
   { label: 'Home', href: '/' },
   { label: 'Marcas', href: '/marcas' },
-  { label: 'Ranking', href: '/ranking' },
   { label: 'Pesquisa', href: '/pesquisa' },
   { label: 'Sobre', href: '/sobre' },
 ];

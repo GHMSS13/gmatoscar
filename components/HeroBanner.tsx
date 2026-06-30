@@ -50,7 +50,7 @@ export default function HeroBanner() {
           <div className="flex flex-col items-center">
             <Trophy size={20} className="text-[#dc2626] mb-2" />
             <span className="text-xl sm:text-2xl font-bold font-rajdhani text-white">50+</span>
-            <span className="text-[10px] sm:text-xs text-white/40 uppercase tracking-widest font-exo text-center">Rankings</span>
+            <span className="text-[10px] sm:text-xs text-white/40 uppercase tracking-widest font-exo text-center">Marcas</span>
           </div>
           <div className="flex flex-col items-center">
             <Zap size={20} className="text-[#dc2626] mb-2" />
@@ -68,10 +68,10 @@ export default function HeroBanner() {
             Explorar Marcas
           </Link>
           <Link
-            href="/ranking"
+            href="/pesquisa"
             className="inline-flex w-full sm:w-auto items-center justify-center gap-2 border border-white/20 hover:border-[#dc2626]/60 text-white/80 hover:text-white font-rajdhani font-bold uppercase tracking-widest px-6 py-3.5 rounded-sm transition-all duration-300 text-sm hover:bg-[#dc2626]/10"
           >
-            Ver Ranking
+            Ver Noticias
           </Link>
         </div>
       </div>

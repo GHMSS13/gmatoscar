@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import Navbar from '@/components/Navbar';
 import NewsGrid from '@/components/NewsGrid';
 import BrandsSection from '@/components/BrandsSection';
-import RankingPreview from '@/components/RankingPreview';
 import Footer from '@/components/Footer';
 import { getPosts } from '@/lib/posts';
 
@@ -31,7 +30,6 @@ export default async function HomePage() {
       </section>
 
       <BrandsSection />
-      <RankingPreview theme="light" />
       <Footer />
     </main>
   );
