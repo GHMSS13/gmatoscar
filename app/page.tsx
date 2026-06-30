@@ -15,16 +15,7 @@ export const metadata: Metadata = {
 export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
-  const allPosts = await getPosts();
-  const firstBugattiIndex = allPosts.findIndex((post) =>
-    post.title.toLowerCase().includes('bugatti') ||
-    post.excerpt.toLowerCase().includes('bugatti') ||
-    post.category.toLowerCase().includes('bugatti')
-  );
-  const posts =
-    firstBugattiIndex === -1
-      ? allPosts
-      : [...allPosts.slice(0, firstBugattiIndex), ...allPosts.slice(firstBugattiIndex + 1)];
+  const posts = await getPosts();
 
   return (
     <main className="min-h-screen bg-white">
