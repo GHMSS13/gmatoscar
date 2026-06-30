@@ -53,12 +53,14 @@ export default async function NoticiaPage({ params }: Props) {
           src={item.image_url}
           alt={item.title}
           fill
-          className="object-cover opacity-60"
+          className="object-cover opacity-45"
           priority
           sizes="100vw"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#111827]/85 via-[#111827]/35 to-transparent" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(148,163,184,0.08)_0%,transparent_70%)]" />
+        <div className="absolute inset-0 bg-black/35" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/55 to-black/15" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.35)_0%,transparent_68%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(110deg,rgba(0,0,0,0.25)_0%,rgba(0,0,0,0.08)_45%,rgba(0,0,0,0.3)_100%)]" />
         <div className="relative z-10 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto w-full pb-10">
           <Link
             href="/"
@@ -67,7 +69,7 @@ export default async function NoticiaPage({ params }: Props) {
             <ArrowLeft size={14} /> Voltar
           </Link>
           <span className="inline-block tag-badge bg-[#dc2626] text-white mb-4">{item.category}</span>
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-rajdhani font-bold text-white leading-tight">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-rajdhani font-bold text-white leading-tight [text-shadow:0_3px_16px_rgba(0,0,0,0.65)]">
             {item.title}
           </h1>
         </div>
