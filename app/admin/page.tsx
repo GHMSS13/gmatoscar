@@ -282,32 +282,23 @@ export default function AdminPage() {
       };
 
       const method = form.id ? 'PUT' : 'POST';
-      const body = form.id 
+      const requestBody = form.id 
         ? { post: payload, postId: form.id, accessToken: session.access_token }
         : { post: payload, accessToken: session.access_token };
 
-      const insertPromise = fetch('/api/admin/posts', {
+      const response = await fetch('/api/admin/posts', {
         method,
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(body),
-      }).then(async (res) => {
-        const data = await res.json();
-        if (!res.ok) {
-          return { error: { message: data.error ?? 'Falha ao salvar post.' } };
-        }
-        return { error: null };
+        body: JSON.stringify(requestBody),
       });
 
-      const timeoutPromise = new Promise<never>((_, reject) => {
-        setTimeout(() => reject(new Error('Tempo limite ao salvar post. Verifique conexão e policies no Supabase.')), 15000);
-      });
+      const data = await response.json();
 
-      const response = await Promise.race([insertPromise, timeoutPromise]);
-
-      if (response.error) {
-        setMessage(response.error.message);
+      if (!response.ok) {
+        setMessage(data.error ?? 'Falha ao salvar post.');
+        setSaving(false);
         return;
       }
 
