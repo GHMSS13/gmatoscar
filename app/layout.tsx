@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import AuthRedirectHandler from '@/components/AuthRedirectHandler';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://gmatoscar.com.br'),
@@ -105,6 +106,7 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-white text-[#111] antialiased font-exo">
+        <AuthRedirectHandler />
         {children}
       </body>
     </html>

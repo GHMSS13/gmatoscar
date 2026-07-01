@@ -45,6 +45,8 @@ const initialFormState: PostFormState = {
   published: true,
 };
 
+const ADMIN_REDIRECT_STORAGE_KEY = 'gmatoscar-admin-redirect';
+
 export default function AdminPage() {
   const [session, setSession] = useState<any>(null);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -66,50 +68,82 @@ export default function AdminPage() {
     .filter(Boolean);
 
   const fetchPublishedPosts = async () => {
-    setLoadingPosts(true);
-    const { data, error } = await supabase
-      .from('posts')
-      .select('id, title, slug, category, date, published')
-      .eq('published', true)
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      console.error('Erro ao buscar posts:', error);
-    } else {
-      setPublishedPosts(data as PublishedPost[]);
-    }
-    setLoadingPosts(false);
-  };
-
-  const loadPostForEdit = async (postId: string) => {
-    const { data, error } = await supabase
-      .from('posts')
-      .select('*')
-      .eq('id', postId)
-      .single();
-
-    if (error) {
-      setMessage('Erro ao carregar post para edição');
+    if (!session?.access_token) {
+      setPublishedPosts([]);
       return;
     }
 
-    setForm({
-      id: data.id,
-      title: data.title,
-      slug: data.slug,
-      excerpt: data.excerpt,
-      content: data.content,
-      category: data.category,
-      date: data.date,
-      read_time: data.read_time,
-      image_url: data.image_url,
-      external_url: data.external_url || '',
-      featured: data.featured,
-      hot: data.hot,
-      published: data.published,
-    });
-    setEditingId(postId);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setLoadingPosts(true);
+
+    try {
+      const response = await fetch('/api/admin/posts', {
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+        },
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setMessage(data.error ?? 'Erro ao buscar posts publicados');
+        return;
+      }
+
+      setPublishedPosts(data as PublishedPost[]);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Erro ao buscar posts publicados';
+      setMessage(errorMessage);
+    } finally {
+      setLoadingPosts(false);
+    }
+  };
+
+  const loadPostForEdit = async (postId: string) => {
+    if (!session?.access_token) {
+      setMessage('Sessao expirada. Faca login novamente.');
+      return;
+    }
+
+    setLoadingPosts(true);
+
+    try {
+      const response = await fetch(`/api/admin/posts?postId=${encodeURIComponent(postId)}`, {
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+        },
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setMessage(data.error ?? 'Erro ao carregar post para edição');
+        return;
+      }
+
+      setForm({
+        id: data.id,
+        title: data.title,
+        slug: data.slug,
+        excerpt: data.excerpt,
+        content: data.content,
+        category: data.category,
+        date: data.date,
+        read_time: data.read_time,
+        image_url: data.image_url,
+        external_url: data.external_url || '',
+        featured: data.featured,
+        hot: data.hot,
+        published: data.published,
+      });
+      setEditingId(postId);
+      setMessage(null);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Erro ao carregar post para edição';
+      setMessage(errorMessage);
+    } finally {
+      setLoadingPosts(false);
+    }
   };
 
   const deletePost = async (postId: string) => {
@@ -149,7 +183,6 @@ export default function AdminPage() {
       const {
         data: { session },
       } = await supabase.auth.getSession();
-      console.log('Initial session check:', session?.user?.email);
       setSession(session);
       if (session?.user?.email) {
         await verifyAdmin(session.user.email);
@@ -159,15 +192,11 @@ export default function AdminPage() {
     init();
 
     const { data: listener } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log('Auth state changed. Event:', event, 'Session:', session?.user?.email);
-      
-      // Handle OAuth callback
       if (event === 'SIGNED_IN' && !session?.user?.email) {
-        console.log('OAuth callback detected, refreshing page');
         window.location.reload();
         return;
       }
-      
+
       setSession(session);
       if (session?.user?.email) {
         await verifyAdmin(session.user.email);
@@ -182,12 +211,10 @@ export default function AdminPage() {
   }, []);
 
   useEffect(() => {
-    if (isAdmin) {
+    if (isAdmin && session?.access_token) {
       fetchPublishedPosts();
     }
-  }, [isAdmin]);
-
-  const getAdminRedirect = () => `${window.location.origin}/admin`;
+  }, [isAdmin, session?.access_token]);
 
   const verifyAdmin = async (email: string) => {
     const normalizedEmail = email.trim().toLowerCase();
@@ -223,15 +250,18 @@ export default function AdminPage() {
   const handleSignIn = async () => {
     setLoading(true);
     try {
-      // Get the current host and build the proper redirect URL
       const protocol = window.location.protocol;
       const host = window.location.host;
       const redirectTo = `${protocol}//${host}/admin`;
-      console.log('OAuth redirectTo:', redirectTo);
-      
+
+      window.localStorage.setItem(
+        ADMIN_REDIRECT_STORAGE_KEY,
+        JSON.stringify({ path: '/admin', createdAt: Date.now() })
+      );
+
       await supabase.auth.signInWithOAuth({
         provider: 'google',
-        options: { 
+        options: {
           redirectTo,
           queryParams: {
             access_type: 'offline',
@@ -240,7 +270,7 @@ export default function AdminPage() {
         },
       });
     } catch (error) {
-      console.error('Sign in error:', error);
+      window.localStorage.removeItem(ADMIN_REDIRECT_STORAGE_KEY);
       setMessage('Erro ao fazer login. Tente novamente.');
     } finally {
       setLoading(false);
@@ -249,6 +279,7 @@ export default function AdminPage() {
 
   const handleSignOut = async () => {
     setLoading(true);
+    window.localStorage.removeItem(ADMIN_REDIRECT_STORAGE_KEY);
     const authStorageKey = (supabase.auth as any).storageKey as string | undefined;
     if (authStorageKey) {
       localStorage.removeItem(authStorageKey);
