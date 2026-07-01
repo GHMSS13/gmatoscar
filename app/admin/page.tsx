@@ -149,6 +149,7 @@ export default function AdminPage() {
       const {
         data: { session },
       } = await supabase.auth.getSession();
+      console.log('Initial session check:', session?.user?.email);
       setSession(session);
       if (session?.user?.email) {
         await verifyAdmin(session.user.email);
@@ -157,7 +158,16 @@ export default function AdminPage() {
 
     init();
 
-    const { data: listener } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    const { data: listener } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log('Auth state changed. Event:', event, 'Session:', session?.user?.email);
+      
+      // Handle OAuth callback
+      if (event === 'SIGNED_IN' && !session?.user?.email) {
+        console.log('OAuth callback detected, refreshing page');
+        window.location.reload();
+        return;
+      }
+      
       setSession(session);
       if (session?.user?.email) {
         await verifyAdmin(session.user.email);
@@ -212,12 +222,29 @@ export default function AdminPage() {
 
   const handleSignIn = async () => {
     setLoading(true);
-    const redirectTo = getAdminRedirect();
-    await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo },
-    });
-    setLoading(false);
+    try {
+      // Get the current host and build the proper redirect URL
+      const protocol = window.location.protocol;
+      const host = window.location.host;
+      const redirectTo = `${protocol}//${host}/admin`;
+      console.log('OAuth redirectTo:', redirectTo);
+      
+      await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: { 
+          redirectTo,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
+        },
+      });
+    } catch (error) {
+      console.error('Sign in error:', error);
+      setMessage('Erro ao fazer login. Tente novamente.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSignOut = async () => {
