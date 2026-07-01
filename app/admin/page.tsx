@@ -298,7 +298,6 @@ export default function AdminPage() {
 
       if (!response.ok) {
         setMessage(data.error ?? 'Falha ao salvar post.');
-        setSaving(false);
         return;
       }
 
