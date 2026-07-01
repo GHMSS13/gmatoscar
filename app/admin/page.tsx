@@ -186,12 +186,20 @@ export default function AdminPage() {
       setSession(session);
       if (session?.user?.email) {
         await verifyAdmin(session.user.email);
+      } else {
+        setIsAdmin(false);
       }
     };
 
     init();
 
     const { data: listener } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_OUT') {
+        setSession(null);
+        setIsAdmin(false);
+        return;
+      }
+
       if (event === 'SIGNED_IN' && !session?.user?.email) {
         window.location.reload();
         return;
@@ -200,8 +208,6 @@ export default function AdminPage() {
       setSession(session);
       if (session?.user?.email) {
         await verifyAdmin(session.user.email);
-      } else {
-        setIsAdmin(false);
       }
     });
 
@@ -219,6 +225,13 @@ export default function AdminPage() {
   const verifyAdmin = async (email: string) => {
     const normalizedEmail = email.trim().toLowerCase();
     const isFallbackAdmin = allowedAdminEmails.includes(normalizedEmail);
+
+    if (isFallbackAdmin) {
+      setIsAdmin(true);
+      setMessage(null);
+      return;
+    }
+
     setLoading(true);
     const { data, error } = await supabase
       .from('admins')
@@ -229,22 +242,19 @@ export default function AdminPage() {
 
     setLoading(false);
     if (error) {
-      setIsAdmin(isFallbackAdmin);
-      if (!isFallbackAdmin) {
-        setMessage(`Falha ao validar admin: ${error.message}`);
-      }
+      setIsAdmin(false);
+      setMessage(`Falha ao validar admin: ${error.message}`);
       return;
     }
 
     if (!data) {
-      setIsAdmin(isFallbackAdmin);
-      if (!isFallbackAdmin) {
-        setMessage('Seu e-mail não foi encontrado na lista de admins. Verifique tabela admins e policies RLS no Supabase.');
-      }
+      setIsAdmin(false);
+      setMessage('Seu e-mail não foi encontrado na lista de admins. Verifique tabela admins e policies RLS no Supabase.');
       return;
     }
 
     setIsAdmin(Boolean(data));
+    setMessage(null);
   };
 
   const handleSignIn = async () => {
