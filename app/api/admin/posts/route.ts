@@ -197,10 +197,12 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: client.error }, { status: 500 });
     }
 
-    const { error } = await client.supabase
+    const { data, error } = await client.supabase
       .from('posts')
       .update(post)
-      .eq('id', postId);
+      .eq('id', postId)
+      .select('id')
+      .maybeSingle();
 
     if (error) {
       const rlsDenied =
@@ -217,6 +219,16 @@ export async function PUT(request: Request) {
       }
 
       return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+
+    if (!data) {
+      return NextResponse.json(
+        {
+          error:
+            'Nenhum post foi atualizado. Verifique permissao de update na tabela posts e policies RLS para o seu usuario admin.',
+        },
+        { status: 403 }
+      );
     }
 
     return NextResponse.json({ success: true });
