@@ -49,7 +49,35 @@ export interface Post {
   published: boolean;
 }
 
-export async function getPosts() {
+interface GetPostsOptions {
+  includePrivateModelPosts?: boolean;
+}
+
+function normalize(value: string) {
+  return value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+}
+
+export function isFerrari250GtoPost(post: Post) {
+  const slug = normalize(post.slug);
+  const title = normalize(post.title);
+
+  if (slug.includes('ferrari-250-gto')) {
+    return true;
+  }
+
+  return title.includes('ferrari') && (title.includes('250 gto') || title.includes('250-gto'));
+}
+
+function filterPrivateModelPosts(posts: Post[]) {
+  return posts.filter((post) => !isFerrari250GtoPost(post));
+}
+
+export async function getPosts(options: GetPostsOptions = {}) {
+  const { includePrivateModelPosts = false } = options;
+
   const { data, error } = await supabase
     .from('posts')
     .select('*')
@@ -58,11 +86,12 @@ export async function getPosts() {
 
   if (error) {
     console.error('[getPosts] Supabase error:', error.message);
-    return fallbackPosts;
+    return includePrivateModelPosts ? fallbackPosts : filterPrivateModelPosts(fallbackPosts);
   }
 
   const posts = (data as Post[]) ?? [];
-  return posts.length > 0 ? posts : fallbackPosts;
+  const basePosts = posts.length > 0 ? posts : fallbackPosts;
+  return includePrivateModelPosts ? basePosts : filterPrivateModelPosts(basePosts);
 }
 
 export async function getPostSlugs() {
