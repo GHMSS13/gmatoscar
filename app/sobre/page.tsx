@@ -17,13 +17,6 @@ export const metadata: Metadata = {
     'Conheça o GMATOSCAR, o maior canal brasileiro sobre supercarros, hypercars e automóveis de alto desempenho.',
 };
 
-const stats = [
-  { value: '500K+', label: 'Inscritos YouTube' },
-  { value: '200K+', label: 'Seguidores Instagram' },
-  { value: '300K+', label: 'Seguidores TikTok' },
-  { value: '500+', label: 'Vídeos Publicados' },
-];
-
 const values = [
   {
     icon: Zap,
@@ -98,24 +91,6 @@ export default function SobrePage() {
               <div className="absolute -top-3 -right-3 w-24 h-24 border border-[#dc2626]/20 rounded-sm" />
               <div className="absolute -bottom-3 -left-3 w-16 h-16 border border-[#dc2626]/10 rounded-sm" />
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Stats */}
-      <section className="bg-[#f9fafb] border-y border-[#e5e7eb] py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {stats.map((stat) => (
-              <div key={stat.label} className="text-center">
-                <div className="text-3xl md:text-4xl font-rajdhani font-bold text-[#dc2626] mb-1">
-                  {stat.value}
-                </div>
-                <div className="text-[#6b7280] text-xs uppercase tracking-widest font-exo">
-                  {stat.label}
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       </section>
