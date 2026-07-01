@@ -13,6 +13,7 @@ interface Props {
 
 const targetBrandIds = ['ferrari', 'lamborghini', 'porsche', 'bugatti', 'pagani', 'mclaren', 'koenigsegg'];
 const seoBrands = brands.filter((brand) => targetBrandIds.includes(brand.id));
+const ferrariF80Title = 'Ferrari F80: preço, motor, potência e tudo sobre o novo hipercarro de 1.200 cv';
 
 function normalizeText(value: string) {
   return value
@@ -30,6 +31,15 @@ function getRelatedPosts(posts: Post[], brandName: string) {
       return text.includes(q);
     })
     .slice(0, 6);
+}
+
+function getFerrariF80Post(posts: Post[]) {
+  const targetTitle = normalizeText(ferrariF80Title);
+
+  return (
+    posts.find((post) => normalizeText(post.title) === targetTitle || normalizeText(post.slug).includes('ferrari-f80')) ??
+    null
+  );
 }
 
 export function generateStaticParams() {
@@ -63,6 +73,7 @@ export default async function BrandPage({ params }: Props) {
   const posts = await getPosts();
   const allPosts = await getPosts({ includePrivateModelPosts: true });
   const ferrari250GtoPost = allPosts.find((post) => isFerrari250GtoPost(post)) ?? null;
+  const ferrariF80Post = getFerrariF80Post(allPosts);
   const relatedPosts = getRelatedPosts(posts, brand.name);
 
   const brandSchema = {
@@ -151,6 +162,21 @@ export default async function BrandPage({ params }: Props) {
                   <Link
                     key={item.slug}
                     href={`/noticias/${ferrari250GtoPost.slug}`}
+                    className="group rounded-xl border border-[#e5e7eb] bg-[#f9fafb] p-4 transition-colors hover:border-[#dc2626]/40 hover:bg-white"
+                  >
+                    <div className="flex items-center justify-between gap-3">
+                      <h3 className="text-[#111827] font-rajdhani font-bold text-xl group-hover:text-[#dc2626] transition-colors">
+                        {item.name}
+                      </h3>
+                      <span className="text-[#dc2626] text-xs uppercase tracking-[0.3em] font-rajdhani font-bold">{item.year}</span>
+                    </div>
+                    <p className="text-[#6b7280] text-sm font-exo mt-2 mb-2">{item.highlight}</p>
+                    <p className="text-[#dc2626] text-xs uppercase tracking-[0.3em] font-rajdhani font-bold">Ler artigo</p>
+                  </Link>
+                ) : brand.id === 'ferrari' && item.slug === 'ferrari-f80-preco-motor-potencia-hipercarro-1200cv' && ferrariF80Post ? (
+                  <Link
+                    key={item.slug}
+                    href={`/noticias/${ferrariF80Post.slug}`}
                     className="group rounded-xl border border-[#e5e7eb] bg-[#f9fafb] p-4 transition-colors hover:border-[#dc2626]/40 hover:bg-white"
                   >
                     <div className="flex items-center justify-between gap-3">

@@ -18,10 +18,10 @@ const fallbackPosts: Post[] = [
   },
   {
     id: 'fallback-ferrari-f80-hypercar',
-    title: 'Ferrari F80: O Hypercar de 1.200 cv que Redefine o Topo da Linhagem',
-    slug: 'ferrari-f80-hypercar-1200cv',
-    excerpt: 'A Ferrari F80 chega para assumir o trono deixado pela LaFerrari, com motor hibrido derivado das pistas e foco absoluto em performance.',
-    content: 'Com 1.200 cv, aerodinamica ativa e tecnologia inspirada em Le Mans e Formula 1, a Ferrari F80 eleva o nivel dos hypercars de rua e marca uma nova era para Maranello.',
+    title: 'Ferrari F80: preço, motor, potência e tudo sobre o novo hipercarro de 1.200 cv',
+    slug: 'ferrari-f80-preco-motor-potencia-hipercarro-1200cv',
+    excerpt: 'Tudo sobre a Ferrari F80: proposta, motorização, potência e o que torna o novo hipercarro um dos lançamentos mais importantes da marca.',
+    content: 'A Ferrari F80 chega como o novo topo da linha da marca, unindo desempenho extremo, aerodinâmica ativa e uma linguagem técnica pensada para marcar uma nova fase em Maranello.',
     category: 'Lancamentos',
     date: '2026-06-29',
     read_time: '4 min',
@@ -60,6 +60,13 @@ function normalize(value: string) {
     .replace(/[\u0300-\u036f]/g, '');
 }
 
+function isFerrariF80Post(post: Post) {
+  const slug = normalize(post.slug);
+  const title = normalize(post.title);
+
+  return slug.includes('ferrari-f80') || (title.includes('ferrari') && title.includes('f80'));
+}
+
 export function isFerrari250GtoPost(post: Post) {
   const slug = normalize(post.slug);
   const title = normalize(post.title);
@@ -72,7 +79,7 @@ export function isFerrari250GtoPost(post: Post) {
 }
 
 function filterPrivateModelPosts(posts: Post[]) {
-  return posts.filter((post) => !isFerrari250GtoPost(post));
+  return posts.filter((post) => !isFerrari250GtoPost(post) && !isFerrariF80Post(post));
 }
 
 export async function getPosts(options: GetPostsOptions = {}) {
@@ -102,11 +109,12 @@ export async function getPostSlugs() {
 
   if (error) {
     console.error('[getPostSlugs] Supabase error:', error.message);
-    return fallbackPosts.map((post) => ({ slug: post.slug }));
+    return filterPrivateModelPosts(fallbackPosts).map((post) => ({ slug: post.slug }));
   }
 
   const slugs = data ?? [];
-  return slugs.length > 0 ? slugs : fallbackPosts.map((post) => ({ slug: post.slug }));
+  const baseSlugs = slugs.length > 0 ? slugs : fallbackPosts.map((post) => ({ slug: post.slug }));
+  return baseSlugs;
 }
 
 export async function getPostBySlug(slug: string) {
@@ -119,9 +127,15 @@ export async function getPostBySlug(slug: string) {
 
   if (error) {
     console.error('[getPostBySlug] Supabase error:', error.message);
-    return fallbackPosts.find((post) => post.slug === slug) ?? null;
+    const fallbackPost = fallbackPosts.find((post) => post.slug === slug) ?? null;
+    return fallbackPost;
   }
 
   const post = data as Post | null;
-  return post ?? fallbackPosts.find((item) => item.slug === slug) ?? null;
+  if (!post) {
+    const fallbackPost = fallbackPosts.find((item) => item.slug === slug) ?? null;
+    return fallbackPost;
+  }
+
+  return post;
 }

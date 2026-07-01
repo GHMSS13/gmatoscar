@@ -87,6 +87,7 @@ export const brands: Brand[] = [
       { slug: 'ferrari-250-gto', name: '250 GTO', year: '1962', highlight: 'O clássico mais valioso e reverenciado da Ferrari.' },
       { slug: 'ferrari-458-italia', name: '458 Italia', year: '2009', highlight: 'O último V8 aspirado puro antes da era turbo.' },
       { slug: 'ferrari-sf90-stradale', name: 'SF90 Stradale', year: '2019', highlight: 'O híbrido plug-in que levou a Ferrari a um novo patamar de potência.' },
+      { slug: 'ferrari-f80-preco-motor-potencia-hipercarro-1200cv', name: 'F80', year: '2024', highlight: 'O hypercar que assume o topo da nova linhagem da Ferrari.' },
       { slug: 'ferrari-296-gtb', name: '296 GTB', year: '2021', highlight: 'O V6 híbrido que redefiniu o equilíbrio entre leveza e desempenho.' },
       { slug: 'ferrari-purosangue', name: 'Purosangue', year: '2022', highlight: 'A interpretação da Ferrari para conforto, espaço e performance.' },
     ],
