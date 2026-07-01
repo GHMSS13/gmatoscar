@@ -29,6 +29,7 @@ export interface ModelPage {
   year: string;
   category: string;
   image: string;
+  gallery?: string[];
   description: string;
   keywords: string[];
   specs: {
@@ -83,9 +84,11 @@ export const brands: Brand[] = [
       { year: 2024, title: 'Nova geração híbrida', description: 'A marca combina eletrificação com alta performance em uma nova fase tecnológica.' },
     ],
     famousModels: [
-      { slug: 'ferrari-f40', name: 'F40', year: '1987', highlight: 'Um dos carros mais lendários da história da marca.' },
-      { slug: 'ferrari-laferrari', name: 'LaFerrari', year: '2013', highlight: 'Hipercarro híbrido que redefiniu o topo da linha.' },
-      { slug: 'ferrari-f80', name: 'F80', year: '2024', highlight: 'A nova interpretação da Ferrari para o futuro dos supercarros.' },
+      { slug: 'ferrari-250-gto', name: '250 GTO', year: '1962', highlight: 'O clássico mais valioso e reverenciado da Ferrari.' },
+      { slug: 'ferrari-458-italia', name: '458 Italia', year: '2009', highlight: 'O último V8 aspirado puro antes da era turbo.' },
+      { slug: 'ferrari-sf90-stradale', name: 'SF90 Stradale', year: '2019', highlight: 'O híbrido plug-in que levou a Ferrari a um novo patamar de potência.' },
+      { slug: 'ferrari-296-gtb', name: '296 GTB', year: '2021', highlight: 'O V6 híbrido que redefiniu o equilíbrio entre leveza e desempenho.' },
+      { slug: 'ferrari-purosangue', name: 'Purosangue', year: '2022', highlight: 'A interpretação da Ferrari para conforto, espaço e performance.' },
     ],
   },
   {
@@ -265,6 +268,23 @@ export const modelPages: ModelPage[] = [
     highlights: ['Último modelo aprovado por Enzo Ferrari', 'Construção focada em baixo peso', 'Design agressivo e atemporal'],
   },
   {
+    slug: 'ferrari-250-gto',
+    name: 'Ferrari 250 GTO',
+    brandId: 'ferrari',
+    year: '1962',
+    category: 'Clássico de competição',
+    image: 'https://images.pexels.com/photos/7601311/pexels-photo-7601311.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    gallery: [
+      'https://images.pexels.com/photos/7601311/pexels-photo-7601311.jpeg?auto=compress&cs=tinysrgb&w=1200',
+      'https://images.pexels.com/photos/1007410/pexels-photo-1007410.jpeg?auto=compress&cs=tinysrgb&w=1200',
+      'https://images.pexels.com/photos/1015568/pexels-photo-1015568.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    ],
+    description: 'A Ferrari 250 GTO é um dos carros mais cobiçados da história, símbolo absoluto de raridade, corrida e valor cultural.',
+    keywords: ['ferrari 250 gto', '250 gto ficha tecnica', 'ferrari classico'],
+    specs: { power: '300 cv', topSpeed: '280 km/h', acceleration: '6.1 s', drivetrain: 'RWD' },
+    highlights: ['Ícone máximo da era clássica da Ferrari', 'Construção voltada para homologação e competição', 'Um dos automóveis mais valiosos do mundo'],
+  },
+  {
     slug: 'ferrari-enzo',
     name: 'Ferrari Enzo',
     brandId: 'ferrari',
@@ -275,6 +295,23 @@ export const modelPages: ModelPage[] = [
     keywords: ['ferrari enzo', 'enzo ferrari carro', 'ferrari enzo especificacoes'],
     specs: { power: '660 cv', topSpeed: '350 km/h', acceleration: '3.6 s', drivetrain: 'RWD' },
     highlights: ['Produção limitada e alta exclusividade', 'DNA de Fórmula 1 no conjunto mecânico', 'Modelo de transição para a era moderna da Ferrari'],
+  },
+  {
+    slug: 'ferrari-458-italia',
+    name: 'Ferrari 458 Italia',
+    brandId: 'ferrari',
+    year: '2009',
+    category: 'Supercarro V8',
+    image: 'https://images.pexels.com/photos/174854/pexels-photo-174854.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    gallery: [
+      'https://images.pexels.com/photos/174854/pexels-photo-174854.jpeg?auto=compress&cs=tinysrgb&w=1200',
+      'https://images.pexels.com/photos/1112598/pexels-photo-1112598.jpeg?auto=compress&cs=tinysrgb&w=1200',
+      'https://images.pexels.com/photos/120049/pexels-photo-120049.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    ],
+    description: 'A Ferrari 458 Italia marcou uma geração com resposta imediata, desenho marcante e um dos V8 aspirados mais celebrados da história recente da marca.',
+    keywords: ['ferrari 458 italia', '458 italia ficha tecnica', 'ferrari v8 aspirado'],
+    specs: { power: '570 cv', topSpeed: '325 km/h', acceleration: '3.4 s', drivetrain: 'RWD' },
+    highlights: ['Último grande V8 aspirado da Ferrari antes da virada turbo', 'Desenho assinado para emocionar em qualquer ângulo', 'Equilíbrio entre pista e uso na rua'],
   },
   {
     slug: 'ferrari-laferrari',
@@ -295,10 +332,32 @@ export const modelPages: ModelPage[] = [
     year: '2019',
     category: 'Supercarro híbrido plug-in',
     image: 'https://images.pexels.com/photos/3729464/pexels-photo-3729464.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    gallery: [
+      'https://images.pexels.com/photos/3729464/pexels-photo-3729464.jpeg?auto=compress&cs=tinysrgb&w=1200',
+      'https://images.pexels.com/photos/1112598/pexels-photo-1112598.jpeg?auto=compress&cs=tinysrgb&w=1200',
+      'https://images.pexels.com/photos/210019/pexels-photo-210019.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    ],
     description: 'A SF90 Stradale representa a evolução da Ferrari em eficiência, tração integral e aceleração brutal.',
     keywords: ['ferrari sf90', 'sf90 stradale', 'ferrari sf90 performance'],
     specs: { power: '1000 cv', topSpeed: '340 km/h', acceleration: '2.5 s', drivetrain: 'AWD' },
     highlights: ['Primeiro PHEV de produção em série da Ferrari', 'Tração integral em um novo pacote dinâmico', 'Top performance com usabilidade no dia a dia'],
+  },
+  {
+    slug: 'ferrari-296-gtb',
+    name: 'Ferrari 296 GTB',
+    brandId: 'ferrari',
+    year: '2021',
+    category: 'Supercarro híbrido V6',
+    image: 'https://images.pexels.com/photos/1273986/pexels-photo-1273986.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    gallery: [
+      'https://images.pexels.com/photos/1273986/pexels-photo-1273986.jpeg?auto=compress&cs=tinysrgb&w=1200',
+      'https://images.pexels.com/photos/3729464/pexels-photo-3729464.jpeg?auto=compress&cs=tinysrgb&w=1200',
+      'https://images.pexels.com/photos/1007410/pexels-photo-1007410.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    ],
+    description: 'A Ferrari 296 GTB inaugura uma fase importante ao combinar um V6 híbrido com comportamento muito afiado e respostas de supercarro moderno.',
+    keywords: ['ferrari 296 gtb', '296 gtb ficha tecnica', 'ferrari v6 hibrido'],
+    specs: { power: '830 cv', topSpeed: '330 km/h', acceleration: '2.9 s', drivetrain: 'RWD' },
+    highlights: ['Primeiro Ferrari de rua com V6 híbrido moderno', 'Arquitetura voltada para leveza e precisão', 'Nova linguagem da marca para carros de motor central'],
   },
   {
     slug: 'ferrari-purosangue',
@@ -307,6 +366,11 @@ export const modelPages: ModelPage[] = [
     year: '2022',
     category: 'Crossover de alta performance',
     image: 'https://images.pexels.com/photos/6311656/pexels-photo-6311656.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    gallery: [
+      'https://images.pexels.com/photos/6311656/pexels-photo-6311656.jpeg?auto=compress&cs=tinysrgb&w=1200',
+      'https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?auto=compress&cs=tinysrgb&w=1200',
+      'https://images.pexels.com/photos/1607109/pexels-photo-1607109.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    ],
     description: 'A Ferrari Purosangue expande o portfólio da marca sem abrir mão do foco em performance e comportamento esportivo.',
     keywords: ['ferrari purosangue', 'ferrari suv', 'purosangue especificacoes'],
     specs: { power: '725 cv', topSpeed: '310 km/h', acceleration: '3.3 s', drivetrain: 'AWD' },

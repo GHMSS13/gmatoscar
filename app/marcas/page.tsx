@@ -56,10 +56,10 @@ export default function MarcasPage() {
             Fase 1
           </p>
           <h1 className="text-4xl md:text-6xl font-serif font-semibold text-[#111827] mb-4">
-            Hub de Marcas para SEO
+            As Marcas que Definem os Supercarros
           </h1>
           <p className="text-[#4b5563] text-sm sm:text-base md:text-lg max-w-3xl font-exo leading-relaxed">
-            Esta página concentra as marcas estratégicas para ranqueamento orgânico e distribui autoridade para as páginas individuais de cada fabricante.
+            Explore as fabricantes mais importantes do universo dos supercarros em um só lugar: história, identidade, modelos icônicos e notícias relacionadas para conhecer o peso de cada marca no mercado.
           </p>
         </div>
       </section>
