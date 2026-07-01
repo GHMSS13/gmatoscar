@@ -3,9 +3,10 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
-import { Loader2, LogIn, LogOut, PlusCircle } from 'lucide-react';
+import { Loader2, LogIn, LogOut, PlusCircle, Edit, Trash2 } from 'lucide-react';
 
 interface PostFormState {
+  id?: string;
   title: string;
   slug: string;
   excerpt: string;
@@ -17,6 +18,15 @@ interface PostFormState {
   external_url: string;
   featured: boolean;
   hot: boolean;
+  published: boolean;
+}
+
+interface PublishedPost {
+  id: string;
+  title: string;
+  slug: string;
+  category: string;
+  date: string;
   published: boolean;
 }
 
@@ -42,6 +52,9 @@ export default function AdminPage() {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [form, setForm] = useState<PostFormState>(initialFormState);
+  const [publishedPosts, setPublishedPosts] = useState<PublishedPost[]>([]);
+  const [loadingPosts, setLoadingPosts] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const router = useRouter();
   const isMissingPostsSchema =
     message?.toLowerCase().includes('public.posts') ||
@@ -51,6 +64,85 @@ export default function AdminPage() {
     .split(',')
     .map((email) => email.trim().toLowerCase())
     .filter(Boolean);
+
+  const fetchPublishedPosts = async () => {
+    setLoadingPosts(true);
+    const { data, error } = await supabase
+      .from('posts')
+      .select('id, title, slug, category, date, published')
+      .eq('published', true)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Erro ao buscar posts:', error);
+    } else {
+      setPublishedPosts(data as PublishedPost[]);
+    }
+    setLoadingPosts(false);
+  };
+
+  const loadPostForEdit = async (postId: string) => {
+    const { data, error } = await supabase
+      .from('posts')
+      .select('*')
+      .eq('id', postId)
+      .single();
+
+    if (error) {
+      setMessage('Erro ao carregar post para edição');
+      return;
+    }
+
+    setForm({
+      id: data.id,
+      title: data.title,
+      slug: data.slug,
+      excerpt: data.excerpt,
+      content: data.content,
+      category: data.category,
+      date: data.date,
+      read_time: data.read_time,
+      image_url: data.image_url,
+      external_url: data.external_url || '',
+      featured: data.featured,
+      hot: data.hot,
+      published: data.published,
+    });
+    setEditingId(postId);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const deletePost = async (postId: string) => {
+    if (!confirm('Tem certeza que deseja deletar este post?')) return;
+
+    setSaving(true);
+    try {
+      const response = await fetch('/api/admin/posts', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          postId,
+          accessToken: session.access_token,
+        }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        setMessage(data.error ?? 'Erro ao deletar post');
+        return;
+      }
+
+      setMessage('Post deletado com sucesso!');
+      await fetchPublishedPosts();
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Erro ao deletar post';
+      setMessage(errorMessage);
+    } finally {
+      setSaving(false);
+    }
+  };
 
   useEffect(() => {
     const init = async () => {
@@ -78,6 +170,12 @@ export default function AdminPage() {
       listener.subscription.unsubscribe();
     };
   }, []);
+
+  useEffect(() => {
+    if (isAdmin) {
+      fetchPublishedPosts();
+    }
+  }, [isAdmin]);
 
   const getAdminRedirect = () => `${window.location.origin}/admin`;
 
@@ -183,19 +281,21 @@ export default function AdminPage() {
         published: form.published,
       };
 
+      const method = form.id ? 'PUT' : 'POST';
+      const body = form.id 
+        ? { post: payload, postId: form.id, accessToken: session.access_token }
+        : { post: payload, accessToken: session.access_token };
+
       const insertPromise = fetch('/api/admin/posts', {
-        method: 'POST',
+        method,
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          post: payload,
-          accessToken: session.access_token,
-        }),
+        body: JSON.stringify(body),
       }).then(async (res) => {
         const data = await res.json();
         if (!res.ok) {
-          return { error: { message: data.error ?? 'Falha ao criar post.' } };
+          return { error: { message: data.error ?? 'Falha ao salvar post.' } };
         }
         return { error: null };
       });
@@ -211,14 +311,21 @@ export default function AdminPage() {
         return;
       }
 
-      setMessage('Post criado com sucesso!');
+      setMessage(form.id ? 'Post atualizado com sucesso!' : 'Post criado com sucesso!');
       setForm(initialFormState);
+      setEditingId(null);
+      await fetchPublishedPosts();
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Falha ao criar post.';
+      const errorMessage = error instanceof Error ? error.message : 'Falha ao salvar post.';
       setMessage(errorMessage);
     } finally {
       setSaving(false);
     }
+  };
+
+  const handleCancelEdit = () => {
+    setForm(initialFormState);
+    setEditingId(null);
   };
 
   useEffect(() => {
@@ -237,7 +344,7 @@ export default function AdminPage() {
                 Área administrativa
               </p>
               <h1 className="text-3xl sm:text-4xl font-rajdhani font-bold text-[#111827]">
-                Criar novo post
+                {editingId ? 'Editar post' : 'Criar novo post'}
               </h1>
               <p className="text-[#4b5563] mt-2 max-w-2xl text-sm font-exo">
                 Faça login com Google e publique artigos diretamente no Supabase. O login não é exigido para a área pública do site.
@@ -426,8 +533,17 @@ export default function AdminPage() {
                 className="inline-flex items-center justify-center gap-2 rounded-full bg-[#dc2626] px-6 py-3 text-sm font-bold uppercase tracking-widest text-white transition-colors hover:bg-[#b91c1c] disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <PlusCircle size={18} />
-                {saving ? 'Salvando...' : 'Criar post'}
+                {saving ? 'Salvando...' : editingId ? 'Atualizar post' : 'Criar post'}
               </button>
+              {editingId && (
+                <button
+                  type="button"
+                  onClick={handleCancelEdit}
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[#6b7280] px-6 py-3 text-sm font-bold uppercase tracking-widest text-white transition-colors hover:bg-[#4b5563]"
+                >
+                  Cancelar
+                </button>
+              )}
             </form>
           </div>
           )}
@@ -444,6 +560,64 @@ export default function AdminPage() {
               Após adicionar o email, faça login com o mesmo Google em <code className="text-[#dc2626]">/admin</code>.
             </p>
           </div>
+
+          {session?.user && isAdmin && (
+            <div className="mt-8">
+              <h2 className="text-3xl font-rajdhani font-bold text-[#111827] mb-6 flex items-center gap-2">
+                <span>Posts publicados</span>
+                {loadingPosts && <Loader2 size={20} className="animate-spin" />}
+              </h2>
+
+              {publishedPosts.length === 0 ? (
+                <div className="rounded-xl border border-[#e5e7eb] bg-[#f9fafb] p-6 text-center text-[#6b7280]">
+                  <p>Nenhum post publicado ainda. Crie seu primeiro post acima!</p>
+                </div>
+              ) : (
+                <div className="grid gap-4">
+                  {publishedPosts.map((post) => (
+                    <div
+                      key={post.id}
+                      className="rounded-xl border border-[#e5e7eb] bg-white p-5 sm:p-6 hover:border-[#dc2626]/50 transition-colors"
+                    >
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-2">
+                            <span className="inline-block bg-[#dc2626]/10 text-[#dc2626] text-xs font-bold px-3 py-1 rounded-full">
+                              {post.category}
+                            </span>
+                            <span className="text-[#9ca3af] text-xs">{post.date}</span>
+                          </div>
+                          <h3 className="text-[#111827] font-rajdhani font-bold text-lg mb-1">
+                            {post.title}
+                          </h3>
+                          <p className="text-[#6b7280] text-sm">
+                            <code className="text-[#dc2626] bg-[#f3f4f6] px-2 py-1 rounded">{post.slug}</code>
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+                          <button
+                            onClick={() => loadPostForEdit(post.id)}
+                            className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#3b82f6] px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-[#2563eb]"
+                          >
+                            <Edit size={16} />
+                            <span className="hidden sm:inline">Editar</span>
+                          </button>
+                          <button
+                            onClick={() => deletePost(post.id)}
+                            disabled={saving}
+                            className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#ef4444] px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-[#dc2626] disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            <Trash2 size={16} />
+                            <span className="hidden sm:inline">Deletar</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </main>
