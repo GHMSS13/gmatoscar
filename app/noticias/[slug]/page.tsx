@@ -53,7 +53,7 @@ function renderContent(content: string) {
           <img
             src={src}
             alt={alt}
-            className="block w-full h-[360px] object-cover"
+            className="block w-full h-auto"
             loading="lazy"
           />
           {alt ? <figcaption className="px-4 py-3 text-xs text-[#6b7280] font-exo">{alt}</figcaption> : null}
@@ -71,7 +71,7 @@ function renderContent(content: string) {
           <img
             src={trimmed}
             alt="Imagem do artigo"
-            className="block w-full h-[360px] object-cover"
+            className="block w-full h-auto"
             loading="lazy"
           />
         </figure>
