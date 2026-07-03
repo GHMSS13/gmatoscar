@@ -47,13 +47,13 @@ function renderContent(content: string) {
       return (
         <figure
           key={`img-md-${index}`}
-          className="my-6 mx-auto w-full max-w-3xl overflow-hidden rounded-xl border border-[#e5e7eb] bg-white"
+          className="my-5 mx-auto w-full max-w-[560px] overflow-hidden rounded-xl border border-[#e5e7eb] bg-white"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={src}
             alt={alt}
-            className="w-full h-auto max-h-[520px] object-contain bg-[#f8fafc]"
+            className="w-full h-auto max-h-[360px] object-contain bg-[#f8fafc]"
             loading="lazy"
           />
           {alt ? <figcaption className="px-4 py-3 text-xs text-[#6b7280] font-exo">{alt}</figcaption> : null}
@@ -65,13 +65,13 @@ function renderContent(content: string) {
       return (
         <figure
           key={`img-url-${index}`}
-          className="my-6 mx-auto w-full max-w-3xl overflow-hidden rounded-xl border border-[#e5e7eb] bg-white"
+          className="my-5 mx-auto w-full max-w-[560px] overflow-hidden rounded-xl border border-[#e5e7eb] bg-white"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={trimmed}
             alt="Imagem do artigo"
-            className="w-full h-auto max-h-[520px] object-contain bg-[#f8fafc]"
+            className="w-full h-auto max-h-[360px] object-contain bg-[#f8fafc]"
             loading="lazy"
           />
         </figure>
