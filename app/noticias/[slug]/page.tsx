@@ -47,7 +47,7 @@ function renderContent(content: string) {
       return (
         <figure
           key={`img-md-${index}`}
-          className="my-5 mx-auto w-full max-w-[560px] overflow-hidden rounded-xl border border-[#e5e7eb] bg-white"
+          className="my-5 w-full overflow-hidden rounded-xl border border-[#e5e7eb] bg-white"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -65,7 +65,7 @@ function renderContent(content: string) {
       return (
         <figure
           key={`img-url-${index}`}
-          className="my-5 mx-auto w-full max-w-[560px] overflow-hidden rounded-xl border border-[#e5e7eb] bg-white"
+          className="my-5 w-full overflow-hidden rounded-xl border border-[#e5e7eb] bg-white"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -181,7 +181,7 @@ export default async function NoticiaPage({ params }: Props) {
         </div>
 
         {/* Content */}
-        <div className="prose max-w-none prose-headings:text-[#111827] prose-p:text-[#1f2937]">
+        <div className="prose mx-auto max-w-[560px] prose-headings:text-[#111827] prose-p:text-[#1f2937]">
           <p className="text-[#374151] text-lg leading-[1.8] font-exo mb-6">{item.excerpt}</p>
           {renderContent(item.content)}
         </div>
