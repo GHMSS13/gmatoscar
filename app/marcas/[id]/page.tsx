@@ -188,6 +188,21 @@ export default async function BrandPage({ params }: Props) {
                     <p className="text-[#6b7280] text-sm font-exo mt-2 mb-2">{item.highlight}</p>
                     <p className="text-[#dc2626] text-xs uppercase tracking-[0.3em] font-rajdhani font-bold">Ler artigo</p>
                   </Link>
+                ) : brand.id === 'ferrari' && item.slug === 'ferrari-458-italia' ? (
+                  <Link
+                    key={item.slug}
+                    href={`/noticias/${item.slug}`}
+                    className="group rounded-xl border border-[#e5e7eb] bg-[#f9fafb] p-4 transition-colors hover:border-[#dc2626]/40 hover:bg-white"
+                  >
+                    <div className="flex items-center justify-between gap-3">
+                      <h3 className="text-[#111827] font-rajdhani font-bold text-xl group-hover:text-[#dc2626] transition-colors">
+                        {item.name}
+                      </h3>
+                      <span className="text-[#dc2626] text-xs uppercase tracking-[0.3em] font-rajdhani font-bold">{item.year}</span>
+                    </div>
+                    <p className="text-[#6b7280] text-sm font-exo mt-2 mb-2">{item.highlight}</p>
+                    <p className="text-[#dc2626] text-xs uppercase tracking-[0.3em] font-rajdhani font-bold">Ler artigo</p>
+                  </Link>
                 ) : (
                   <div
                     key={item.slug}

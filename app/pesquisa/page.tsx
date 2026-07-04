@@ -147,7 +147,7 @@ function PesquisaContent({ posts }: PesquisaContentProps) {
 }
 
 export default async function PesquisaPage() {
-  const posts = await getPosts();
+  const posts = await getPosts({ includePrivateModelPosts: true });
 
   return (
     <Suspense fallback={<div className="min-h-screen bg-white" />}>

@@ -67,6 +67,13 @@ function isFerrariF80Post(post: Post) {
   return slug.includes('ferrari-f80') || (title.includes('ferrari') && title.includes('f80'));
 }
 
+function isFerrari458ItaliaPost(post: Post) {
+  const slug = normalize(post.slug);
+  const title = normalize(post.title);
+
+  return slug.includes('ferrari-458-italia') || (title.includes('ferrari') && title.includes('458 italia'));
+}
+
 export function isFerrari250GtoPost(post: Post) {
   const slug = normalize(post.slug);
   const title = normalize(post.title);
@@ -79,7 +86,7 @@ export function isFerrari250GtoPost(post: Post) {
 }
 
 function filterPrivateModelPosts(posts: Post[]) {
-  return posts.filter((post) => !isFerrari250GtoPost(post) && !isFerrariF80Post(post));
+  return posts.filter((post) => !isFerrari250GtoPost(post) && !isFerrariF80Post(post) && !isFerrari458ItaliaPost(post));
 }
 
 export async function getPosts(options: GetPostsOptions = {}) {
