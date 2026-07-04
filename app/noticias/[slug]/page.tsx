@@ -114,7 +114,7 @@ function renderContent(content: string) {
     }
 
     return (
-      <p key={`p-${index}`} className="text-[#1f2937] leading-[1.8] font-exo mb-4">
+      <p key={`p-${index}`} className="text-[#1f2937] leading-[1.45] font-exo mb-3">
         {parts.length > 0 ? parts : trimmed}
       </p>
     );
@@ -181,8 +181,8 @@ export default async function NoticiaPage({ params }: Props) {
         </div>
 
         {/* Content */}
-        <div className="prose mx-auto max-w-[560px] prose-headings:text-[#111827] prose-p:text-[#1f2937]">
-          <p className="text-[#374151] text-lg leading-[1.8] font-exo mb-6">{item.excerpt}</p>
+        <div className="prose mx-auto max-w-[560px] prose-headings:text-[#111827] prose-headings:leading-tight prose-p:text-[#1f2937] prose-p:leading-[1.45] prose-p:mb-3">
+          <p className="text-[#374151] text-lg leading-[1.45] font-exo mb-3">{item.excerpt}</p>
           {renderContent(item.content)}
         </div>
       </article>
