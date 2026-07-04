@@ -50,7 +50,6 @@ export default function MarcasPage() {
       <Navbar />
 
       <section className="relative pt-28 pb-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden">
-        <div className="absolute inset-0 grid-pattern opacity-15" />
         <div className="relative z-10">
           <p className="text-[#dc2626] text-xs font-bold uppercase tracking-[0.3em] font-rajdhani mb-3">
             Fase 1
