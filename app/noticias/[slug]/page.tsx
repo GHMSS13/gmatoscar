@@ -5,6 +5,7 @@ import { ArrowLeft, Clock, Calendar, Tag } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import NewsCard from '@/components/NewsCard';
+import ArticleShareButtons from '@/components/ArticleShareButtons';
 import { getPostBySlug, getPosts, type Post } from '@/lib/posts';
 import { renderArticleContent } from '@/lib/articleContent';
 import { notFound } from 'next/navigation';
@@ -84,6 +85,7 @@ export default async function NoticiaPage({ params }: Props) {
             <Tag size={14} className="text-[#dc2626]" />
             {item.category}
           </div>
+          <ArticleShareButtons title={item.title} slug={item.slug} />
         </div>
 
         {/* Content */}
