@@ -76,7 +76,7 @@ export function renderArticleContent(content: string) {
       return;
     }
 
-    const headingMatch = trimmed.match(/^(#{1,4})\s+(.+)$/);
+    const headingMatch = trimmed.match(/^(#{1,4})\s*(.+)$/);
     if (headingMatch) {
       const level = headingMatch[1].length;
       const headingText = headingMatch[2].trim();
