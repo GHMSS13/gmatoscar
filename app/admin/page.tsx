@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { Loader2, LogIn, LogOut, PlusCircle, Edit, Trash2 } from 'lucide-react';
+import { renderArticleContent } from '@/lib/articleContent';
 
 interface PostFormState {
   id?: string;
@@ -562,7 +563,25 @@ export default function AdminPage() {
                   required
                   placeholder="Use markdown para formatar texto e links."
                 />
+                <p className="mt-2 text-xs text-[#6b7280] font-exo">
+                  O espaçamento final do artigo é padronizado automaticamente (igual em todos os posts).
+                </p>
               </label>
+
+              <div className="rounded-2xl border border-[#e5e7eb] bg-white p-4 sm:p-6">
+                <p className="text-[#111827] text-sm font-bold uppercase tracking-[0.2em] font-rajdhani mb-4">
+                  Pré-visualização do conteúdo
+                </p>
+                <div className="prose mx-auto max-w-[560px] prose-headings:text-[#111827] prose-headings:leading-tight prose-p:text-[#1f2937] prose-p:leading-[1.45] prose-p:mb-3">
+                  {form.content.trim().length > 0 ? (
+                    renderArticleContent(form.content)
+                  ) : (
+                    <p className="text-[#6b7280] text-sm font-exo mb-0">
+                      Digite o conteúdo em Markdown para visualizar como o artigo será exibido.
+                    </p>
+                  )}
+                </div>
+              </div>
 
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
                 <label className="inline-flex items-center gap-3 rounded-xl border border-[#d1d5db] bg-white px-4 py-3">
