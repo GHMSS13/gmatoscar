@@ -42,6 +42,15 @@ const clearPendingRedirect = () => {
   window.localStorage.removeItem(ADMIN_REDIRECT_STORAGE_KEY);
 };
 
+const hasOAuthTokensInHash = () => {
+  const hashValue = window.location.hash;
+  if (!hashValue) {
+    return false;
+  }
+
+  return /access_token=|refresh_token=|provider_token=/.test(hashValue);
+};
+
 export default function AuthRedirectHandler() {
   const pathname = usePathname();
   const router = useRouter();
@@ -51,6 +60,11 @@ export default function AuthRedirectHandler() {
       const pendingRedirect = readPendingRedirect();
 
       if (!pendingRedirect) {
+        // Fallback: if OAuth lands on home (/#...) without pending localStorage,
+        // still push the user to /admin after successful sign-in.
+        if (pathname !== '/admin' && hasOAuthTokensInHash()) {
+          router.replace('/admin');
+        }
         return;
       }
 
@@ -76,6 +90,9 @@ export default function AuthRedirectHandler() {
       const pendingRedirect = readPendingRedirect();
 
       if (!pendingRedirect || !session?.user) {
+        if (pathname !== '/admin' && session?.user && hasOAuthTokensInHash()) {
+          router.replace('/admin');
+        }
         return;
       }
 

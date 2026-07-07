@@ -15,6 +15,7 @@ const targetBrandIds = ['ferrari', 'lamborghini', 'porsche', 'bugatti', 'pagani'
 const seoBrands = brands.filter((brand) => targetBrandIds.includes(brand.id));
 const ferrariF80Title = 'Ferrari F80: preço, motor, potência e tudo sobre o novo hipercarro de 1.200 cv';
 const ferrariSf90Title = 'Ferrari SF90 Stradale: preço, motor híbrido, potência e ficha técnica completa';
+const ferrari296Title = 'Ferrari 296 GTB: preço, motor V6 híbrido, potência e ficha técnica completa';
 
 function normalizeText(value: string) {
   return value
@@ -55,6 +56,18 @@ function getFerrariSf90Post(posts: Post[]) {
   );
 }
 
+function getFerrari296Post(posts: Post[]) {
+  const targetTitle = normalizeText(ferrari296Title);
+
+  return (
+    posts.find(
+      (post) =>
+        normalizeText(post.title) === targetTitle ||
+        normalizeText(post.slug).includes('ferrari-296-gtb')
+    ) ?? null
+  );
+}
+
 export function generateStaticParams() {
   return seoBrands.map((brand) => ({ id: brand.id }));
 }
@@ -88,6 +101,7 @@ export default async function BrandPage({ params }: Props) {
   const ferrari250GtoPost = allPosts.find((post) => isFerrari250GtoPost(post)) ?? null;
   const ferrariF80Post = getFerrariF80Post(allPosts);
   const ferrariSf90Post = getFerrariSf90Post(allPosts);
+  const ferrari296Post = getFerrari296Post(allPosts);
   const relatedPosts = getRelatedPosts(posts, brand.name);
 
   const brandSchema = {
@@ -221,6 +235,21 @@ export default async function BrandPage({ params }: Props) {
                   <Link
                     key={item.slug}
                     href={`/noticias/${ferrariSf90Post.slug}`}
+                    className="group rounded-xl border border-[#e5e7eb] bg-[#f9fafb] p-4 transition-colors hover:border-[#dc2626]/40 hover:bg-white"
+                  >
+                    <div className="flex items-center justify-between gap-3">
+                      <h3 className="text-[#111827] font-rajdhani font-bold text-xl group-hover:text-[#dc2626] transition-colors">
+                        {item.name}
+                      </h3>
+                      <span className="text-[#dc2626] text-xs uppercase tracking-[0.3em] font-rajdhani font-bold">{item.year}</span>
+                    </div>
+                    <p className="text-[#6b7280] text-sm font-exo mt-2 mb-2">{item.highlight}</p>
+                    <p className="text-[#dc2626] text-xs uppercase tracking-[0.3em] font-rajdhani font-bold">Ler artigo</p>
+                  </Link>
+                ) : brand.id === 'ferrari' && item.slug === 'ferrari-296-gtb' && ferrari296Post ? (
+                  <Link
+                    key={item.slug}
+                    href={`/noticias/${ferrari296Post.slug}`}
                     className="group rounded-xl border border-[#e5e7eb] bg-[#f9fafb] p-4 transition-colors hover:border-[#dc2626]/40 hover:bg-white"
                   >
                     <div className="flex items-center justify-between gap-3">
