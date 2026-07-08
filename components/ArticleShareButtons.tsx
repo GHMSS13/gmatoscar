@@ -14,11 +14,8 @@ export default function ArticleShareButtons({ title, slug }: Props) {
   const wrapperRef = useRef<HTMLDivElement | null>(null);
 
   const shareUrl = useMemo(() => {
-    if (typeof window !== 'undefined') {
-      return window.location.href;
-    }
-
-    return `https://gmatoscar.com.br/noticias/${slug}`;
+    const cleanSlug = slug.trim().replace(/^\/+|\/+$/g, '');
+    return `https://gmatoscar.com.br/noticias/${encodeURIComponent(cleanSlug)}`;
   }, [slug]);
 
   const encodedUrl = encodeURIComponent(shareUrl);
