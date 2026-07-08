@@ -57,13 +57,13 @@ export default function MarkdownContent({ content }: { content: string }): React
             {children}
           </h4>
         ),
-        p: ({ children }: ComponentProps) => <p className="text-[#1f2937] leading-[1.55] font-exo mb-3">{children}</p>,
+        p: ({ children }: ComponentProps) => <p className="text-[#1f2937] leading-[1.55] font-exo mb-3 break-words">{children}</p>,
         a: ({ href, children }: ComponentProps) => (
           <a
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[#dc2626] underline underline-offset-2 hover:text-[#b91c1c]"
+            className="text-[#dc2626] underline underline-offset-2 hover:text-[#b91c1c] break-all"
           >
             {children}
           </a>
@@ -91,19 +91,19 @@ export default function MarkdownContent({ content }: { content: string }): React
         ol: ({ children }: ComponentProps) => <ol className="list-decimal list-inside my-4 space-y-1 text-[#1f2937] font-exo">{children}</ol>,
         li: ({ children }: ComponentProps) => <li className="ml-4">{children}</li>,
         table: ({ children }: ComponentProps) => (
-          <div className="overflow-x-auto my-4">
-            <table className="w-full border-collapse border border-[#d1d5db]">{children}</table>
+          <div className="overflow-x-auto my-4 -mx-1 px-1 sm:mx-0 sm:px-0">
+            <table className="w-full min-w-[520px] border-collapse border border-[#d1d5db] text-sm">{children}</table>
           </div>
         ),
         thead: ({ children }: ComponentProps) => <thead>{children}</thead>,
         tbody: ({ children }: ComponentProps) => <tbody>{children}</tbody>,
         tr: ({ children }: ComponentProps) => <tr className="even:bg-[#f9fafb] odd:bg-white">{children}</tr>,
         th: ({ children }: ComponentProps) => (
-          <th className="border border-[#d1d5db] bg-[#f3f4f6] px-4 py-2 text-left font-bold text-[#111827]">
+          <th className="border border-[#d1d5db] bg-[#f3f4f6] px-2.5 sm:px-4 py-2 text-left font-bold text-[#111827] whitespace-nowrap">
             {children}
           </th>
         ),
-        td: ({ children }: ComponentProps) => <td className="border border-[#d1d5db] px-4 py-2 text-[#1f2937]">{children}</td>,
+        td: ({ children }: ComponentProps) => <td className="border border-[#d1d5db] px-2.5 sm:px-4 py-2 text-[#1f2937] break-words">{children}</td>,
         img: ({ src, alt }: ComponentProps) => {
           const imageAlt = alt || 'Imagem do artigo';
 
@@ -113,7 +113,7 @@ export default function MarkdownContent({ content }: { content: string }): React
               <img
                 src={src || ''}
                 alt={imageAlt}
-                className="block w-full h-[220px] sm:h-[280px] md:h-[360px] object-cover"
+                className="block w-full h-[200px] sm:h-[280px] md:h-[360px] object-cover"
                 loading="lazy"
               />
               {alt ? <figcaption className="px-4 py-3 text-xs text-[#6b7280] font-exo">{alt}</figcaption> : null}

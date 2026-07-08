@@ -53,14 +53,14 @@ function PesquisaContent({ posts }: PesquisaContentProps) {
       <Navbar />
 
       {/* Header */}
-      <section className="relative pt-36 pb-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      <section className="relative pt-28 sm:pt-36 pb-10 sm:pb-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
         <div className="absolute inset-0 grid-pattern opacity-20" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(148,163,184,0.06)_0%,transparent_70%)]" />
         <div className="max-w-7xl mx-auto relative z-10">
           <p className="text-[#dc2626] text-xs font-bold uppercase tracking-[0.3em] font-rajdhani mb-3">
             Pesquisar
           </p>
-          <h1 className="text-4xl md:text-5xl font-serif font-semibold text-[#111827] mb-6">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-semibold text-[#111827] mb-6 leading-tight">
             Encontre seu Supercarro
           </h1>
 
@@ -101,8 +101,8 @@ function PesquisaContent({ posts }: PesquisaContentProps) {
       {/* Results */}
       <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto pb-20">
         {/* Results count */}
-        <div className="flex items-center justify-between mb-6">
-          <p className="text-[#6b7280] text-sm font-exo">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+          <p className="text-[#6b7280] text-sm font-exo leading-relaxed">
             {results.length === 0
               ? 'Nenhum resultado encontrado'
               : `${results.length} resultado${results.length !== 1 ? 's' : ''} encontrado${results.length !== 1 ? 's' : ''}`}

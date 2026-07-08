@@ -34,12 +34,12 @@ export default function Navbar() {
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-[#050505] border-b border-white/10 shadow-[0_20px_80px_rgba(0,0,0,0.25)]`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14 sm:h-16 md:h-20">
-          <Link href="/" className="text-base sm:text-lg md:text-xl font-bold uppercase tracking-[0.28em] sm:tracking-[0.4em] text-white font-rajdhani whitespace-nowrap">
+          <Link href="/" className="text-sm sm:text-lg md:text-xl font-bold uppercase tracking-[0.18em] sm:tracking-[0.32em] text-white font-rajdhani whitespace-nowrap">
             GMATOS
             <span className="text-[#dc2626]">CAR</span>
           </Link>
 
-          <nav className="hidden lg:flex flex-1 items-center justify-center gap-10 text-sm font-semibold uppercase tracking-[0.28em] font-rajdhani">
+          <nav className="hidden md:flex flex-1 items-center justify-center gap-6 lg:gap-10 text-xs lg:text-sm font-semibold uppercase tracking-[0.22em] lg:tracking-[0.28em] font-rajdhani">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
               return (

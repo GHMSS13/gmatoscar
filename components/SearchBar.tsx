@@ -89,30 +89,30 @@ export default function SearchBar({
 
   return (
     <form onSubmit={handleSubmit} className="relative group">
-      <div className="relative flex items-center">
+      <div className="relative flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-0">
         <Search
           size={18}
-          className="absolute left-4 text-[#9ca3af] group-focus-within:text-[#dc2626] transition-colors duration-300"
+          className="absolute left-4 top-4 sm:top-1/2 sm:-translate-y-1/2 text-[#9ca3af] group-focus-within:text-[#dc2626] transition-colors duration-300"
         />
         <input
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Pesquisar supercarros..."
-          className="w-full bg-white border border-[#d1d5db] focus:border-[#dc2626]/50 text-[#111827] placeholder-[#9ca3af] pl-11 pr-28 py-3 rounded-sm outline-none transition-all duration-300 font-exo text-sm"
+          className="w-full bg-white border border-[#d1d5db] focus:border-[#dc2626]/50 text-[#111827] placeholder-[#9ca3af] pl-11 pr-11 sm:pr-28 py-3 rounded-sm outline-none transition-all duration-300 font-exo text-sm"
         />
         {query && (
           <button
             type="button"
             onClick={handleClear}
-            className="absolute right-24 text-[#9ca3af] hover:text-[#4b5563] transition-colors"
+            className="absolute right-3 top-4 sm:right-24 sm:top-1/2 sm:-translate-y-1/2 text-[#9ca3af] hover:text-[#4b5563] transition-colors"
           >
             <X size={15} />
           </button>
         )}
         <button
           type="submit"
-          className="absolute right-2 bg-[#dc2626] hover:bg-[#b91c1c] text-white font-rajdhani font-bold uppercase tracking-widest px-4 py-1.5 rounded-sm transition-all duration-300 text-xs"
+          className="w-full sm:w-auto sm:absolute sm:right-2 bg-[#dc2626] hover:bg-[#b91c1c] text-white font-rajdhani font-bold uppercase tracking-widest px-4 py-2 sm:py-1.5 rounded-sm transition-all duration-300 text-xs"
         >
           Buscar
         </button>

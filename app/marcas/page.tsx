@@ -49,12 +49,12 @@ export default function MarcasPage() {
 
       <Navbar />
 
-      <section className="relative pt-28 pb-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden">
+      <section className="relative pt-24 sm:pt-28 pb-12 sm:pb-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden">
         <div className="relative z-10">
           <p className="text-[#dc2626] text-xs font-bold uppercase tracking-[0.3em] font-rajdhani mb-3">
             Fase 1
           </p>
-          <h1 className="text-4xl md:text-6xl font-serif font-semibold text-[#111827] mb-4">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl font-serif font-semibold text-[#111827] mb-4 leading-tight">
             As Marcas que Definem os Supercarros
           </h1>
           <p className="text-[#4b5563] text-sm sm:text-base md:text-lg max-w-3xl font-exo leading-relaxed">
@@ -69,7 +69,7 @@ export default function MarcasPage() {
             <Link
               key={brand.id}
               href={`/marcas/${brand.id}`}
-              className="rounded-2xl border border-[#e5e7eb] bg-white p-6 hover:border-[#dc2626]/50 transition-colors"
+              className="rounded-2xl border border-[#e5e7eb] bg-white p-5 sm:p-6 hover:border-[#dc2626]/50 transition-colors"
             >
               <p className="text-[#dc2626] text-xs uppercase tracking-[0.35em] font-bold font-rajdhani mb-2">
                 {brand.country}
