@@ -188,6 +188,98 @@ export function renderArticleContent(content: string) {
   let listItems: { type: 'ul' | 'ol'; items: string[] } | null = null;
   let blockquoteContent: string[] = [];
 
+  // Função para detectar e processar tabelas
+  const detectAndProcessTable = (startIdx: number): { endIdx: number; element: ReactNode } | null => {
+    const currentLine = lines[startIdx]?.trim();
+    
+    if (!currentLine?.includes('|')) {
+      return null;
+    }
+
+    // Verifica se a próxima linha é um separador
+    const nextLine = lines[startIdx + 1]?.trim();
+    if (!nextLine?.match(/^\|[\s\-:| ]+\|$/)) {
+      return null;
+    }
+
+    const tableLines: string[] = [];
+    let idx = startIdx;
+
+    // Coleta todas as linhas da tabela
+    while (idx < lines.length) {
+      const line = lines[idx]?.trim();
+      if (!line || !line.includes('|')) {
+        break;
+      }
+      tableLines.push(line);
+      idx++;
+    }
+
+    if (tableLines.length < 2) {
+      return null;
+    }
+
+    // Parse header
+    const headerCells = tableLines[0]
+      .split('|')
+      .map(cell => cell.trim())
+      .filter(cell => cell.length > 0);
+
+    if (headerCells.length === 0) {
+      return null;
+    }
+
+    // Parse body
+    const bodyRows: string[][] = [];
+    for (let i = 2; i < tableLines.length; i++) {
+      const cells = tableLines[i]
+        .split('|')
+        .map(cell => cell.trim())
+        .filter(cell => cell.length > 0);
+
+      if (cells.length === headerCells.length) {
+        bodyRows.push(cells);
+      }
+    }
+
+    // Renderiza a tabela
+    const tableKey = `table-${startIdx}`;
+    const element = (
+      <div key={tableKey} className="overflow-x-auto my-4">
+        <table className="w-full border-collapse border border-[#d1d5db]">
+          <thead>
+            <tr className="bg-[#f3f4f6]">
+              {headerCells.map((cell, i) => (
+                <th
+                  key={`${tableKey}-header-${i}`}
+                  className="border border-[#d1d5db] px-4 py-2 text-left font-bold text-[#111827]"
+                >
+                  {renderInlineParts(cell, startIdx)}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {bodyRows.map((row, rowIdx) => (
+              <tr key={`${tableKey}-row-${rowIdx}`} className={rowIdx % 2 === 0 ? 'bg-white' : 'bg-[#f9fafb]'}>
+                {row.map((cell, cellIdx) => (
+                  <td
+                    key={`${tableKey}-cell-${rowIdx}-${cellIdx}`}
+                    className="border border-[#d1d5db] px-4 py-2 text-[#1f2937]"
+                  >
+                    {renderInlineParts(cell, startIdx)}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+
+    return { endIdx: idx - 1, element };
+  };
+
   const flushList = () => {
     if (listItems) {
       const key = `list-${nodes.length}`;
@@ -235,8 +327,22 @@ export function renderArticleContent(content: string) {
     }
   };
 
-  lines.forEach((line, index) => {
+  for (let index = 0; index < lines.length; index++) {
+    const line = lines[index];
     const trimmed = line.trim();
+
+    // Tenta detectar tabela
+    if (!inCodeBlock && !trimmed.startsWith('```') && !trimmed.startsWith('>') && trimmed.includes('|')) {
+      const tableResult = detectAndProcessTable(index);
+      if (tableResult) {
+        flushList();
+        flushBlockquote();
+        nodes.push(tableResult.element);
+        index = tableResult.endIdx;
+        previousWasBlank = false;
+        continue;
+      }
+    }
 
     // Handle code blocks
     if (trimmed.startsWith('```')) {
@@ -253,26 +359,26 @@ export function renderArticleContent(content: string) {
         );
         codeBlockContent = '';
         codeBlockLanguage = '';
-        return;
+        continue;
       } else {
         flushList();
         flushBlockquote();
         inCodeBlock = true;
         codeBlockLanguage = trimmed.slice(3).trim();
-        return;
+        continue;
       }
     }
 
     if (inCodeBlock) {
       codeBlockContent += (codeBlockContent ? '\n' : '') + line;
-      return;
+      continue;
     }
 
     // Handle blockquotes
     if (trimmed.startsWith('>')) {
       const blockquoteText = trimmed.slice(1).trim();
       blockquoteContent.push(blockquoteText);
-      return;
+      continue;
     } else if (blockquoteContent.length > 0) {
       flushBlockquote();
     }
@@ -284,7 +390,7 @@ export function renderArticleContent(content: string) {
         nodes.push(<div key={`sp-${index}`} className="h-2" />);
       }
       previousWasBlank = true;
-      return;
+      continue;
     }
 
     previousWasBlank = false;
@@ -298,7 +404,7 @@ export function renderArticleContent(content: string) {
         listItems = { type: 'ul', items: [] };
       }
       listItems.items.push(itemText);
-      return;
+      continue;
     }
 
     // Handle ordered lists
@@ -310,7 +416,7 @@ export function renderArticleContent(content: string) {
         listItems = { type: 'ol', items: [] };
       }
       listItems.items.push(itemText);
-      return;
+      continue;
     }
 
     // If we have any pending list or blockquote, flush them
@@ -330,7 +436,7 @@ export function renderArticleContent(content: string) {
           {renderInlineParts(boldSubtitleMatch[1].trim(), index)}
         </h3>
       );
-      return;
+      continue;
     }
 
     // Handle headings
@@ -367,7 +473,7 @@ export function renderArticleContent(content: string) {
           </h4>
         );
       }
-      return;
+      continue;
     }
 
     // Handle markdown images
@@ -391,7 +497,7 @@ export function renderArticleContent(content: string) {
           {alt ? <figcaption className="px-4 py-3 text-xs text-[#6b7280] font-exo">{alt}</figcaption> : null}
         </figure>
       );
-      return;
+      continue;
     }
 
     // Handle direct image URLs
@@ -410,7 +516,7 @@ export function renderArticleContent(content: string) {
           />
         </figure>
       );
-      return;
+      continue;
     }
 
     // Handle paragraphs
@@ -420,6 +526,8 @@ export function renderArticleContent(content: string) {
       </p>
     );
   });
+
+  }
 
   // Flush any remaining list or blockquote
   flushList();

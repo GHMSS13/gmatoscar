@@ -63,9 +63,20 @@ Use números com ponto:
 3. Terceiro passo
 ```
 
-## Blocos de Código
+## Tabelas
 
-Use três backticks:
+Use pipes `|` e hífens `-`:
+```
+| Item | Informação |
+|------|-----------|
+| Fabricante | Ferrari |
+| Modelo | Purosangue |
+| Lançamento | 2022 |
+```
+
+Renderiza como uma tabela profissional com bordas e cores alternadas.
+
+## Blocos de Código
 ```javascript
 function exemplo() {
   console.log('Hello, World!');
