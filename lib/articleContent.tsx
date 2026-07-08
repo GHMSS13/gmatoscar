@@ -12,7 +12,27 @@ type ComponentProps = {
   inline?: boolean;
 };
 
+const standaloneImageUrlRegex = /^https?:\/\/\S+\.(?:png|jpe?g|webp|gif|avif)(?:\?\S*)?$/i;
+
+function normalizeMarkdownContent(content: string) {
+  return content
+    .replace(/\r\n/g, '\n')
+    .split('\n')
+    .map((line) => {
+      const trimmed = line.trim();
+
+      if (standaloneImageUrlRegex.test(trimmed)) {
+        return `![](${trimmed})`;
+      }
+
+      return line;
+    })
+    .join('\n');
+}
+
 export default function MarkdownContent({ content }: { content: string }): ReactNode {
+  const normalizedContent = normalizeMarkdownContent(content);
+
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm]}
@@ -102,7 +122,7 @@ export default function MarkdownContent({ content }: { content: string }): React
         },
       }}
     >
-      {content}
+      {normalizedContent}
     </ReactMarkdown>
   );
 }
