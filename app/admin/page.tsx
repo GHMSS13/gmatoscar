@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { Loader2, LogIn, LogOut, PlusCircle, Edit, Trash2 } from 'lucide-react';
-import { renderArticleContent } from '@/lib/articleContent';
+import MarkdownContent from '@/lib/articleContent';
 
 interface PostFormState {
   id?: string;
@@ -574,7 +574,7 @@ export default function AdminPage() {
                 </p>
                 <div className="prose mx-auto max-w-[560px] prose-headings:text-[#111827] prose-headings:leading-tight prose-p:text-[#1f2937] prose-p:leading-[1.45] prose-p:mb-3">
                   {form.content.trim().length > 0 ? (
-                    renderArticleContent(form.content)
+                    <MarkdownContent content={form.content} />
                   ) : (
                     <p className="text-[#6b7280] text-sm font-exo mb-0">
                       Digite o conteúdo em Markdown para visualizar como o artigo será exibido.

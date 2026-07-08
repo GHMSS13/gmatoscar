@@ -1,3 +1,5 @@
+"use client";
+
 import type { ReactNode } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -10,7 +12,7 @@ type ComponentProps = {
   inline?: boolean;
 };
 
-export function renderArticleContent(content: string): ReactNode {
+export default function MarkdownContent({ content }: { content: string }): ReactNode {
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm]}

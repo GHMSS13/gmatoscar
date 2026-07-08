@@ -8,7 +8,7 @@ import NewsCard from '@/components/NewsCard';
 import ArticleShareButtons from '@/components/ArticleShareButtons';
 import ArticleFollowBanner from '@/components/ArticleFollowBanner';
 import { getPostBySlug, getPosts, type Post } from '@/lib/posts';
-import { renderArticleContent } from '@/lib/articleContent';
+import MarkdownContent from '@/lib/articleContent';
 import { notFound } from 'next/navigation';
 
 interface Props {
@@ -93,7 +93,7 @@ export default async function NoticiaPage({ params }: Props) {
         <div className="prose mx-auto max-w-[560px] prose-headings:text-[#111827] prose-headings:leading-tight prose-p:text-[#1f2937] prose-p:leading-[1.45] prose-p:mb-3">
           <p className="text-[#374151] text-lg leading-[1.45] font-exo mb-3">{item.excerpt}</p>
           <ArticleFollowBanner />
-          {renderArticleContent(item.content)}
+          <MarkdownContent content={item.content} />
         </div>
       </article>
 
