@@ -55,6 +55,14 @@ const categories = [
   { label: 'Koenigsegg', href: '/pesquisa?q=koenigsegg' },
 ];
 
+const legalLinks = [
+  { label: 'Contato', href: '/contato' },
+  { label: 'Política de Privacidade', href: '/politica-de-privacidade' },
+  { label: 'Política de Cookies', href: '/politica-de-cookies' },
+  { label: 'Termos de Uso', href: '/termos-de-uso' },
+  { label: 'Isenção de Responsabilidade', href: '/isencao-de-responsabilidade' },
+];
+
 export default function Footer() {
   const year = new Date().getFullYear();
 
@@ -95,7 +103,7 @@ export default function Footer() {
 
       {/* Main footer content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-14">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 sm:gap-10">
           {/* Brand */}
           <div className="lg:col-span-2">
             <Link href="/" className="inline-block mb-5">
@@ -170,6 +178,27 @@ export default function Footer() {
                   >
                     <span className="w-0 h-px bg-[#dc2626] group-hover:w-3 transition-all duration-300" />
                     {cat.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Legal */}
+          <div>
+            <h4 className="font-rajdhani font-bold uppercase tracking-[0.2em] text-white text-sm mb-5 flex items-center gap-2">
+              <span className="w-4 h-0.5 bg-[#dc2626]" />
+              Institucional
+            </h4>
+            <ul className="space-y-3">
+              {legalLinks.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="text-white/40 hover:text-[#dc2626] text-sm font-exo transition-colors duration-300 flex items-center gap-2 group"
+                  >
+                    <span className="w-0 h-px bg-[#dc2626] group-hover:w-3 transition-all duration-300" />
+                    {item.label}
                   </Link>
                 </li>
               ))}

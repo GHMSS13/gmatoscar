@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import AuthRedirectHandler from '@/components/AuthRedirectHandler';
+import CookieConsentBanner from '@/components/CookieConsentBanner';
+import AdsenseScript from '@/components/AdsenseScript';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://gmatoscar.com.br'),
@@ -107,7 +109,9 @@ export default function RootLayout({
       </head>
       <body className="bg-white text-[#111] antialiased font-exo">
         <AuthRedirectHandler />
+        <AdsenseScript />
         {children}
+        <CookieConsentBanner />
       </body>
     </html>
   );
