@@ -17,12 +17,12 @@ const contacts = [
   {
     title: 'Editorial e pauta',
     description: 'Sugestões de conteúdo, correções e temas para cobertura.',
-    email: 'editorial@gmatoscar.com.br',
+    email: 'contato@gmatoscar.com.br',
   },
   {
     title: 'Privacidade e dados',
     description: 'Solicitações relacionadas à LGPD e direitos do titular.',
-    email: 'privacidade@gmatoscar.com.br',
+    email: 'contato@gmatoscar.com.br',
   },
 ];
 
