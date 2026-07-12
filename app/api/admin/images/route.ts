@@ -7,6 +7,12 @@ interface UploadImagePayload {
   base64Data: string;
 }
 
+interface UploadImagesRequestBody {
+  accessToken?: string;
+  image?: UploadImagePayload;
+  images?: UploadImagePayload[];
+}
+
 const createAuthorizedSupabaseClient = (accessToken: string) => {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
@@ -119,27 +125,40 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const payload = body as UploadImagePayload | undefined;
-    const accessToken = body?.accessToken as string | undefined;
+    const body = (await request.json()) as UploadImagesRequestBody;
+    const accessToken = body?.accessToken;
 
-    if (!payload?.fileName || !payload?.mimeType || !payload?.base64Data) {
+    const inputImages = body.images ?? (body.image ? [body.image] : []);
+
+    if (inputImages.length === 0) {
       return NextResponse.json({ error: 'Dados da imagem ausentes.' }, { status: 400 });
+    }
+
+    if (inputImages.length > 20) {
+      return NextResponse.json({ error: 'Envie no maximo 20 imagens por vez.' }, { status: 400 });
     }
 
     if (!accessToken) {
       return NextResponse.json({ error: 'Sessao expirada. Faca login novamente.' }, { status: 401 });
     }
 
-    if (!payload.mimeType.startsWith('image/')) {
-      return NextResponse.json({ error: 'Formato de arquivo invalido.' }, { status: 400 });
-    }
-
-    const estimatedSizeInBytes = Math.floor((payload.base64Data.length * 3) / 4);
     const maxSizeInBytes = 5 * 1024 * 1024;
+    for (const payload of inputImages) {
+      if (!payload?.fileName || !payload?.mimeType || !payload?.base64Data) {
+        return NextResponse.json({ error: 'Dados da imagem ausentes.' }, { status: 400 });
+      }
 
-    if (estimatedSizeInBytes > maxSizeInBytes) {
-      return NextResponse.json({ error: 'A imagem deve ter no maximo 5MB.' }, { status: 400 });
+      if (!payload.mimeType.startsWith('image/')) {
+        return NextResponse.json({ error: `Formato de arquivo invalido: ${payload.fileName}` }, { status: 400 });
+      }
+
+      const estimatedSizeInBytes = Math.floor((payload.base64Data.length * 3) / 4);
+      if (estimatedSizeInBytes > maxSizeInBytes) {
+        return NextResponse.json(
+          { error: `A imagem ${payload.fileName} deve ter no maximo 5MB.` },
+          { status: 400 }
+        );
+      }
     }
 
     const client = createAuthorizedSupabaseClient(accessToken);
@@ -148,17 +167,17 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: client.error }, { status: 500 });
     }
 
+    const rows = inputImages.map((payload) => ({
+      file_name: payload.fileName,
+      mime_type: payload.mimeType,
+      base64_data: payload.base64Data,
+    }));
+
     const { data, error } = await client.supabase
       .from('post_images')
-      .insert([
-        {
-          file_name: payload.fileName,
-          mime_type: payload.mimeType,
-          base64_data: payload.base64Data,
-        },
-      ])
+      .insert(rows)
       .select('id')
-      .single();
+      .order('created_at', { ascending: false });
 
     if (error) {
       const missingImagesTable =
@@ -192,7 +211,18 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
-    return NextResponse.json({ success: true, id: data.id });
+    const createdIds = (data ?? []).map((item) => item.id);
+
+    if (createdIds.length === 0) {
+      return NextResponse.json({ error: 'Nenhuma imagem foi salva.' }, { status: 500 });
+    }
+
+    return NextResponse.json({
+      success: true,
+      ids: createdIds,
+      id: createdIds[0],
+      count: createdIds.length,
+    });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Erro inesperado ao enviar imagem.';
     return NextResponse.json({ error: message }, { status: 500 });

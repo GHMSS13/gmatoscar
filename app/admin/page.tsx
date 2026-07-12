@@ -1,9 +1,10 @@
 'use client';
 
 import { ChangeEvent, useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
-import { Loader2, LogIn, LogOut, PlusCircle, Edit, Trash2 } from 'lucide-react';
+import { Loader2, LogIn, LogOut, PlusCircle, Edit, Trash2, ImagePlus } from 'lucide-react';
 import MarkdownContent from '@/lib/articleContent';
 
 interface PostFormState {
@@ -66,6 +67,40 @@ const initialFormState: PostFormState = {
 const ADMIN_REDIRECT_STORAGE_KEY = 'gmatoscar-admin-redirect';
 const IMAGE_PAGE_SIZE = 10;
 const IMAGE_URL_PREFIX = '/api/images/';
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+
+const quillModules = {
+  toolbar: [
+    [{ font: [] }, { size: ['small', false, 'large', 'huge'] }],
+    [{ header: [1, 2, 3, false] }],
+    ['bold', 'italic', 'underline', 'strike'],
+    [{ color: [] }, { background: [] }],
+    [{ align: [] }],
+    [{ list: 'ordered' }, { list: 'bullet' }],
+    ['blockquote', 'code-block'],
+    ['link', 'image'],
+    ['clean'],
+  ],
+};
+
+const quillFormats = [
+  'font',
+  'size',
+  'header',
+  'bold',
+  'italic',
+  'underline',
+  'strike',
+  'color',
+  'background',
+  'align',
+  'list',
+  'bullet',
+  'blockquote',
+  'code-block',
+  'link',
+  'image',
+];
 
 const extractImageIdFromUrl = (url: string) => {
   const trimmedUrl = url.trim();
@@ -76,6 +111,15 @@ const extractImageIdFromUrl = (url: string) => {
 
   const id = trimmedUrl.slice(IMAGE_URL_PREFIX.length).split('?')[0].split('#')[0].trim();
   return id.length > 0 ? id : null;
+};
+
+const isEditorContentEmpty = (content: string) => {
+  const plainText = content
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;/g, ' ')
+    .trim();
+
+  return plainText.length === 0;
 };
 
 export default function AdminPage() {
