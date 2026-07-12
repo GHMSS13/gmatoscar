@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { Loader2, LogIn, LogOut, PlusCircle, Edit, Trash2 } from 'lucide-react';
@@ -31,6 +31,23 @@ interface PublishedPost {
   published: boolean;
 }
 
+interface LibraryImage {
+  id: string;
+  file_name: string;
+  mime_type: string;
+  image_url: string;
+  preview_data_url: string;
+  created_at: string;
+}
+
+interface LibraryResponse {
+  items: LibraryImage[];
+  page: number;
+  pageSize: number;
+  total: number;
+  totalPages: number;
+}
+
 const initialFormState: PostFormState = {
   title: '',
   slug: '',
@@ -47,6 +64,19 @@ const initialFormState: PostFormState = {
 };
 
 const ADMIN_REDIRECT_STORAGE_KEY = 'gmatoscar-admin-redirect';
+const IMAGE_PAGE_SIZE = 10;
+const IMAGE_URL_PREFIX = '/api/images/';
+
+const extractImageIdFromUrl = (url: string) => {
+  const trimmedUrl = url.trim();
+
+  if (!trimmedUrl.startsWith(IMAGE_URL_PREFIX)) {
+    return null;
+  }
+
+  const id = trimmedUrl.slice(IMAGE_URL_PREFIX.length).split('?')[0].split('#')[0].trim();
+  return id.length > 0 ? id : null;
+};
 
 export default function AdminPage() {
   const [session, setSession] = useState<any>(null);
@@ -58,6 +88,12 @@ export default function AdminPage() {
   const [publishedPosts, setPublishedPosts] = useState<PublishedPost[]>([]);
   const [loadingPosts, setLoadingPosts] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [libraryImages, setLibraryImages] = useState<LibraryImage[]>([]);
+  const [loadingLibrary, setLoadingLibrary] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [libraryPage, setLibraryPage] = useState(1);
+  const [libraryTotalPages, setLibraryTotalPages] = useState(1);
+  const [selectedImageId, setSelectedImageId] = useState<string | null>(null);
   const router = useRouter();
   const isMissingPostsSchema =
     message?.toLowerCase().includes('public.posts') ||
@@ -99,6 +135,124 @@ export default function AdminPage() {
     }
   };
 
+  const fetchImageLibrary = async (page: number) => {
+    if (!session?.access_token) {
+      setLibraryImages([]);
+      setLibraryTotalPages(1);
+      return;
+    }
+
+    setLoadingLibrary(true);
+
+    try {
+      const response = await fetch(`/api/admin/images?page=${page}&pageSize=${IMAGE_PAGE_SIZE}`, {
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+        },
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setMessage(data.error ?? 'Erro ao carregar banco de imagens');
+        return;
+      }
+
+      const payload = data as LibraryResponse;
+      setLibraryImages(payload.items);
+      setLibraryTotalPages(Math.max(payload.totalPages, 1));
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Erro ao carregar banco de imagens';
+      setMessage(errorMessage);
+    } finally {
+      setLoadingLibrary(false);
+    }
+  };
+
+  const handleImageUpload = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    if (!session?.access_token) {
+      setMessage('Sessao expirada. Faca login novamente.');
+      event.target.value = '';
+      return;
+    }
+
+    if (!file.type.startsWith('image/')) {
+      setMessage('Selecione apenas arquivos de imagem.');
+      event.target.value = '';
+      return;
+    }
+
+    const maxFileSizeInBytes = 5 * 1024 * 1024;
+    if (file.size > maxFileSizeInBytes) {
+      setMessage('A imagem deve ter no maximo 5MB.');
+      event.target.value = '';
+      return;
+    }
+
+    setUploadingImage(true);
+    setMessage(null);
+
+    try {
+      const dataUrl = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result ?? ''));
+        reader.onerror = () => reject(new Error('Nao foi possivel ler o arquivo selecionado.'));
+        reader.readAsDataURL(file);
+      });
+
+      const base64Data = dataUrl.includes(',') ? dataUrl.split(',')[1] : '';
+      if (!base64Data) {
+        setMessage('Falha ao converter imagem para base64.');
+        return;
+      }
+
+      const response = await fetch('/api/admin/images', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          accessToken: session.access_token,
+          fileName: file.name,
+          mimeType: file.type,
+          base64Data,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setMessage(data.error ?? 'Erro ao salvar imagem.');
+        return;
+      }
+
+      const imageUrl = `${IMAGE_URL_PREFIX}${data.id}`;
+      setForm((prev) => ({ ...prev, image_url: imageUrl }));
+      setSelectedImageId(data.id);
+      setLibraryPage(1);
+      await fetchImageLibrary(1);
+      setMessage('Imagem enviada para o banco e selecionada no post.');
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Erro ao enviar imagem.';
+      setMessage(errorMessage);
+    } finally {
+      setUploadingImage(false);
+      event.target.value = '';
+    }
+  };
+
+  const handleSelectLibraryImage = (imageId: string) => {
+    const imageUrl = `${IMAGE_URL_PREFIX}${imageId}`;
+    setForm((prev) => ({ ...prev, image_url: imageUrl }));
+    setSelectedImageId(imageId);
+  };
+
   const loadPostForEdit = async (postId: string) => {
     if (!session?.access_token) {
       setMessage('Sessao expirada. Faca login novamente.');
@@ -136,6 +290,7 @@ export default function AdminPage() {
         hot: data.hot,
         published: data.published,
       });
+      setSelectedImageId(extractImageIdFromUrl(data.image_url));
       setEditingId(postId);
       setMessage(null);
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -198,6 +353,10 @@ export default function AdminPage() {
       if (event === 'SIGNED_OUT') {
         setSession(null);
         setIsAdmin(false);
+        setLibraryImages([]);
+        setLibraryTotalPages(1);
+        setLibraryPage(1);
+        setSelectedImageId(null);
         return;
       }
 
@@ -222,6 +381,12 @@ export default function AdminPage() {
       fetchPublishedPosts();
     }
   }, [isAdmin, session?.access_token]);
+
+  useEffect(() => {
+    if (isAdmin && session?.access_token) {
+      fetchImageLibrary(libraryPage);
+    }
+  }, [isAdmin, session?.access_token, libraryPage]);
 
   const verifyAdmin = async (email: string) => {
     const normalizedEmail = email.trim().toLowerCase();
@@ -373,6 +538,7 @@ export default function AdminPage() {
       setMessage(form.id ? 'Post atualizado com sucesso!' : 'Post criado com sucesso!');
       setForm(initialFormState);
       setEditingId(null);
+      setSelectedImageId(null);
       await fetchPublishedPosts();
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Falha ao salvar post.';
@@ -385,7 +551,12 @@ export default function AdminPage() {
   const handleCancelEdit = () => {
     setForm(initialFormState);
     setEditingId(null);
+    setSelectedImageId(null);
   };
+
+  useEffect(() => {
+    setSelectedImageId(extractImageIdFromUrl(form.image_url));
+  }, [form.image_url]);
 
   useEffect(() => {
     if (!session?.user) {
@@ -531,7 +702,7 @@ export default function AdminPage() {
                     value={form.image_url}
                     onChange={(event) => handleInput('image_url', event.target.value)}
                     className="mt-2 w-full rounded-xl border border-[#d1d5db] bg-white px-4 py-3 text-[#111827] outline-none transition-all focus:border-[#dc2626]"
-                    placeholder="https://..."
+                    placeholder="Use o banco de imagens abaixo ou uma URL externa"
                   />
                 </label>
               </div>
@@ -623,6 +794,98 @@ export default function AdminPage() {
               )}
             </form>
           </div>
+          )}
+
+          {session?.user && isAdmin && (
+            <div className="rounded-2xl border border-[#e5e7eb] bg-[#f9fafb] p-4 sm:p-6">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h2 className="text-2xl font-rajdhani font-bold text-[#111827]">Banco de imagens</h2>
+                  <p className="text-sm font-exo text-[#4b5563] mt-1">
+                    Envie imagens antes de criar o post e selecione uma abaixo. Exibindo 10 por página.
+                  </p>
+                </div>
+                <label className="inline-flex items-center justify-center gap-2 rounded-full bg-[#111827] px-4 py-2 text-xs font-bold uppercase tracking-widest text-white hover:bg-[#1f2937] cursor-pointer">
+                  {uploadingImage ? <Loader2 size={16} className="animate-spin" /> : <PlusCircle size={16} />}
+                  {uploadingImage ? 'Enviando...' : 'Anexar imagem'}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="hidden"
+                    disabled={uploadingImage}
+                  />
+                </label>
+              </div>
+
+              {loadingLibrary ? (
+                <div className="mt-6 rounded-xl border border-[#e5e7eb] bg-white p-6 text-center text-[#6b7280]">
+                  <div className="inline-flex items-center gap-2">
+                    <Loader2 size={16} className="animate-spin" />
+                    Carregando imagens...
+                  </div>
+                </div>
+              ) : libraryImages.length === 0 ? (
+                <div className="mt-6 rounded-xl border border-[#e5e7eb] bg-white p-6 text-center text-[#6b7280]">
+                  Nenhuma imagem no banco ainda. Clique em "Anexar imagem" para enviar a primeira.
+                </div>
+              ) : (
+                <>
+                  <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+                    {libraryImages.map((image) => {
+                      const isSelected = selectedImageId === image.id;
+
+                      return (
+                        <div
+                          key={image.id}
+                          className={`rounded-xl border bg-white p-3 ${isSelected ? 'border-[#dc2626]' : 'border-[#e5e7eb]'}`}
+                        >
+                          <div className="relative h-28 w-full overflow-hidden rounded-lg bg-[#f3f4f6]">
+                            <img
+                              src={image.preview_data_url}
+                              alt={image.file_name}
+                              className="h-full w-full object-cover"
+                            />
+                          </div>
+                          <p className="mt-2 truncate text-xs font-exo text-[#4b5563]" title={image.file_name}>
+                            {image.file_name}
+                          </p>
+                          <button
+                            type="button"
+                            onClick={() => handleSelectLibraryImage(image.id)}
+                            className={`mt-3 inline-flex w-full items-center justify-center rounded-lg px-3 py-2 text-xs font-bold uppercase tracking-wider transition-colors ${isSelected ? 'bg-[#dc2626] text-white' : 'bg-[#e5e7eb] text-[#111827] hover:bg-[#d1d5db]'}`}
+                          >
+                            {isSelected ? 'Selecionada' : 'Selecionar'}
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  <div className="mt-6 flex items-center justify-between gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setLibraryPage((prev) => Math.max(prev - 1, 1))}
+                      disabled={libraryPage <= 1 || loadingLibrary}
+                      className="inline-flex items-center justify-center rounded-lg border border-[#d1d5db] bg-white px-4 py-2 text-xs font-bold uppercase tracking-wider text-[#111827] disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Anterior
+                    </button>
+                    <p className="text-xs font-exo text-[#6b7280]">
+                      Página {libraryPage} de {libraryTotalPages}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => setLibraryPage((prev) => Math.min(prev + 1, libraryTotalPages))}
+                      disabled={libraryPage >= libraryTotalPages || loadingLibrary}
+                      className="inline-flex items-center justify-center rounded-lg border border-[#d1d5db] bg-white px-4 py-2 text-xs font-bold uppercase tracking-wider text-[#111827] disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Próxima
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
           )}
 
           <div className="rounded-2xl border border-[#e5e7eb] bg-[#f9fafb] p-5 text-sm text-[#4b5563]">
