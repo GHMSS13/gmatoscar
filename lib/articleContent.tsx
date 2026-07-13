@@ -3,6 +3,7 @@
 import type { ReactNode } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 
 type ComponentProps = {
   children?: ReactNode;
@@ -36,6 +37,7 @@ export default function MarkdownContent({ content }: { content: string }): React
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm]}
+      rehypePlugins={[rehypeRaw]}
       components={{
         h1: ({ children }: ComponentProps) => (
           <h2 className="text-[#111827] font-exo font-bold !text-[1.62rem] sm:!text-[1.9rem] !leading-[1.13] tracking-[-0.005em] mt-7 mb-4">
@@ -104,19 +106,25 @@ export default function MarkdownContent({ content }: { content: string }): React
           </th>
         ),
         td: ({ children }: ComponentProps) => <td className="border border-[#d1d5db] px-2.5 sm:px-4 py-2 text-[#1f2937] break-words">{children}</td>,
-        img: ({ src, alt }: ComponentProps) => {
+        img: ({ src, alt, width, height, style }: any) => {
           const imageAlt = alt || 'Imagem do artigo';
+          const hasCustomSize = !!(width || height || (style && (style.width || style.height)));
 
           return (
-            <figure className="my-5 w-full overflow-hidden rounded-xl border border-[#e5e7eb] bg-white">
+            <figure className="my-5 w-full overflow-hidden rounded-xl border border-[#e5e7eb] bg-white text-center">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={src || ''}
                 alt={imageAlt}
-                className="block w-full h-[200px] sm:h-[280px] md:h-[360px] object-cover"
+                className={hasCustomSize ? "inline-block max-w-full rounded-xl" : "block w-full h-[200px] sm:h-[280px] md:h-[360px] object-cover"}
+                style={{
+                  width: width || (style && style.width) || undefined,
+                  height: height || (style && style.height) || undefined,
+                  ...style
+                }}
                 loading="lazy"
               />
-              {alt ? <figcaption className="px-4 py-3 text-xs text-[#6b7280] font-exo">{alt}</figcaption> : null}
+              {alt ? <figcaption className="px-4 py-3 text-xs text-[#6b7280] font-exo text-center">{alt}</figcaption> : null}
             </figure>
           );
         },
