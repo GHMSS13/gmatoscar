@@ -64,6 +64,24 @@ const createUserClient = (accessToken: string): SupabaseClientResult => {
   } as const;
 };
 
+/**
+ * Prefers service role for server operations, but gracefully falls back
+ * to the authenticated admin JWT client when the service key is unavailable.
+ */
+const createDbClient = (accessToken: string): SupabaseClientResult => {
+  const serviceClient = createServiceClient();
+  if (serviceClient.ok) {
+    return serviceClient;
+  }
+
+  const userClient = createUserClient(accessToken);
+  if (userClient.ok) {
+    return userClient;
+  }
+
+  return serviceClient;
+};
+
 /** Verifies the access token and returns the user's email, or an error string. */
 async function verifyAdminToken(accessToken: string): Promise<{ email: string } | { error: string }> {
   const client = createUserClient(accessToken);
@@ -117,7 +135,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: auth.error }, { status: 403 });
     }
 
-    const client = createServiceClient();
+    const client = createDbClient(accessToken);
     if (!client.ok) {
       return NextResponse.json({ error: client.error }, { status: 500 });
     }
@@ -171,7 +189,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: auth.error }, { status: 403 });
     }
 
-    const client = createServiceClient();
+    const client = createDbClient(accessToken);
     if (!client.ok) {
       return NextResponse.json({ error: client.error }, { status: 500 });
     }
@@ -225,7 +243,7 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: auth.error }, { status: 403 });
     }
 
-    const client = createServiceClient();
+    const client = createDbClient(accessToken);
     if (!client.ok) {
       return NextResponse.json({ error: client.error }, { status: 500 });
     }
@@ -274,7 +292,7 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: auth.error }, { status: 403 });
     }
 
-    const client = createServiceClient();
+    const client = createDbClient(accessToken);
     if (!client.ok) {
       return NextResponse.json({ error: client.error }, { status: 500 });
     }
