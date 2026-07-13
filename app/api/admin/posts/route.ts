@@ -16,28 +16,78 @@ interface PostPayload {
   published: boolean;
 }
 
-const createAuthorizedSupabaseClient = (accessToken: string) => {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+const ALLOWED_ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAILS ?? 'gustavohmssilva13@gmail.com')
+  .split(',')
+  .map((e) => e.trim().toLowerCase())
+  .filter(Boolean);
 
-  if (!supabaseUrl || !supabaseAnonKey) {
-    return { error: 'Supabase nao configurado no ambiente.' } as const;
+/** Client that uses the service role key — bypasses RLS, server-side only. */
+const createServiceClient = () => {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !serviceRoleKey) {
+    return { error: 'Supabase service role key não configurada no ambiente. Adicione SUPABASE_SERVICE_ROLE_KEY nas variáveis de ambiente do servidor.' } as const;
   }
 
   return {
-    supabase: createClient(supabaseUrl, supabaseAnonKey, {
-      auth: {
-        persistSession: false,
-        autoRefreshToken: false,
-      },
-      global: {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      },
+    supabase: createClient(supabaseUrl, serviceRoleKey, {
+      auth: { persistSession: false, autoRefreshToken: false },
     }),
   } as const;
 };
+
+/** Client that uses the user JWT — respects RLS, used only for identity verification. */
+const createUserClient = (accessToken: string) => {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+
+  if (!supabaseUrl || !anonKey) {
+    return { error: 'Supabase não configurado no ambiente.' } as const;
+  }
+
+  return {
+    supabase: createClient(supabaseUrl, anonKey, {
+      auth: { persistSession: false, autoRefreshToken: false },
+      global: { headers: { Authorization: `Bearer ${accessToken}` } },
+    }),
+  } as const;
+};
+
+/** Verifies the access token and returns the user's email, or an error string. */
+async function verifyAdminToken(accessToken: string): Promise<{ email: string } | { error: string }> {
+  const client = createUserClient(accessToken);
+  if ('error' in client) return { error: client.error };
+
+  const { data: { user }, error } = await client.supabase.auth.getUser();
+
+  if (error || !user?.email) {
+    return { error: 'Sessão inválida ou expirada. Faça login novamente.' };
+  }
+
+  const email = user.email.trim().toLowerCase();
+
+  // First check: is this email in the hardcoded allow-list?
+  if (ALLOWED_ADMIN_EMAILS.includes(email)) {
+    return { email };
+  }
+
+  // Second check: is this email in the admins table?
+  const serviceClient = createServiceClient();
+  if ('error' in serviceClient) return { error: serviceClient.error };
+
+  const { data: adminRow } = await serviceClient.supabase
+    .from('admins')
+    .select('email')
+    .ilike('email', email)
+    .maybeSingle();
+
+  if (!adminRow) {
+    return { error: `Acesso negado. O e-mail "${email}" não está autorizado como admin.` };
+  }
+
+  return { email };
+}
 
 export async function GET(request: Request) {
   try {
@@ -52,8 +102,12 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Sessao expirada. Faca login novamente.' }, { status: 401 });
     }
 
-    const client = createAuthorizedSupabaseClient(accessToken);
+    const auth = await verifyAdminToken(accessToken);
+    if ('error' in auth) {
+      return NextResponse.json({ error: auth.error }, { status: 403 });
+    }
 
+    const client = createServiceClient();
     if ('error' in client) {
       return NextResponse.json({ error: client.error }, { status: 500 });
     }
@@ -65,41 +119,19 @@ export async function GET(request: Request) {
         .order('created_at', { ascending: false });
 
       if (error) {
-        const rlsDenied =
-          error.code === '42501' || error.message.toLowerCase().includes('row-level security');
-
-        if (rlsDenied) {
-          return NextResponse.json(
-            {
-              error:
-                'Permissao negada para listar posts. Verifique se seu email esta na tabela admins e se as policies RLS da tabela posts foram aplicadas.',
-            },
-            { status: 403 }
-          );
-        }
-
         return NextResponse.json({ error: error.message }, { status: 400 });
       }
 
       return NextResponse.json(data);
     }
 
-    const { data, error } = await client.supabase.from('posts').select('*').eq('id', postId).single();
+    const { data, error } = await client.supabase
+      .from('posts')
+      .select('*')
+      .eq('id', postId)
+      .single();
 
     if (error) {
-      const rlsDenied =
-        error.code === '42501' || error.message.toLowerCase().includes('row-level security');
-
-      if (rlsDenied) {
-        return NextResponse.json(
-          {
-            error:
-              'Permissao negada para carregar post. Verifique se seu email esta na tabela admins e se as policies RLS da tabela posts foram aplicadas.',
-          },
-          { status: 403 }
-        );
-      }
-
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
@@ -124,8 +156,12 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Sessao expirada. Faca login novamente.' }, { status: 401 });
     }
 
-    const client = createAuthorizedSupabaseClient(accessToken);
+    const auth = await verifyAdminToken(accessToken);
+    if ('error' in auth) {
+      return NextResponse.json({ error: auth.error }, { status: 403 });
+    }
 
+    const client = createServiceClient();
     if ('error' in client) {
       return NextResponse.json({ error: client.error }, { status: 500 });
     }
@@ -140,24 +176,8 @@ export async function POST(request: Request) {
 
       if (missingPostsTable) {
         return NextResponse.json(
-          {
-            error:
-              "Tabela public.posts nao encontrada no Supabase. Execute o script supabase/posts_schema.sql no SQL Editor e tente novamente.",
-          },
+          { error: 'Tabela public.posts nao encontrada no Supabase. Execute o script supabase/posts_schema.sql no SQL Editor e tente novamente.' },
           { status: 500 }
-        );
-      }
-
-      const rlsDenied =
-        error.code === '42501' || error.message.toLowerCase().includes('row-level security');
-
-      if (rlsDenied) {
-        return NextResponse.json(
-          {
-            error:
-              'Permissao negada para inserir post. Verifique se seu email esta na tabela admins e se as policies RLS da tabela posts foram aplicadas.',
-          },
-          { status: 403 }
         );
       }
 
@@ -190,8 +210,12 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: 'Sessao expirada. Faca login novamente.' }, { status: 401 });
     }
 
-    const client = createAuthorizedSupabaseClient(accessToken);
+    const auth = await verifyAdminToken(accessToken);
+    if ('error' in auth) {
+      return NextResponse.json({ error: auth.error }, { status: 403 });
+    }
 
+    const client = createServiceClient();
     if ('error' in client) {
       return NextResponse.json({ error: client.error }, { status: 500 });
     }
@@ -204,29 +228,13 @@ export async function PUT(request: Request) {
       .maybeSingle();
 
     if (error) {
-      const rlsDenied =
-        error.code === '42501' || error.message.toLowerCase().includes('row-level security');
-
-      if (rlsDenied) {
-        return NextResponse.json(
-          {
-            error:
-              'Permissao negada para atualizar post. Verifique se seu email esta na tabela admins e se as policies RLS da tabela posts foram aplicadas.',
-          },
-          { status: 403 }
-        );
-      }
-
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
     if (!data) {
       return NextResponse.json(
-        {
-          error:
-            'Nenhum post foi atualizado. Verifique permissao de update na tabela posts e policies RLS para o seu usuario admin.',
-        },
-        { status: 403 }
+        { error: 'Nenhum post foi atualizado. O post pode não existir.' },
+        { status: 404 }
       );
     }
 
@@ -251,8 +259,12 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: 'Sessao expirada. Faca login novamente.' }, { status: 401 });
     }
 
-    const client = createAuthorizedSupabaseClient(accessToken);
+    const auth = await verifyAdminToken(accessToken);
+    if ('error' in auth) {
+      return NextResponse.json({ error: auth.error }, { status: 403 });
+    }
 
+    const client = createServiceClient();
     if ('error' in client) {
       return NextResponse.json({ error: client.error }, { status: 500 });
     }
@@ -263,19 +275,6 @@ export async function DELETE(request: Request) {
       .eq('id', postId);
 
     if (error) {
-      const rlsDenied =
-        error.code === '42501' || error.message.toLowerCase().includes('row-level security');
-
-      if (rlsDenied) {
-        return NextResponse.json(
-          {
-            error:
-              'Permissao negada para deletar post. Verifique se seu email esta na tabela admins e se as policies RLS da tabela posts foram aplicadas.',
-          },
-          { status: 403 }
-        );
-      }
-
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
