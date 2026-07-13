@@ -47,8 +47,22 @@ drop policy if exists "Public can read published posts" on public.posts;
 create policy "Public can read published posts"
 on public.posts
 for select
-to anon, authenticated
+to anon
 using (published = true);
+
+-- Admins can read ALL posts (including unpublished)
+drop policy if exists "Admins can read all posts" on public.posts;
+create policy "Admins can read all posts"
+on public.posts
+for select
+to authenticated
+using (
+  exists (
+    select 1
+    from public.admins a
+    where lower(a.email) = lower(coalesce(auth.jwt() ->> 'email', ''))
+  )
+);
 
 -- Admin users (in admins table) can manage posts
 drop policy if exists "Admins can manage posts" on public.posts;

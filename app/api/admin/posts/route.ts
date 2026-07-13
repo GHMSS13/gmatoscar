@@ -62,7 +62,6 @@ export async function GET(request: Request) {
       const { data, error } = await client.supabase
         .from('posts')
         .select('id, title, slug, category, date, published')
-        .eq('published', true)
         .order('created_at', { ascending: false });
 
       if (error) {
