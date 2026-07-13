@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
 interface UploadImagePayload {
   fileName: string;
@@ -13,21 +13,30 @@ interface UploadImagesRequestBody {
   images?: UploadImagePayload[];
 }
 
+type SupabaseClientResult =
+  | { ok: true; supabase: SupabaseClient }
+  | { ok: false; error: string };
+
 const ALLOWED_ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAILS ?? 'gustavohmssilva13@gmail.com')
   .split(',')
   .map((e) => e.trim().toLowerCase())
   .filter(Boolean);
 
 /** Client that uses the service role key — bypasses RLS, server-side only. */
-const createServiceClient = () => {
+const createServiceClient = (): SupabaseClientResult => {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!supabaseUrl || !serviceRoleKey) {
-    return { error: 'Supabase service role key não configurada no ambiente. Adicione SUPABASE_SERVICE_ROLE_KEY nas variáveis de ambiente do servidor.' } as const;
+    return {
+      ok: false,
+      error:
+        'Supabase service role key não configurada no ambiente. Adicione SUPABASE_SERVICE_ROLE_KEY nas variáveis de ambiente do servidor.',
+    } as const;
   }
 
   return {
+    ok: true,
     supabase: createClient(supabaseUrl, serviceRoleKey, {
       auth: { persistSession: false, autoRefreshToken: false },
     }),
@@ -35,15 +44,16 @@ const createServiceClient = () => {
 };
 
 /** Client that uses the user JWT — respects RLS, used only for identity verification. */
-const createUserClient = (accessToken: string) => {
+const createUserClient = (accessToken: string): SupabaseClientResult => {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const anonKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
   if (!supabaseUrl || !anonKey) {
-    return { error: 'Supabase não configurado no ambiente.' } as const;
+    return { ok: false, error: 'Supabase não configurado no ambiente.' } as const;
   }
 
   return {
+    ok: true,
     supabase: createClient(supabaseUrl, anonKey, {
       auth: { persistSession: false, autoRefreshToken: false },
       global: { headers: { Authorization: `Bearer ${accessToken}` } },
@@ -54,7 +64,7 @@ const createUserClient = (accessToken: string) => {
 /** Verifies the access token and returns the user's email, or an error string. */
 async function verifyAdminToken(accessToken: string): Promise<{ email: string } | { error: string }> {
   const client = createUserClient(accessToken);
-  if ('error' in client) return { error: client.error };
+  if (!client.ok) return { error: client.error };
 
   const { data: { user }, error } = await client.supabase.auth.getUser();
 
@@ -71,7 +81,7 @@ async function verifyAdminToken(accessToken: string): Promise<{ email: string } 
 
   // Second check: admins table
   const serviceClient = createServiceClient();
-  if ('error' in serviceClient) return { error: serviceClient.error };
+  if (!serviceClient.ok) return { error: serviceClient.error };
 
   const { data: adminRow } = await serviceClient.supabase
     .from('admins')
@@ -107,7 +117,7 @@ export async function GET(request: Request) {
     }
 
     const client = createServiceClient();
-    if ('error' in client) {
+    if (!client.ok) {
       return NextResponse.json({ error: client.error }, { status: 500 });
     }
 
@@ -199,7 +209,7 @@ export async function POST(request: Request) {
     }
 
     const client = createServiceClient();
-    if ('error' in client) {
+    if (!client.ok) {
       return NextResponse.json({ error: client.error }, { status: 500 });
     }
 
