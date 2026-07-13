@@ -759,7 +759,7 @@ export default function AdminPage() {
 
           {/* PRIMEIRO CONTAINER: Banco de Imagens (Agora no topo sob requisição) */}
           {session?.user && isAdmin && (
-            <div className="rounded-2xl border border-[#e5e7eb] bg-[#f9fafb] p-4 sm:p-6 shadow-sm">
+            <div id="banco-de-imagens-container" className="transition-all duration-500 rounded-2xl border border-[#e5e7eb] bg-[#f9fafb] p-4 sm:p-6 shadow-sm">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <h2 className="text-2xl font-rajdhani font-bold text-[#111827]">Banco de imagens</h2>
@@ -932,15 +932,44 @@ export default function AdminPage() {
                       required
                     />
                   </label>
-                  <label className="block">
-                    <span className="text-[#374151] text-sm font-exo">Imagem principal URL (Capa)</span>
-                    <input
-                      value={form.image_url}
-                      onChange={(event) => handleInput('image_url', event.target.value)}
-                      className="mt-2 w-full rounded-xl border border-[#d1d5db] bg-white px-4 py-3 text-[#111827] outline-none transition-all focus:border-[#dc2626]"
-                      placeholder="Defina acima no banco de imagens ou insira URL externa"
-                    />
-                  </label>
+                  <div className="block">
+                    <span className="text-[#374151] text-sm font-exo">Imagem de Capa (Post)</span>
+                    <div className="mt-2 flex items-center gap-4 rounded-xl border border-[#d1d5db] bg-white px-4 py-2.5 min-h-[50px]">
+                      {form.image_url ? (
+                        <>
+                          <div className="relative h-10 w-14 overflow-hidden rounded bg-[#f3f4f6] flex-shrink-0 border border-[#e5e7eb]">
+                            <img
+                              src={form.image_url}
+                              alt="Capa"
+                              className="h-full w-full object-cover"
+                            />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-xs font-exo text-[#111827] truncate font-semibold">
+                              Imagem Selecionada
+                            </p>
+                            <p className="text-[10px] font-mono text-[#6b7280] truncate">
+                              {form.image_url}
+                            </p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setForm((prev) => ({ ...prev, image_url: '' }));
+                              setSelectedImageId(null);
+                            }}
+                            className="text-xs font-bold text-[#dc2626] hover:text-[#b91c1c] transition-colors uppercase tracking-wider font-rajdhani px-2 py-1 rounded hover:bg-[#dc2626]/5"
+                          >
+                            Remover
+                          </button>
+                        </>
+                      ) : (
+                        <p className="text-xs font-exo text-[#6b7280]">
+                          Nenhuma capa selecionada. Clique em <strong className="text-[#dc2626]">Capa</strong> em alguma imagem do banco acima.
+                        </p>
+                      )}
+                    </div>
+                  </div>
                 </div>
 
                 <label className="block">
@@ -963,38 +992,13 @@ export default function AdminPage() {
                   />
                 </label>
 
-                {/* EDITOR DE TEXTO PROFISSIONAL (MARKDOWN + AUXILIARES HTML) */}
+                {/* EDITOR DE TEXTO PROFISSIONAL LADO A LADO */}
                 <div className="block">
                   <span className="text-[#374151] text-sm font-exo">Conteúdo do Artigo</span>
                   
-                  {/* Abas */}
-                  <div className="flex border-b border-[#e5e7eb] mt-2 bg-white/50 rounded-t-xl overflow-hidden">
-                    <button
-                      type="button"
-                      onClick={() => setEditorTab('write')}
-                      className={`px-4 py-2.5 text-xs font-bold uppercase tracking-wider font-rajdhani transition-all ${
-                        editorTab === 'write'
-                          ? 'bg-white border-t border-x border-[#e5e7eb] text-[#dc2626]'
-                          : 'text-[#4b5563] hover:text-[#111827] hover:bg-[#f3f4f6]/50'
-                      }`}
-                    >
-                      Escrever
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setEditorTab('preview')}
-                      className={`px-4 py-2.5 text-xs font-bold uppercase tracking-wider font-rajdhani transition-all ${
-                        editorTab === 'preview'
-                          ? 'bg-white border-t border-x border-[#e5e7eb] text-[#dc2626]'
-                          : 'text-[#4b5563] hover:text-[#111827] hover:bg-[#f3f4f6]/50'
-                      }`}
-                    >
-                      Visualizar
-                    </button>
-                  </div>
-
-                  {editorTab === 'write' ? (
-                    <div className="border-x border-b border-[#e5e7eb] rounded-b-xl bg-white p-3 flex flex-col gap-2">
+                  <div className="grid gap-6 lg:grid-cols-2 mt-2">
+                    {/* Painel do Editor */}
+                    <div className="border border-[#e5e7eb] rounded-xl bg-white p-3 flex flex-col gap-2 shadow-sm">
                       
                       {/* Barra de Ferramentas */}
                       <div className="flex flex-wrap items-center gap-2 pb-3 mb-2 border-b border-[#e5e7eb]">
@@ -1159,7 +1163,7 @@ export default function AdminPage() {
 
                         <div className="h-5 w-[1px] bg-[#d1d5db] mx-1" />
 
-                        {/* Links & External Images */}
+                        {/* Links & Image Bank Scroll */}
                         <button
                           type="button"
                           onClick={() => {
@@ -1176,14 +1180,17 @@ export default function AdminPage() {
                         <button
                           type="button"
                           onClick={() => {
-                            const url = prompt('Digite o endereço da imagem externa:');
-                            if (url) {
-                              const alt = prompt('Digite a legenda da imagem:') || 'imagem';
-                              insertTextAtCursor(`![${alt}](${url})`);
+                            const element = document.getElementById('banco-de-imagens-container');
+                            if (element) {
+                              element.scrollIntoView({ behavior: 'smooth' });
+                              element.classList.add('ring-4', 'ring-[#dc2626]/70', 'ring-offset-2');
+                              setTimeout(() => {
+                                element.classList.remove('ring-4', 'ring-[#dc2626]/70', 'ring-offset-2');
+                              }, 2000);
                             }
                           }}
-                          className="px-2 py-1 bg-[#f3f4f6] hover:bg-[#e5e7eb] text-red-600 rounded text-xs font-bold"
-                          title="Inserir Imagem Externa"
+                          className="px-2 py-1 bg-[#f3f4f6] hover:bg-[#e5e7eb] text-[#dc2626] rounded text-xs font-bold font-exo"
+                          title="Inserir Imagem do Banco de Imagens"
                         >
                           + Imagem
                         </button>
@@ -1193,24 +1200,34 @@ export default function AdminPage() {
                         id="post-content-textarea"
                         value={form.content}
                         onChange={(event) => handleInput('content', event.target.value)}
-                        className="w-full min-h-[300px] border-0 outline-none text-[#111827] focus:ring-0 resize-y font-mono text-sm p-2"
+                        className="w-full min-h-[450px] border-0 outline-none text-[#111827] focus:ring-0 resize-y font-mono text-sm p-2"
                         required
-                        placeholder="Utilize markdown ou as ferramentas da barra acima para formatar o texto do artigo."
+                        placeholder="Utilize as ferramentas da barra acima ou digite markdown diretamente. Clique em '+ Imagem' para rolar até o banco de imagens."
                       />
                     </div>
-                  ) : (
-                    <div className="border-x border-b border-[#e5e7eb] rounded-b-xl bg-white p-6 min-h-[300px]">
-                      <div className="prose mx-auto max-w-[560px] prose-headings:text-[#111827] prose-headings:leading-tight prose-p:text-[#1f2937] prose-p:leading-[1.45] prose-p:mb-3">
+
+                    {/* Painel do Preview */}
+                    <div className="border border-[#e5e7eb] rounded-xl bg-[#f9fafb] p-5 flex flex-col min-h-[450px] max-h-[600px] overflow-y-auto shadow-sm">
+                      <div className="border-b border-[#e5e7eb] pb-2 mb-4 flex justify-between items-center">
+                        <p className="text-xs uppercase font-bold tracking-widest text-[#dc2626] font-rajdhani">
+                          Pré-visualização em tempo real
+                        </p>
+                        <span className="text-[10px] bg-red-100 text-[#dc2626] px-2 py-0.5 rounded font-mono font-semibold">
+                          Live
+                        </span>
+                      </div>
+                      <div className="prose mx-auto w-full max-w-[560px] prose-headings:text-[#111827] prose-headings:leading-tight prose-p:text-[#1f2937] prose-p:leading-[1.45] prose-p:mb-3">
                         {form.content.trim().length > 0 ? (
                           <MarkdownContent content={form.content} />
                         ) : (
-                          <p className="text-[#6b7280] text-sm font-exo mb-0 text-center">
-                            Nenhum conteúdo para pré-visualizar.
+                          <p className="text-[#6b7280] text-sm font-exo mb-0 text-center py-20">
+                            O conteúdo formatado aparecerá aqui em tempo real conforme você escreve.
                           </p>
                         )}
                       </div>
                     </div>
-                  )}
+
+                  </div>
                   <p className="mt-2 text-xs text-[#6b7280] font-exo">
                     Use tags HTML como <code>&lt;span style="color: red"&gt;texto&lt;/span&gt;</code> para controle de cores avançado no meio do parágrafo.
                   </p>
