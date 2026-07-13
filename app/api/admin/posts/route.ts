@@ -20,6 +20,18 @@ type SupabaseClientResult =
   | { ok: true; supabase: SupabaseClient }
   | { ok: false; error: string };
 
+const isRlsViolation = (message: string) => {
+  const normalized = message.toLowerCase();
+  return (
+    normalized.includes('row-level security') ||
+    normalized.includes('violates row-level security') ||
+    normalized.includes('new row violates')
+  );
+};
+
+const rlsPostsGuidance =
+  'Permissao negada pelo RLS da tabela posts. Adicione seu e-mail na tabela public.admins e/ou configure SUPABASE_SERVICE_ROLE_KEY no Vercel (Project Settings > Environment Variables), depois redeploy.';
+
 const ALLOWED_ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAILS ?? 'gustavohmssilva13@gmail.com')
   .split(',')
   .map((e) => e.trim().toLowerCase())
@@ -197,6 +209,10 @@ export async function POST(request: Request) {
     const { error } = await client.supabase.from('posts').insert([post]);
 
     if (error) {
+      if (isRlsViolation(error.message)) {
+        return NextResponse.json({ error: rlsPostsGuidance }, { status: 403 });
+      }
+
       const missingPostsTable =
         error.code === 'PGRST205' ||
         (error.message.toLowerCase().includes('public.posts') &&
@@ -256,6 +272,10 @@ export async function PUT(request: Request) {
       .maybeSingle();
 
     if (error) {
+      if (isRlsViolation(error.message)) {
+        return NextResponse.json({ error: rlsPostsGuidance }, { status: 403 });
+      }
+
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
@@ -303,6 +323,10 @@ export async function DELETE(request: Request) {
       .eq('id', postId);
 
     if (error) {
+      if (isRlsViolation(error.message)) {
+        return NextResponse.json({ error: rlsPostsGuidance }, { status: 403 });
+      }
+
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
