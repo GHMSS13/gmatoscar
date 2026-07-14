@@ -15,6 +15,15 @@ type ComponentProps = {
 
 const standaloneImageUrlRegex = /^https?:\/\/\S+\.(?:png|jpe?g|webp|gif|avif)(?:\?\S*)?$/i;
 
+function parsePixelValue(value: unknown): number | null {
+  if (typeof value !== 'string') return null;
+  const match = value.trim().match(/^(\d+(?:\.\d+)?)px$/i);
+  if (!match) return null;
+
+  const parsed = Number(match[1]);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
+}
+
 function normalizeMarkdownContent(content: string) {
   return content
     .replace(/\r\n/g, '\n')
@@ -109,6 +118,26 @@ export default function MarkdownContent({ content }: { content: string }): React
         img: ({ src, alt, width, height, style }: any) => {
           const imageAlt = alt || 'Imagem do artigo';
           const hasCustomSize = !!(width || height || (style && (style.width || style.height)));
+          const rawWidth = width || (style && style.width);
+          const rawHeight = height || (style && style.height);
+          const widthPx = parsePixelValue(rawWidth);
+          const heightPx = parsePixelValue(rawHeight);
+          const hasPixelDimensions = Boolean(widthPx && heightPx);
+
+          // Prevent distortion in narrow containers: keep the aspect ratio responsive.
+          const responsiveCustomStyle = hasPixelDimensions
+            ? {
+                ...style,
+                width: '100%',
+                maxWidth: `${widthPx}px`,
+                height: 'auto',
+                aspectRatio: `${widthPx} / ${heightPx}`,
+              }
+            : {
+                width: rawWidth || undefined,
+                height: rawHeight || undefined,
+                ...style,
+              };
 
           return (
             <figure className="my-5 w-full overflow-hidden rounded-xl border border-[#e5e7eb] bg-white text-center">
@@ -117,11 +146,7 @@ export default function MarkdownContent({ content }: { content: string }): React
                 src={src || ''}
                 alt={imageAlt}
                 className={hasCustomSize ? "inline-block max-w-full rounded-xl" : "block w-full h-[200px] sm:h-[280px] md:h-[360px] object-cover"}
-                style={{
-                  width: width || (style && style.width) || undefined,
-                  height: height || (style && style.height) || undefined,
-                  ...style
-                }}
+                style={responsiveCustomStyle}
                 loading="lazy"
               />
             </figure>
