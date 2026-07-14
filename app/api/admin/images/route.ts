@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import sharp from 'sharp';
+
+export const runtime = 'nodejs';
 
 interface UploadImagePayload {
   fileName: string;
@@ -16,6 +19,25 @@ interface UploadImagesRequestBody {
 type SupabaseClientResult =
   | { ok: true; supabase: SupabaseClient }
   | { ok: false; error: string };
+
+const AVIF_QUALITY = 62;
+
+const replaceExtensionWithAvif = (fileName: string) => {
+  const trimmed = fileName.trim();
+  const withoutExtension = trimmed.replace(/\.[a-z0-9]+$/i, '');
+  const fallback = withoutExtension.length > 0 ? withoutExtension : 'imagem';
+  return `${fallback}.avif`;
+};
+
+const convertBase64ImageToAvif = async (base64Data: string) => {
+  const inputBuffer = Buffer.from(base64Data, 'base64');
+  const avifBuffer = await sharp(inputBuffer)
+    .rotate()
+    .avif({ quality: AVIF_QUALITY, effort: 4 })
+    .toBuffer();
+
+  return avifBuffer.toString('base64');
+};
 
 const ALLOWED_ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAILS ?? 'gustavohmssilva13@gmail.com')
   .split(',')
@@ -213,11 +235,13 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: client.error }, { status: 500 });
     }
 
-    const rows = inputImages.map((payload) => ({
-      file_name: payload.fileName,
-      mime_type: payload.mimeType,
-      base64_data: payload.base64Data,
-    }));
+    const rows = await Promise.all(
+      inputImages.map(async (payload) => ({
+        file_name: replaceExtensionWithAvif(payload.fileName),
+        mime_type: 'image/avif',
+        base64_data: await convertBase64ImageToAvif(payload.base64Data),
+      }))
+    );
 
     const { data, error } = await client.supabase
       .from('post_images')
