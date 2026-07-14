@@ -158,6 +158,7 @@ export default function AdminPage() {
   const [libraryImages, setLibraryImages] = useState<LibraryImage[]>([]);
   const [loadingLibrary, setLoadingLibrary] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [deletingImageId, setDeletingImageId] = useState<string | null>(null);
   const [libraryPage, setLibraryPage] = useState(1);
   const [libraryTotalPages, setLibraryTotalPages] = useState(1);
   const [selectedImageId, setSelectedImageId] = useState<string | null>(null);
@@ -355,6 +356,54 @@ export default function AdminPage() {
     const imageUrl = `${IMAGE_URL_PREFIX}${imageId}`;
     setForm((prev) => ({ ...prev, image_url: imageUrl }));
     setSelectedImageId(imageId);
+  };
+
+  const handleDeleteLibraryImage = async (imageId: string) => {
+    if (!session?.access_token) {
+      setMessage('Sessao expirada. Faca login novamente.');
+      return;
+    }
+
+    const confirmed = window.confirm('Deseja excluir esta imagem do banco?');
+    if (!confirmed) {
+      return;
+    }
+
+    setDeletingImageId(imageId);
+    setMessage(null);
+
+    try {
+      const response = await fetch('/api/admin/images', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          accessToken: session.access_token,
+          imageId,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setMessage(data.error ?? 'Erro ao excluir imagem.');
+        return;
+      }
+
+      if (selectedImageId === imageId) {
+        setSelectedImageId(null);
+        setForm((prev) => ({ ...prev, image_url: '' }));
+      }
+
+      await fetchImageLibrary(libraryPage);
+      setMessage('Imagem excluida com sucesso.');
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Erro ao excluir imagem.';
+      setMessage(errorMessage);
+    } finally {
+      setDeletingImageId(null);
+    }
   };
 
   // Auxiliar para inserir texto na área de escrita do post
@@ -817,6 +866,7 @@ export default function AdminPage() {
                   <div className="mt-6 grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
                     {libraryImages.map((image) => {
                       const isSelected = selectedImageId === image.id;
+                      const isDeleting = deletingImageId === image.id;
 
                       return (
                         <div
@@ -830,6 +880,15 @@ export default function AdminPage() {
                                 alt={image.file_name}
                                 className="h-full w-full object-cover"
                               />
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteLibraryImage(image.id)}
+                                disabled={Boolean(deletingImageId)}
+                                className="absolute right-1.5 top-1.5 inline-flex h-6 w-6 items-center justify-center rounded-md bg-white/95 text-[#dc2626] shadow-sm transition-colors hover:bg-white disabled:cursor-not-allowed disabled:opacity-50"
+                                title="Excluir imagem"
+                              >
+                                {isDeleting ? <Loader2 size={13} className="animate-spin" /> : <Trash2 size={13} />}
+                              </button>
                             </div>
                             <p className="mt-2 truncate text-[11px] font-exo text-[#4b5563]" title={image.file_name}>
                               {image.file_name}

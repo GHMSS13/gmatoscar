@@ -16,6 +16,11 @@ interface UploadImagesRequestBody {
   images?: UploadImagePayload[];
 }
 
+interface DeleteImageRequestBody {
+  accessToken?: string;
+  imageId?: string;
+}
+
 type SupabaseClientResult =
   | { ok: true; supabase: SupabaseClient }
   | { ok: false; error: string };
@@ -278,6 +283,46 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Erro inesperado ao enviar imagem.';
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: Request) {
+  try {
+    const body = (await request.json()) as DeleteImageRequestBody;
+    const accessToken = body?.accessToken;
+    const imageId = body?.imageId?.trim();
+
+    if (!accessToken) {
+      return NextResponse.json({ error: 'Sessao expirada. Faca login novamente.' }, { status: 401 });
+    }
+
+    if (!imageId) {
+      return NextResponse.json({ error: 'ID da imagem ausente.' }, { status: 400 });
+    }
+
+    const auth = await verifyAdminToken(accessToken);
+    if ('error' in auth) {
+      return NextResponse.json({ error: auth.error }, { status: 403 });
+    }
+
+    const client = createServiceClient();
+    if (!client.ok) {
+      return NextResponse.json({ error: client.error }, { status: 500 });
+    }
+
+    const { error } = await client.supabase
+      .from('post_images')
+      .delete()
+      .eq('id', imageId);
+
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Erro inesperado ao excluir imagem.';
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
