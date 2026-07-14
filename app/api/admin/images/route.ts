@@ -149,7 +149,7 @@ export async function GET(request: Request) {
     const { data, error, count } = await client.supabase
       .from('post_images')
       .select('id, file_name, mime_type, base64_data, created_at', { count: 'exact' })
-      .order('created_at', { ascending: false })
+      .order('id', { ascending: false })
       .range(start, end);
 
     if (error) {
@@ -246,8 +246,7 @@ export async function POST(request: Request) {
     const { data, error } = await client.supabase
       .from('post_images')
       .insert(rows)
-      .select('id')
-      .order('created_at', { ascending: false });
+      .select('id');
 
     if (error) {
       const missingImagesTable =
