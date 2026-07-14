@@ -124,7 +124,6 @@ export default function MarkdownContent({ content }: { content: string }): React
                 }}
                 loading="lazy"
               />
-              {alt ? <figcaption className="px-4 py-3 text-xs text-[#6b7280] font-exo text-center">{alt}</figcaption> : null}
             </figure>
           );
         },

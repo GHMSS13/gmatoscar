@@ -113,6 +113,29 @@ const extractImageIdFromUrl = (url: string) => {
   return id.length > 0 ? id : null;
 };
 
+const sanitizeSeoFileName = (value: string) =>
+  value
+    .trim()
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9-_]+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
+
+const stripFileExtension = (value: string) => value.replace(/\.[a-z0-9]+$/i, '');
+
+const normalizeDimension = (value: string, fallback: string) => {
+  const trimmed = value.trim();
+  if (!trimmed) return fallback;
+
+  if (/^\d+$/.test(trimmed)) {
+    return `${trimmed}px`;
+  }
+
+  return trimmed;
+};
+
 const isEditorContentEmpty = (content: string) => {
   const plainText = content
     .replace(/<[^>]+>/g, ' ')
@@ -143,15 +166,15 @@ export default function AdminPage() {
   const [editorTab, setEditorTab] = useState<'write' | 'preview'>('write');
   const [insertImageMetadata, setInsertImageMetadata] = useState<{
     url: string;
-    alt: string;
+    seoFileName: string;
     width: string;
     height: string;
     isOpen: boolean;
   }>({
     url: '',
-    alt: '',
-    width: '100%',
-    height: 'auto',
+    seoFileName: '',
+    width: '1600px',
+    height: '1067px',
     isOpen: false,
   });
 
@@ -356,15 +379,12 @@ export default function AdminPage() {
 
   // Confirmação de inserção da imagem do banco no post
   const handleConfirmInsertImage = () => {
-    const { url, alt, width, height } = insertImageMetadata;
-    const useHtml = width !== '100%' || height !== 'auto';
-    
-    let tag = '';
-    if (useHtml) {
-      tag = `<img src="${url}" alt="${alt}" style="width: ${width}; height: ${height};" />`;
-    } else {
-      tag = `![${alt}](${url})`;
-    }
+    const { url, seoFileName, width, height } = insertImageMetadata;
+    const normalizedSeoName = sanitizeSeoFileName(stripFileExtension(seoFileName)) || 'imagem-artigo';
+    const imageUrlWithFileName = `${url}${url.includes('?') ? '&' : '?'}filename=${encodeURIComponent(normalizedSeoName)}`;
+
+    // Keep alt hidden in UI by not rendering figcaption, while preserving accessibility text.
+    const tag = `<img src="${imageUrlWithFileName}" alt="${normalizedSeoName}" style="width: ${normalizeDimension(width, '1600px')}; height: ${normalizeDimension(height, '1067px')};" />`;
 
     insertTextAtCursor(tag);
     setInsertImageMetadata((prev) => ({ ...prev, isOpen: false }));
@@ -828,9 +848,9 @@ export default function AdminPage() {
                               type="button"
                               onClick={() => setInsertImageMetadata({
                                 url: image.image_url,
-                                alt: image.file_name.split('.')[0] || 'imagem',
-                                width: '100%',
-                                height: 'auto',
+                                seoFileName: stripFileExtension(image.file_name) || 'imagem-artigo',
+                                width: '1600px',
+                                height: '1067px',
                                 isOpen: true
                               })}
                               className="flex-1 inline-flex items-center justify-center rounded-lg bg-[#111827] text-white hover:bg-[#1f2937] py-1.5 text-[10px] font-bold uppercase tracking-wider transition-colors"
@@ -1371,40 +1391,40 @@ export default function AdminPage() {
             <div className="grid gap-4 mb-6">
               <label className="block">
                 <span className="text-[#374151] text-xs font-bold uppercase tracking-wider font-rajdhani">
-                  Legenda / Texto Alt
+                  Nome do arquivo SEO
                 </span>
                 <input
                   type="text"
-                  value={insertImageMetadata.alt}
-                  onChange={(e) => setInsertImageMetadata(prev => ({ ...prev, alt: e.target.value }))}
+                  value={insertImageMetadata.seoFileName}
+                  onChange={(e) => setInsertImageMetadata(prev => ({ ...prev, seoFileName: e.target.value }))}
                   className="mt-1 w-full rounded-xl border border-[#d1d5db] bg-white px-3 py-2 text-sm text-[#111827] outline-none focus:border-[#dc2626]"
-                  placeholder="Ex: Novo carro esportivo nas ruas"
+                  placeholder="Ex: ferrari-f80-supercar"
                 />
               </label>
 
               <div className="grid grid-cols-2 gap-4">
                 <label className="block">
                   <span className="text-[#374151] text-xs font-bold uppercase tracking-wider font-rajdhani">
-                    Largura (ex: 100%, 400px)
+                    Largura (padrão: 1600px)
                   </span>
                   <input
                     type="text"
                     value={insertImageMetadata.width}
                     onChange={(e) => setInsertImageMetadata(prev => ({ ...prev, width: e.target.value }))}
                     className="mt-1 w-full rounded-xl border border-[#d1d5db] bg-white px-3 py-2 text-sm text-[#111827] outline-none focus:border-[#dc2626]"
-                    placeholder="100% ou 400px"
+                    placeholder="1600px"
                   />
                 </label>
                 <label className="block">
                   <span className="text-[#374151] text-xs font-bold uppercase tracking-wider font-rajdhani">
-                    Altura (ex: auto, 250px)
+                    Altura (padrão: 1067px)
                   </span>
                   <input
                     type="text"
                     value={insertImageMetadata.height}
                     onChange={(e) => setInsertImageMetadata(prev => ({ ...prev, height: e.target.value }))}
                     className="mt-1 w-full rounded-xl border border-[#d1d5db] bg-white px-3 py-2 text-sm text-[#111827] outline-none focus:border-[#dc2626]"
-                    placeholder="auto ou 250px"
+                    placeholder="1067px"
                   />
                 </label>
               </div>

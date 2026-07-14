@@ -21,13 +21,25 @@ const createPublicSupabaseClient = () => {
   } as const;
 };
 
+const sanitizeFileName = (value: string) =>
+  value
+    .trim()
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9._-]+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
+
 interface RouteParams {
   params: Promise<{ id: string }>;
 }
 
-export async function GET(_: Request, { params }: RouteParams) {
+export async function GET(request: Request, { params }: RouteParams) {
   try {
     const { id } = await params;
+    const { searchParams } = new URL(request.url);
+    const requestedFileName = searchParams.get('filename')?.trim() ?? '';
 
     if (!id) {
       return NextResponse.json({ error: 'ID da imagem ausente.' }, { status: 400 });
@@ -41,7 +53,7 @@ export async function GET(_: Request, { params }: RouteParams) {
 
     const { data, error } = await client.supabase
       .from('post_images')
-      .select('mime_type, base64_data')
+      .select('file_name, mime_type, base64_data')
       .eq('id', id)
       .maybeSingle();
 
@@ -54,12 +66,15 @@ export async function GET(_: Request, { params }: RouteParams) {
     }
 
     const binary = Buffer.from(data.base64_data, 'base64');
+    const fallbackName = sanitizeFileName(data.file_name ?? 'imagem');
+    const safeName = sanitizeFileName(requestedFileName) || fallbackName || 'imagem';
 
     return new NextResponse(binary, {
       status: 200,
       headers: {
         'Content-Type': data.mime_type,
         'Cache-Control': 'public, max-age=31536000, immutable',
+        'Content-Disposition': `inline; filename="${safeName}"`,
       },
     });
   } catch (error) {
