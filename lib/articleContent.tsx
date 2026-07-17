@@ -128,7 +128,7 @@ export default function MarkdownContent({ content }: { content: string }): React
             ? {
                 width: '100%',
                 height: '100%',
-                objectFit: 'cover' as const,
+                objectFit: 'contain' as const,
                 objectPosition: 'center',
                 ...style,
               }
@@ -143,7 +143,7 @@ export default function MarkdownContent({ content }: { content: string }): React
               {/* eslint-disable-next-line @next/next/no-img-element */}
               {hasPixelDimensions ? (
                 <div
-                  className="mx-auto w-full overflow-hidden rounded-xl"
+                  className="mx-auto w-full overflow-hidden rounded-xl bg-[#f3f4f6]"
                   style={{
                     maxWidth: `${widthPx}px`,
                     aspectRatio: `${widthPx} / ${heightPx}`,
