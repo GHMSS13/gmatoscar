@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import Link from 'next/link';
-import { ArrowLeft, Clock, Calendar, Tag } from 'lucide-react';
+import { Clock, Calendar, Tag } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import NewsCard from '@/components/NewsCard';
 import ArticleShareButtons from '@/components/ArticleShareButtons';
 import ArticleFollowBanner from '@/components/ArticleFollowBanner';
+import ArticleBackButton from '@/components/ArticleBackButton';
 import { getPostBySlug, getPosts, type Post } from '@/lib/posts';
 import MarkdownContent from '@/lib/articleContent';
 import { notFound } from 'next/navigation';
@@ -57,12 +57,9 @@ export default async function NoticiaPage({ params }: Props) {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.35)_0%,transparent_68%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(110deg,rgba(0,0,0,0.25)_0%,rgba(0,0,0,0.08)_45%,rgba(0,0,0,0.3)_100%)]" />
         <div className="relative z-10 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto w-full pb-10">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-white/75 hover:text-white text-sm font-exo mb-6 transition-colors"
-          >
-            <ArrowLeft size={14} /> Voltar
-          </Link>
+          <div className="mb-6">
+            <ArticleBackButton fallbackHref="/" />
+          </div>
           <span className="inline-block tag-badge bg-[#dc2626] text-white mb-4">{item.category}</span>
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-rajdhani font-bold text-white leading-tight [text-shadow:0_3px_16px_rgba(0,0,0,0.65)]">
             {item.title}
