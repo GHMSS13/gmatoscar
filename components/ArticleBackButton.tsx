@@ -45,7 +45,7 @@ export default function ArticleBackButton({
         compact
           ? 'h-11 w-11 rounded-full border border-black/10 bg-white text-[#111827] shadow-md hover:bg-[#f9fafb] hover:shadow-lg'
           : 'gap-3 rounded-full bg-white/10 px-2 py-1.5 text-white/90 ring-1 ring-white/30 hover:bg-white/15 hover:text-white hover:ring-white/55',
-        floating ? 'fixed left-4 top-1/2 z-50 -translate-y-1/2 md:left-6 md:h-12 md:w-12' : '',
+        floating ? 'hidden md:inline-flex fixed left-4 top-1/2 z-50 -translate-y-1/2 md:left-6 md:h-12 md:w-12' : '',
       ].join(' ')}
     >
       {compact ? (
