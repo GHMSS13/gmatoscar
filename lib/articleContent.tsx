@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
@@ -14,6 +14,8 @@ type ComponentProps = {
 };
 
 const standaloneImageUrlRegex = /^https?:\/\/\S+\.(?:png|jpe?g|webp|gif|avif)(?:\?\S*)?$/i;
+const SMART_COVER_THRESHOLD = 0.22;
+const SUBTLE_COVER_SCALE = 1.02;
 
 function parsePixelValue(value: unknown): number | null {
   if (typeof value !== 'string') return null;
@@ -38,6 +40,62 @@ function normalizeMarkdownContent(content: string) {
       return line;
     })
     .join('\n');
+}
+
+function SmartFramedImage({
+  src,
+  alt,
+  widthPx,
+  heightPx,
+  styleWithoutDimensions,
+}: {
+  src: string;
+  alt: string;
+  widthPx: number;
+  heightPx: number;
+  styleWithoutDimensions?: Record<string, unknown>;
+}) {
+  const [objectFit, setObjectFit] = useState<'contain' | 'cover'>('contain');
+
+  return (
+    <div
+      className="mx-auto w-full overflow-hidden rounded-xl bg-[#f3f4f6]"
+      style={{
+        maxWidth: `${widthPx}px`,
+        aspectRatio: `${widthPx} / ${heightPx}`,
+      }}
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={src}
+        alt={alt}
+        className="block h-full w-full rounded-xl"
+        style={{
+          ...(styleWithoutDimensions ?? {}),
+          width: '100%',
+          height: '100%',
+          objectFit,
+          objectPosition: 'center',
+          transform: objectFit === 'cover' ? `scale(${SUBTLE_COVER_SCALE})` : undefined,
+        }}
+        onLoad={(event) => {
+          const { naturalWidth, naturalHeight } = event.currentTarget;
+          if (!naturalWidth || !naturalHeight) {
+            setObjectFit('contain');
+            return;
+          }
+
+          const frameRatio = widthPx / heightPx;
+          const imageRatio = naturalWidth / naturalHeight;
+          const ratioDistance = Math.abs(Math.log(imageRatio / frameRatio));
+
+          // Near ratios: fill frame with a slight zoom. Distant ratios: preserve full image.
+          setObjectFit(ratioDistance <= SMART_COVER_THRESHOLD ? 'cover' : 'contain');
+        }}
+        loading="lazy"
+      />
+    </div>
+  );
 }
 
 export default function MarkdownContent({ content }: { content: string }): ReactNode {
@@ -147,21 +205,13 @@ export default function MarkdownContent({ content }: { content: string }): React
             <figure className="my-5 w-full overflow-hidden rounded-xl border border-[#e5e7eb] bg-white text-center">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               {hasPixelDimensions ? (
-                <div
-                  className="mx-auto w-full overflow-hidden rounded-xl bg-[#f3f4f6]"
-                  style={{
-                    maxWidth: `${widthPx}px`,
-                    aspectRatio: `${widthPx} / ${heightPx}`,
-                  }}
-                >
-                  <img
-                    src={src || ''}
-                    alt={imageAlt}
-                    className="block h-full w-full rounded-xl"
-                    style={responsiveCustomStyle}
-                    loading="lazy"
-                  />
-                </div>
+                <SmartFramedImage
+                  src={src || ''}
+                  alt={imageAlt}
+                  widthPx={widthPx as number}
+                  heightPx={heightPx as number}
+                  styleWithoutDimensions={styleWithoutDimensions as Record<string, unknown> | undefined}
+                />
               ) : (
                 <img
                   src={src || ''}
