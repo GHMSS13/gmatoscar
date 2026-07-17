@@ -41,6 +41,7 @@ export default async function NoticiaPage({ params }: Props) {
   return (
     <main className="min-h-screen bg-white">
       <Navbar />
+      <ArticleBackButton fallbackHref="/" compact floating />
 
       {/* Hero image */}
       <section className="relative h-[50vh] min-h-[350px] md:h-[60vh] flex items-end overflow-hidden">
@@ -57,9 +58,6 @@ export default async function NoticiaPage({ params }: Props) {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.35)_0%,transparent_68%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(110deg,rgba(0,0,0,0.25)_0%,rgba(0,0,0,0.08)_45%,rgba(0,0,0,0.3)_100%)]" />
         <div className="relative z-10 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto w-full pb-10">
-          <div className="mb-6">
-            <ArticleBackButton fallbackHref="/" />
-          </div>
           <span className="inline-block tag-badge bg-[#dc2626] text-white mb-4">{item.category}</span>
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-rajdhani font-bold text-white leading-tight [text-shadow:0_3px_16px_rgba(0,0,0,0.65)]">
             {item.title}
