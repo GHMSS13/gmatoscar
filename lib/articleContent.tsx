@@ -123,6 +123,11 @@ export default function MarkdownContent({ content }: { content: string }): React
           const widthPx = parsePixelValue(rawWidth);
           const heightPx = parsePixelValue(rawHeight);
           const hasPixelDimensions = Boolean(widthPx && heightPx);
+          const styleWithoutDimensions = style && typeof style === 'object'
+            ? Object.fromEntries(
+                Object.entries(style).filter(([key]) => key !== 'width' && key !== 'height')
+              )
+            : undefined;
 
           const responsiveCustomStyle = hasPixelDimensions
             ? {
@@ -130,7 +135,7 @@ export default function MarkdownContent({ content }: { content: string }): React
                 height: '100%',
                 objectFit: 'contain' as const,
                 objectPosition: 'center',
-                ...style,
+                ...styleWithoutDimensions,
               }
             : {
                 width: rawWidth || undefined,
