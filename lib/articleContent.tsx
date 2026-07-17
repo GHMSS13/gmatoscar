@@ -124,14 +124,13 @@ export default function MarkdownContent({ content }: { content: string }): React
           const heightPx = parsePixelValue(rawHeight);
           const hasPixelDimensions = Boolean(widthPx && heightPx);
 
-          // Prevent distortion in narrow containers: keep the aspect ratio responsive.
           const responsiveCustomStyle = hasPixelDimensions
             ? {
-                ...style,
                 width: '100%',
-                maxWidth: `${widthPx}px`,
-                height: 'auto',
-                aspectRatio: `${widthPx} / ${heightPx}`,
+                height: '100%',
+                objectFit: 'cover' as const,
+                objectPosition: 'center',
+                ...style,
               }
             : {
                 width: rawWidth || undefined,
@@ -142,13 +141,31 @@ export default function MarkdownContent({ content }: { content: string }): React
           return (
             <figure className="my-5 w-full overflow-hidden rounded-xl border border-[#e5e7eb] bg-white text-center">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={src || ''}
-                alt={imageAlt}
-                className={hasCustomSize ? "inline-block max-w-full rounded-xl" : "block w-full h-[200px] sm:h-[280px] md:h-[360px] object-cover"}
-                style={responsiveCustomStyle}
-                loading="lazy"
-              />
+              {hasPixelDimensions ? (
+                <div
+                  className="mx-auto w-full overflow-hidden rounded-xl"
+                  style={{
+                    maxWidth: `${widthPx}px`,
+                    aspectRatio: `${widthPx} / ${heightPx}`,
+                  }}
+                >
+                  <img
+                    src={src || ''}
+                    alt={imageAlt}
+                    className="block h-full w-full rounded-xl"
+                    style={responsiveCustomStyle}
+                    loading="lazy"
+                  />
+                </div>
+              ) : (
+                <img
+                  src={src || ''}
+                  alt={imageAlt}
+                  className={hasCustomSize ? "inline-block max-w-full rounded-xl" : "block w-full h-[200px] sm:h-[280px] md:h-[360px] object-cover"}
+                  style={responsiveCustomStyle}
+                  loading="lazy"
+                />
+              )}
             </figure>
           );
         },
