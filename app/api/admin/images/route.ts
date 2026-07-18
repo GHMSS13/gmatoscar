@@ -128,6 +128,7 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const page = Math.max(1, Number(searchParams.get('page') ?? '1'));
     const pageSize = Math.min(50, Math.max(1, Number(searchParams.get('pageSize') ?? '10')));
+    const query = searchParams.get('q')?.trim() ?? '';
 
     const authorizationHeader = request.headers.get('authorization');
     const accessToken = authorizationHeader?.startsWith('Bearer ')
@@ -151,11 +152,17 @@ export async function GET(request: Request) {
     const start = (page - 1) * pageSize;
     const end = start + pageSize - 1;
 
-    const { data, error, count } = await client.supabase
+    let queryBuilder = client.supabase
       .from('post_images')
       .select('id, file_name, mime_type, base64_data, created_at', { count: 'exact' })
-      .order('id', { ascending: false })
-      .range(start, end);
+      .order('created_at', { ascending: false })
+      .order('id', { ascending: false });
+
+    if (query) {
+      queryBuilder = queryBuilder.ilike('file_name', `%${query}%`);
+    }
+
+    const { data, error, count } = await queryBuilder.range(start, end);
 
     if (error) {
       const missingImagesTable =

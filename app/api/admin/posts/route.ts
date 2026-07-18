@@ -133,6 +133,7 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const postId = searchParams.get('postId');
+    const query = searchParams.get('q')?.trim() ?? '';
     const authorizationHeader = request.headers.get('authorization');
     const accessToken = authorizationHeader?.startsWith('Bearer ')
       ? authorizationHeader.slice('Bearer '.length)
@@ -162,7 +163,16 @@ export async function GET(request: Request) {
         return NextResponse.json({ error: error.message }, { status: 400 });
       }
 
-      return NextResponse.json(data);
+      const normalizedQuery = query.toLowerCase();
+      const filteredData = normalizedQuery
+        ? (data ?? []).filter((post) =>
+            [post.title, post.slug, post.category].some((value) =>
+              String(value).toLowerCase().includes(normalizedQuery)
+            )
+          )
+        : data;
+
+      return NextResponse.json(filteredData);
     }
 
     const { data, error } = await client.supabase

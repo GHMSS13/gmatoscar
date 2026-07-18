@@ -4,7 +4,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
-import { Loader2, LogIn, LogOut, PlusCircle, Edit, Trash2, ImagePlus } from 'lucide-react';
+import { Loader2, LogIn, LogOut, PlusCircle, Edit, Trash2, ImagePlus, Search, X } from 'lucide-react';
 import MarkdownContent from '@/lib/articleContent';
 
 interface PostFormState {
@@ -162,6 +162,8 @@ export default function AdminPage() {
   const [libraryPage, setLibraryPage] = useState(1);
   const [libraryTotalPages, setLibraryTotalPages] = useState(1);
   const [selectedImageId, setSelectedImageId] = useState<string | null>(null);
+  const [imageSearchQuery, setImageSearchQuery] = useState('');
+  const [postSearchQuery, setPostSearchQuery] = useState('');
   
   // Novos estados para o editor profissional e inserção de imagem
   const [editorTab, setEditorTab] = useState<'write' | 'preview'>('write');
@@ -189,7 +191,7 @@ export default function AdminPage() {
     .map((email) => email.trim().toLowerCase())
     .filter(Boolean);
 
-  const fetchPublishedPosts = async () => {
+  const fetchPublishedPosts = async (searchQuery = postSearchQuery) => {
     if (!session?.access_token) {
       setPublishedPosts([]);
       return;
@@ -198,7 +200,7 @@ export default function AdminPage() {
     setLoadingPosts(true);
 
     try {
-      const response = await fetch('/api/admin/posts', {
+      const response = await fetch(`/api/admin/posts?q=${encodeURIComponent(searchQuery.trim())}`, {
         headers: {
           Authorization: `Bearer ${session.access_token}`,
         },
@@ -220,7 +222,7 @@ export default function AdminPage() {
     }
   };
 
-  const fetchImageLibrary = async (page: number) => {
+  const fetchImageLibrary = async (page: number, searchQuery = imageSearchQuery) => {
     if (!session?.access_token) {
       setLibraryImages([]);
       setLibraryTotalPages(1);
@@ -230,11 +232,14 @@ export default function AdminPage() {
     setLoadingLibrary(true);
 
     try {
-      const response = await fetch(`/api/admin/images?page=${page}&pageSize=${IMAGE_PAGE_SIZE}`, {
+      const response = await fetch(
+        `/api/admin/images?page=${page}&pageSize=${IMAGE_PAGE_SIZE}&q=${encodeURIComponent(searchQuery.trim())}`,
+        {
         headers: {
           Authorization: `Bearer ${session.access_token}`,
         },
-      });
+        }
+      );
 
       const data = await response.json();
 
@@ -563,16 +568,28 @@ export default function AdminPage() {
   }, []);
 
   useEffect(() => {
-    if (isAdmin && session?.access_token) {
-      fetchPublishedPosts();
+    if (!isAdmin || !session?.access_token) {
+      return;
     }
-  }, [isAdmin, session?.access_token]);
+
+    const timeoutId = window.setTimeout(() => {
+      void fetchPublishedPosts(postSearchQuery);
+    }, 250);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [isAdmin, session?.access_token, postSearchQuery]);
 
   useEffect(() => {
-    if (isAdmin && session?.access_token) {
-      fetchImageLibrary(libraryPage);
+    if (!isAdmin || !session?.access_token) {
+      return;
     }
-  }, [isAdmin, session?.access_token, libraryPage]);
+
+    const timeoutId = window.setTimeout(() => {
+      void fetchImageLibrary(libraryPage, imageSearchQuery);
+    }, 250);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [isAdmin, session?.access_token, libraryPage, imageSearchQuery]);
 
   const verifyAdmin = async (email: string) => {
     const normalizedEmail = email.trim().toLowerCase();
@@ -739,6 +756,14 @@ export default function AdminPage() {
     setSelectedImageId(null);
   };
 
+  const handleImageSearchSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+  };
+
+  const handlePostSearchSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+  };
+
   useEffect(() => {
     setSelectedImageId(extractImageIdFromUrl(form.image_url));
   }, [form.image_url]);
@@ -850,6 +875,44 @@ export default function AdminPage() {
                 </label>
               </div>
 
+              <form onSubmit={handleImageSearchSubmit} className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
+                <div className="relative flex-1">
+                  <Search
+                    size={16}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9ca3af] pointer-events-none"
+                  />
+                  <input
+                    type="text"
+                    value={imageSearchQuery}
+                    onChange={(event) => {
+                      setLibraryPage(1);
+                      setImageSearchQuery(event.target.value);
+                    }}
+                    placeholder="Pesquisar imagens por nome..."
+                    className="w-full rounded-xl border border-[#d1d5db] bg-white py-3 pl-10 pr-10 text-sm font-exo text-[#111827] outline-none transition-colors placeholder:text-[#9ca3af] focus:border-[#dc2626]/50"
+                  />
+                  {imageSearchQuery && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setImageSearchQuery('');
+                        setLibraryPage(1);
+                      }}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#9ca3af] hover:text-[#4b5563] transition-colors"
+                      aria-label="Limpar busca de imagens"
+                    >
+                      <X size={15} />
+                    </button>
+                  )}
+                </div>
+                <button
+                  type="submit"
+                  className="inline-flex items-center justify-center rounded-xl bg-[#dc2626] px-5 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[#b91c1c]"
+                >
+                  Buscar
+                </button>
+              </form>
+
               {loadingLibrary ? (
                 <div className="mt-6 rounded-xl border border-[#e5e7eb] bg-white p-6 text-center text-[#6b7280]">
                   <div className="inline-flex items-center gap-2">
@@ -859,7 +922,9 @@ export default function AdminPage() {
                 </div>
               ) : libraryImages.length === 0 ? (
                 <div className="mt-6 rounded-xl border border-[#e5e7eb] bg-white p-6 text-center text-[#6b7280]">
-                  Nenhuma imagem no banco ainda. Clique em "Anexar imagens" para enviar.
+                  {imageSearchQuery.trim()
+                    ? 'Nenhuma imagem encontrada para essa busca.'
+                    : 'Nenhuma imagem no banco ainda. Clique em "Anexar imagens" para enviar.'}
                 </div>
               ) : (
                 <>
@@ -1356,31 +1421,50 @@ export default function AdminPage() {
             </div>
           )}
 
-          {/* Guia de Configuração Rápida */}
-          <div className="rounded-2xl border border-[#e5e7eb] bg-[#f9fafb] p-5 text-sm text-[#4b5563]">
-            <h2 className="font-semibold text-[#111827] mb-3">Configuração manual do admin</h2>
-            <p className="mb-3">
-              Insira o email do Google do administrador diretamente na tabela <code className="text-[#dc2626]">admins</code> do Supabase.
-            </p>
-            <pre className="overflow-x-auto rounded-xl bg-white border border-[#e5e7eb] p-4 text-xs text-[#4b5563]">
-{`insert into public.admins (email) values ('seu-email@gmail.com');`}
-            </pre>
-            <p className="mt-3">
-              Após adicionar o email, faça login com o mesmo Google em <code className="text-[#dc2626]">/admin</code>.
-            </p>
-          </div>
-
-          {/* TERCEIRO CONTAINER: Posts Publicados */}
           {session?.user && isAdmin && (
             <div className="mt-8">
-              <h2 className="text-3xl font-rajdhani font-bold text-[#111827] mb-6 flex items-center gap-2">
-                <span>Posts publicados</span>
-                {loadingPosts && <Loader2 size={20} className="animate-spin" />}
-              </h2>
+              <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                <h2 className="text-3xl font-rajdhani font-bold text-[#111827] flex items-center gap-2">
+                  <span>Posts publicados</span>
+                  {loadingPosts && <Loader2 size={20} className="animate-spin" />}
+                </h2>
+
+                <form onSubmit={handlePostSearchSubmit} className="w-full sm:max-w-md">
+                  <div className="relative">
+                    <Search
+                      size={16}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9ca3af] pointer-events-none"
+                    />
+                    <input
+                      type="text"
+                      value={postSearchQuery}
+                      onChange={(event) => setPostSearchQuery(event.target.value)}
+                      placeholder="Pesquisar posts por título, slug ou categoria..."
+                      className="w-full rounded-xl border border-[#d1d5db] bg-white py-3 pl-10 pr-10 text-sm font-exo text-[#111827] outline-none transition-colors placeholder:text-[#9ca3af] focus:border-[#dc2626]/50"
+                    />
+                    {postSearchQuery && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setPostSearchQuery('');
+                        }}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#9ca3af] hover:text-[#4b5563] transition-colors"
+                        aria-label="Limpar busca de posts"
+                      >
+                        <X size={15} />
+                      </button>
+                    )}
+                  </div>
+                </form>
+              </div>
 
               {publishedPosts.length === 0 ? (
                 <div className="rounded-xl border border-[#e5e7eb] bg-[#f9fafb] p-6 text-center text-[#6b7280]">
-                  <p>Nenhum post publicado ainda. Crie seu primeiro post acima!</p>
+                  <p>
+                    {postSearchQuery.trim()
+                      ? 'Nenhum post encontrado para essa busca.'
+                      : 'Nenhum post publicado ainda. Crie seu primeiro post acima!'}
+                  </p>
                 </div>
               ) : (
                 <div className="grid gap-4">
