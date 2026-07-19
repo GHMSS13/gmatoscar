@@ -54,9 +54,12 @@ const relatedScore = (current: Post, candidate: Post) => {
 
   const currentTitle = normalizeText(current.title);
   const candidateTitle = normalizeText(candidate.title);
-  const hasTitleKeyword = [...currentTokens].some(
-    (token) => currentTitle.includes(token) && candidateTitle.includes(token)
-  );
+  let hasTitleKeyword = false;
+  currentTokens.forEach((token) => {
+    if (!hasTitleKeyword && currentTitle.includes(token) && candidateTitle.includes(token)) {
+      hasTitleKeyword = true;
+    }
+  });
 
   return overlap + (hasTitleKeyword ? 2 : 0);
 };
