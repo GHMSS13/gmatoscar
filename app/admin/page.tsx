@@ -54,7 +54,7 @@ const initialFormState: PostFormState = {
   slug: '',
   excerpt: '',
   content: '',
-  category: 'Lançamentos',
+  category: 'Noticias',
   date: new Date().toISOString().slice(0, 10),
   read_time: '3 min',
   image_url: '',
@@ -1045,16 +1045,7 @@ export default function AdminPage() {
                 </div>
 
                 <div className="grid gap-6 lg:grid-cols-2">
-                  <label className="block">
-                    <span className="text-[#374151] text-sm font-exo">Categoria</span>
-                    <input
-                      value={form.category}
-                      onChange={(event) => handleInput('category', event.target.value)}
-                      className="mt-2 w-full rounded-xl border border-[#d1d5db] bg-white px-4 py-3 text-[#111827] outline-none transition-all focus:border-[#dc2626]"
-                      required
-                    />
-                  </label>
-                  <label className="block">
+                  <label className="block lg:col-span-1">
                     <span className="text-[#374151] text-sm font-exo">Data</span>
                     <input
                       type="date"
@@ -1064,6 +1055,7 @@ export default function AdminPage() {
                       required
                     />
                   </label>
+                  <div className="hidden lg:block" />
                 </div>
 
                 <div className="grid gap-6 lg:grid-cols-2">
@@ -1439,7 +1431,7 @@ export default function AdminPage() {
                       type="text"
                       value={postSearchQuery}
                       onChange={(event) => setPostSearchQuery(event.target.value)}
-                      placeholder="Pesquisar posts por título, slug ou categoria..."
+                      placeholder="Pesquisar posts por título ou slug..."
                       className="w-full rounded-xl border border-[#d1d5db] bg-white py-3 pl-10 pr-10 text-sm font-exo text-[#111827] outline-none transition-colors placeholder:text-[#9ca3af] focus:border-[#dc2626]/50"
                     />
                     {postSearchQuery && (
@@ -1476,9 +1468,6 @@ export default function AdminPage() {
                       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                         <div className="flex-1">
                           <div className="flex items-center gap-3 mb-2">
-                            <span className="inline-block bg-[#dc2626]/10 text-[#dc2626] text-xs font-bold px-3 py-1 rounded-full">
-                              {post.category}
-                            </span>
                             <span className="text-[#9ca3af] text-xs">{post.date}</span>
                           </div>
                           <h3 className="text-[#111827] font-rajdhani font-bold text-lg mb-1">

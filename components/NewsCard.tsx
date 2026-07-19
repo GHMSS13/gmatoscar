@@ -5,7 +5,7 @@ import type { Post } from '@/lib/posts';
 
 interface NewsCardProps {
   item: Post;
-  variant?: 'default' | 'featured' | 'horizontal' | 'compact' | 'mobile-medium';
+  variant?: 'default' | 'featured' | 'horizontal' | 'compact' | 'mobile-medium' | 'related';
   theme?: 'dark' | 'light';
 }
 
@@ -53,14 +53,13 @@ export default function NewsCard({ item, variant = 'default', theme = 'dark' }: 
               <div className="absolute inset-0 bg-gradient-to-t from-white via-white/70 to-transparent" />
 
               <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="tag-badge bg-[#dc2626] text-white">{item.category}</span>
-                  {item.hot && (
-                    <span className="tag-badge bg-[#1a1a1a] border border-[#dc2626]/40 text-[#dc2626] flex items-center gap-1">
+                {item.hot && (
+                  <div className="mb-3">
+                    <span className="tag-badge bg-[#1a1a1a] border border-[#dc2626]/40 text-[#dc2626] inline-flex items-center gap-1">
                       <Flame size={10} fill="currentColor" /> HOT
                     </span>
-                  )}
-                </div>
+                  </div>
+                )}
                 <h2 className="text-xl md:text-2xl leading-tight mb-2 group-hover:text-[#dc2626] transition-colors duration-300 line-clamp-2 font-serif font-semibold text-[#111]">
                   {item.title}
                 </h2>
@@ -100,14 +99,13 @@ export default function NewsCard({ item, variant = 'default', theme = 'dark' }: 
 
             {/* Content overlay */}
             <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
-              <div className="flex items-center gap-3 mb-3">
-                <span className="tag-badge bg-[#dc2626] text-white">{item.category}</span>
-                {item.hot && (
-                  <span className="tag-badge bg-[#1a1a1a] border border-[#dc2626]/40 text-[#dc2626] flex items-center gap-1">
+              {item.hot && (
+                <div className="mb-3">
+                  <span className="tag-badge bg-[#1a1a1a] border border-[#dc2626]/40 text-[#dc2626] inline-flex items-center gap-1">
                     <Flame size={10} fill="currentColor" /> HOT
                   </span>
-                )}
-              </div>
+                </div>
+              )}
               <h2 className={`text-xl md:text-2xl leading-tight mb-2 group-hover:text-[#dc2626] transition-colors duration-300 line-clamp-2 ${isLight ? 'font-serif font-semibold text-[#111]' : 'font-rajdhani font-bold text-white'}`}>
                 {item.title}
               </h2>
@@ -147,7 +145,6 @@ export default function NewsCard({ item, variant = 'default', theme = 'dark' }: 
           </div>
           <div className="flex-1 min-w-0 flex flex-col justify-between py-1">
             <div>
-              <span className="tag-badge bg-[#dc2626]/15 text-[#dc2626] text-[10px] mb-2 inline-block">{item.category}</span>
               <h3 className={`text-base leading-tight line-clamp-2 group-hover:text-[#dc2626] transition-colors duration-300 ${isLight ? 'font-serif font-semibold text-[#111]' : 'font-rajdhani font-bold text-white'}`}>
                 {item.title}
               </h3>
@@ -219,6 +216,49 @@ export default function NewsCard({ item, variant = 'default', theme = 'dark' }: 
     );
   }
 
+  if (variant === 'related') {
+    return (
+      <article className={`news-card group rounded-sm overflow-hidden cursor-pointer h-full flex flex-col ${isLight ? 'bg-white border border-[#e5e7eb]' : 'bg-[#111] border border-[#1e1e1e] card-glow'}`}>
+        <Link href={`/noticias/${item.slug}`} className="flex flex-col h-full">
+          <div className="relative aspect-[16/9] overflow-hidden">
+            <Image
+              src={item.image_url}
+              alt={item.title}
+              fill
+              className="news-img object-cover"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            />
+            <div className={`absolute inset-0 ${isLight ? 'bg-gradient-to-t from-white/10 to-transparent' : 'bg-gradient-to-t from-black/40 to-transparent'}`} />
+            {item.hot && (
+              <div className="absolute top-3 left-3">
+                <span className="tag-badge bg-black/70 border border-[#dc2626]/40 text-[#dc2626] inline-flex items-center gap-1">
+                  <Flame size={9} fill="currentColor" /> HOT
+                </span>
+              </div>
+            )}
+          </div>
+          <div className="flex flex-col flex-1 p-4 sm:p-5">
+            <h3 className={`text-xl sm:text-2xl leading-[1.08] mb-2 sm:mb-3 group-hover:text-[#dc2626] transition-colors duration-300 line-clamp-3 ${isLight ? 'font-rajdhani font-bold text-[#111]' : 'font-rajdhani font-bold text-white'}`}>
+              {item.title}
+            </h3>
+            <p className={`text-sm leading-relaxed mb-3 sm:mb-4 flex-1 line-clamp-2 sm:line-clamp-3 font-exo ${isLight ? 'text-[#4b5563]' : 'text-white/50'}`}>
+              {item.excerpt}
+            </p>
+            <div className={`flex items-center justify-between pt-2 sm:pt-3 mt-auto ${isLight ? 'border-t border-[#e5e7eb]' : 'border-t border-[#1e1e1e]'}`}>
+              <div className={`flex items-center gap-3 text-xs font-exo ${isLight ? 'text-[#6b7280]' : 'text-white/30'}`}>
+                <span>{item.date}</span>
+                <span className="flex items-center gap-1"><Clock size={11} /> {item.read_time}</span>
+              </div>
+              <span className="text-[#dc2626] flex items-center gap-1 text-xs font-rajdhani font-bold uppercase tracking-wider group-hover:gap-2 transition-all duration-300">
+                Ler <ArrowRight size={12} />
+              </span>
+            </div>
+          </div>
+        </Link>
+      </article>
+    );
+  }
+
   return (
     <article className={`news-card group rounded-sm overflow-hidden cursor-pointer h-full flex flex-col ${isLight ? 'bg-white border border-[#e5e7eb]' : 'bg-[#111] border border-[#1e1e1e] card-glow'}`}>
       <Link href={`/noticias/${item.slug}`} className="flex flex-col h-full">
@@ -231,14 +271,13 @@ export default function NewsCard({ item, variant = 'default', theme = 'dark' }: 
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
           <div className={`absolute inset-0 ${isLight ? 'bg-gradient-to-t from-white/10 to-transparent' : 'bg-gradient-to-t from-black/40 to-transparent'}`} />
-          <div className="absolute top-3 left-3 flex gap-2">
-            <span className="tag-badge bg-[#dc2626] text-white">{item.category}</span>
-            {item.hot && (
-              <span className="tag-badge bg-black/70 border border-[#dc2626]/40 text-[#dc2626] flex items-center gap-1">
+          {item.hot && (
+            <div className="absolute top-3 left-3">
+              <span className="tag-badge bg-black/70 border border-[#dc2626]/40 text-[#dc2626] inline-flex items-center gap-1">
                 <Flame size={9} fill="currentColor" /> HOT
               </span>
-            )}
-          </div>
+            </div>
+          )}
         </div>
         <div className="flex flex-col flex-1 p-4 sm:p-5">
           <h3 className={`text-base sm:text-lg leading-tight mb-2 sm:mb-3 group-hover:text-[#dc2626] transition-colors duration-300 line-clamp-2 ${isLight ? 'font-serif font-semibold text-[#111]' : 'font-rajdhani font-bold text-white'}`}>
