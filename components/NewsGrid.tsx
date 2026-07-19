@@ -52,13 +52,13 @@ export default function NewsGrid({ posts, theme = 'dark' }: NewsGridProps) {
 
       {/* Mobile: one highlighted story + compact list */}
       <div className="md:hidden space-y-3">
+        {mobileFeatured && <NewsCard item={mobileFeatured} variant="featured" theme={theme} />}
         <div className="flex items-center gap-3 pt-1">
           <span className="w-1 h-5 bg-[#dc2626] rounded-full" />
           <h3 className={`font-rajdhani font-bold uppercase tracking-widest text-sm ${isLight ? 'text-[#111]' : 'text-white'}`}>
             Mais Recentes
           </h3>
         </div>
-        {mobileFeatured && <NewsCard item={mobileFeatured} variant="featured" theme={theme} />}
         <div className="border-y border-[#d1d5db] divide-y divide-[#d1d5db]">
           {mobileItems.map((item) => (
             <NewsCard key={item.id} item={item} variant="compact" theme={theme} />
