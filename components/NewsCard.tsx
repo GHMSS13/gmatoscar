@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Clock, ArrowRight, Flame } from 'lucide-react';
+import { Clock, ArrowRight } from 'lucide-react';
 import type { Post } from '@/lib/posts';
 
 interface NewsCardProps {
@@ -53,13 +53,6 @@ export default function NewsCard({ item, variant = 'default', theme = 'dark' }: 
               <div className="absolute inset-0 bg-gradient-to-t from-white via-white/70 to-transparent" />
 
               <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
-                {item.hot && (
-                  <div className="mb-3">
-                    <span className="tag-badge bg-[#1a1a1a] border border-[#dc2626]/40 text-[#dc2626] inline-flex items-center gap-1">
-                      <Flame size={10} fill="currentColor" /> HOT
-                    </span>
-                  </div>
-                )}
                 <h2 className="text-xl md:text-2xl leading-tight mb-2 group-hover:text-[#dc2626] transition-colors duration-300 line-clamp-2 font-serif font-semibold text-[#111]">
                   {item.title}
                 </h2>
@@ -99,13 +92,6 @@ export default function NewsCard({ item, variant = 'default', theme = 'dark' }: 
 
             {/* Content overlay */}
             <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
-              {item.hot && (
-                <div className="mb-3">
-                  <span className="tag-badge bg-[#1a1a1a] border border-[#dc2626]/40 text-[#dc2626] inline-flex items-center gap-1">
-                    <Flame size={10} fill="currentColor" /> HOT
-                  </span>
-                </div>
-              )}
               <h2 className={`text-xl md:text-2xl leading-tight mb-2 group-hover:text-[#dc2626] transition-colors duration-300 line-clamp-2 ${isLight ? 'font-serif font-semibold text-[#111]' : 'font-rajdhani font-bold text-white'}`}>
                 {item.title}
               </h2>
@@ -229,16 +215,9 @@ export default function NewsCard({ item, variant = 'default', theme = 'dark' }: 
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
             <div className={`absolute inset-0 ${isLight ? 'bg-gradient-to-t from-white/10 to-transparent' : 'bg-gradient-to-t from-black/40 to-transparent'}`} />
-            {item.hot && (
-              <div className="absolute top-3 left-3">
-                <span className="tag-badge bg-black/70 border border-[#dc2626]/40 text-[#dc2626] inline-flex items-center gap-1">
-                  <Flame size={9} fill="currentColor" /> HOT
-                </span>
-              </div>
-            )}
           </div>
           <div className="flex flex-col flex-1 p-4 sm:p-5">
-            <h3 className={`text-xl sm:text-2xl leading-[1.08] mb-2 sm:mb-3 group-hover:text-[#dc2626] transition-colors duration-300 line-clamp-3 ${isLight ? 'font-rajdhani font-bold text-[#111]' : 'font-rajdhani font-bold text-white'}`}>
+            <h3 className={`text-xl md:text-2xl leading-tight mb-2 sm:mb-3 group-hover:text-[#dc2626] transition-colors duration-300 line-clamp-3 ${isLight ? 'font-serif font-semibold text-[#111]' : 'font-rajdhani font-bold text-white'}`}>
               {item.title}
             </h3>
             <p className={`text-sm leading-relaxed mb-3 sm:mb-4 flex-1 line-clamp-2 sm:line-clamp-3 font-exo ${isLight ? 'text-[#4b5563]' : 'text-white/50'}`}>
@@ -271,13 +250,6 @@ export default function NewsCard({ item, variant = 'default', theme = 'dark' }: 
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
           <div className={`absolute inset-0 ${isLight ? 'bg-gradient-to-t from-white/10 to-transparent' : 'bg-gradient-to-t from-black/40 to-transparent'}`} />
-          {item.hot && (
-            <div className="absolute top-3 left-3">
-              <span className="tag-badge bg-black/70 border border-[#dc2626]/40 text-[#dc2626] inline-flex items-center gap-1">
-                <Flame size={9} fill="currentColor" /> HOT
-              </span>
-            </div>
-          )}
         </div>
         <div className="flex flex-col flex-1 p-4 sm:p-5">
           <h3 className={`text-base sm:text-lg leading-tight mb-2 sm:mb-3 group-hover:text-[#dc2626] transition-colors duration-300 line-clamp-2 ${isLight ? 'font-serif font-semibold text-[#111]' : 'font-rajdhani font-bold text-white'}`}>
