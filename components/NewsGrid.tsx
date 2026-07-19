@@ -14,11 +14,15 @@ export default function NewsGrid({ posts, theme = 'dark' }: NewsGridProps) {
   const hasFeaturedRow = !isLight && featuredCandidates.length === 2;
   const featured = hasFeaturedRow ? featuredCandidates : [];
   const feedPosts = hasFeaturedRow ? posts.filter((n) => !n.featured) : posts;
+  const mobileFeatured = feedPosts[0];
+  const mobileItems = feedPosts.slice(1, 5);
+  const mobileAfterMoreFeatured = feedPosts[5];
+  const mobileMore = feedPosts.slice(6, 8);
   const rest = feedPosts.slice(0, 4);
   const sideItems = feedPosts.slice(4, 7);
 
   return (
-    <section className="py-14 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <section className="pt-8 pb-14 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       {/* Section header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-3 sm:gap-4 mb-8 sm:mb-10">
         <div>
@@ -46,8 +50,32 @@ export default function NewsGrid({ posts, theme = 'dark' }: NewsGridProps) {
         </div>
       )}
 
+      {/* Mobile: one highlighted story + compact list */}
+      <div className="md:hidden space-y-3">
+        {mobileFeatured && <NewsCard item={mobileFeatured} variant="featured" theme={theme} />}
+        <div className="border-y border-[#d1d5db] divide-y divide-[#d1d5db]">
+          {mobileItems.map((item) => (
+            <NewsCard key={item.id} item={item} variant="compact" theme={theme} />
+          ))}
+        </div>
+        <Link
+          href="/pesquisa"
+          className="group inline-flex w-full items-center justify-center gap-2 rounded-sm border border-[#d1d5db] py-3 text-sm font-rajdhani font-bold uppercase tracking-widest text-[#374151] transition-all duration-300 hover:border-[#dc2626] hover:text-[#dc2626]"
+        >
+          Ver Mais <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+        </Link>
+        <div className="space-y-3 pt-1">
+          {mobileAfterMoreFeatured && (
+            <NewsCard item={mobileAfterMoreFeatured} variant="featured" theme={theme} />
+          )}
+          {mobileMore.map((item) => (
+            <NewsCard key={item.id} item={item} variant="mobile-medium" theme={theme} />
+          ))}
+        </div>
+      </div>
+
       {/* Main grid + sidebar */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+      <div className="hidden md:grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         {/* Cards grid */}
         <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
           {rest.map((item) => (
