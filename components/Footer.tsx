@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { Youtube, Instagram, Facebook } from 'lucide-react';
 
 const TikTokIcon = ({ size = 20 }: { size?: number }) => (
@@ -106,19 +105,12 @@ export default function Footer() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 sm:gap-10">
           {/* Brand */}
           <div className="lg:col-span-2">
-            <Link href="/" className="inline-block mb-5">
-              <div className="relative w-44 sm:w-48 h-11 sm:h-12">
-                <Image
-                  src="/images/gmatoscar_canal_youtube_carros.png"
-                  alt="GMATOSCAR Supercarros"
-                  fill
-                  className="object-contain object-left"
-                  sizes="192px"
-                />
-              </div>
+            <Link href="/" className="inline-block mb-5 text-xl sm:text-2xl font-bold uppercase tracking-[0.18em] sm:tracking-[0.32em] text-white font-rajdhani whitespace-nowrap">
+              GMATOS
+              <span className="text-[#dc2626]">CAR</span>
             </Link>
             <p className="text-white/40 text-sm leading-relaxed mb-6 max-w-sm font-exo">
-              O maior canal brasileiro dedicado ao universo dos supercarros, hypercars e automóveis de alto desempenho. Notícias, rankings e conteúdo exclusivo sobre os carros mais incríveis do mundo.
+              GMATOSCAR é um portal brasileiro dedicado a supercarros, hipercarros e ao universo automotivo. Descubra curiosidades, notícias, rankings e histórias dos carros mais incríveis do mundo.
             </p>
 
             {/* Social icons large */}

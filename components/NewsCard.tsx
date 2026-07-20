@@ -148,21 +148,21 @@ export default function NewsCard({ item, variant = 'default', theme = 'dark' }: 
   if (variant === 'compact') {
     return (
       <article className="group overflow-hidden transition-all duration-300 cursor-pointer">
-        <Link href={`/noticias/${item.slug}`} className="flex gap-3 py-3">
-          <div className="relative w-[104px] h-[74px] flex-shrink-0 rounded-[2px] overflow-hidden">
+        <Link href={`/noticias/${item.slug}`} className="flex gap-4 py-4">
+          <div className="relative w-[132px] h-[94px] flex-shrink-0 rounded-[2px] overflow-hidden">
             <Image
               src={item.image_url}
               alt={item.title}
               fill
               className="news-img object-cover"
-              sizes="104px"
+              sizes="132px"
             />
           </div>
           <div className="min-w-0 flex-1 flex flex-col justify-between">
-            <h3 className={`text-[17px] leading-[1.12] line-clamp-3 group-hover:text-[#dc2626] transition-colors duration-300 ${isLight ? 'font-serif font-semibold text-[#111]' : 'font-rajdhani font-bold text-white'}`}>
+            <h3 className={`text-[19px] leading-[1.14] line-clamp-3 group-hover:text-[#dc2626] transition-colors duration-300 ${isLight ? 'font-serif font-semibold text-[#111]' : 'font-rajdhani font-bold text-white'}`}>
               {item.title}
             </h3>
-            <div className={`flex items-center gap-2 text-[11px] mt-2 font-exo ${isLight ? 'text-[#6b7280]' : 'text-white/30'}`}>
+            <div className={`flex items-center gap-2 text-[11px] mt-2.5 font-exo ${isLight ? 'text-[#6b7280]' : 'text-white/30'}`}>
               <span>{item.date}</span>
               <span className="inline-flex items-center gap-1"><Clock size={10} /> {item.read_time}</span>
             </div>
