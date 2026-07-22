@@ -154,13 +154,13 @@ export default function HomeTopNewsSection({
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4 lg:gap-4 mb-5 sm:mb-6 lg:mb-8 lg:h-[360px]">
-        <div className="lg:col-span-6 lg:h-full">
+        <div className="-mx-4 sm:mx-0 lg:col-span-6 lg:h-full">
           <div className="relative pb-5 sm:pb-6 lg:pb-0">
             <Carousel setApi={setApi} opts={{ loop: true }} className="w-full">
               <CarouselContent className="ml-0 lg:h-[360px]">
               {heroPosts.map((item) => (
                 <CarouselItem key={item.id} className="pl-0 lg:h-full">
-                  <article className="group rounded-sm overflow-hidden border border-[#e5e7eb] bg-white lg:h-full">
+                  <article className="group rounded-none sm:rounded-sm overflow-hidden border-0 sm:border sm:border-[#e5e7eb] bg-white lg:h-full">
                     <Link href={`/noticias/${item.slug}`} className="block">
                       <div className="relative min-h-[330px] sm:min-h-[320px] lg:min-h-0 lg:h-[360px] overflow-hidden">
                         <Image
@@ -244,7 +244,7 @@ export default function HomeTopNewsSection({
           ) : (
             <article className="rounded-sm overflow-hidden border border-[#e5e7eb] bg-white h-full">
               <Link href="/noticias" className="block h-full">
-                <div className="relative h-[160px] sm:h-[170px] lg:h-full overflow-hidden">
+                <div className="relative h-[190px] sm:h-[170px] lg:h-full overflow-hidden">
                   <Image
                     src={heroPosts[0]?.image_url || placeholderImage}
                     alt="Noticias em breve"
@@ -277,7 +277,7 @@ export default function HomeTopNewsSection({
             return (
             <article key={`${item.id}-${idx}`} className="group rounded-sm overflow-hidden border border-[#e5e7eb] bg-white lg:h-full">
               <Link href={href} className="block h-full">
-                <div className="relative h-[160px] sm:h-[170px] lg:h-full overflow-hidden">
+                <div className="relative h-[190px] sm:h-[170px] lg:h-full overflow-hidden">
                   <Image
                     src={item.image_url || heroPosts[0]?.image_url || placeholderImage}
                     alt={item.title}
@@ -302,8 +302,26 @@ export default function HomeTopNewsSection({
         </div>
       </div>
 
+      <div className="sm:hidden flex items-center justify-between gap-3 mb-3">
+        <div>
+          <p className="text-[#dc2626] text-[10px] font-bold uppercase tracking-[0.24em] font-rajdhani mb-1">
+            Categoria
+          </p>
+          <h3 className="text-[#111827] text-lg font-rajdhani font-bold leading-none">
+            Rankings
+          </h3>
+        </div>
+        <Link
+          href="/ranking"
+          className="inline-flex items-center gap-1.5 text-[11px] text-[#4b5563] hover:text-[#dc2626] font-rajdhani uppercase tracking-[0.14em] transition-colors duration-300"
+        >
+          Ver mais <ArrowRight size={12} />
+        </Link>
+      </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 lg:gap-3">
         {normalizedInfoCards.slice(0, 4).map((card, idx) => {
+          const showDreamGarageHeader = idx === 2;
           const content = (
             <div className="rounded-sm border border-[#e5e7eb] bg-[#f8fafc] h-full overflow-hidden transition-colors duration-300 hover:border-[#dc2626]/35 hover:bg-white">
               <div className="relative aspect-[16/10] w-full bg-[#e5e7eb]">
@@ -314,8 +332,14 @@ export default function HomeTopNewsSection({
                   className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent sm:hidden" />
+                <div className="absolute bottom-0 left-0 right-0 p-3 sm:hidden">
+                  <p className="text-white text-[1rem] font-rajdhani font-bold leading-[1.08] line-clamp-2">
+                    {card.value}
+                  </p>
+                </div>
               </div>
-              <div className="p-2.5 sm:p-3 lg:p-3 min-h-[110px] sm:min-h-[120px] lg:min-h-[128px]">
+              <div className="hidden sm:block p-2.5 sm:p-3 lg:p-3 min-h-[110px] sm:min-h-[120px] lg:min-h-[128px]">
                 <p className="text-[#6b7280] text-[9px] font-rajdhani font-bold uppercase tracking-[0.18em] mb-1">
                   {card.title}
                 </p>
@@ -329,13 +353,55 @@ export default function HomeTopNewsSection({
 
           if (card.href) {
             return (
-              <Link key={`${card.title}-${card.value}-${idx}`} href={card.href} className="group block h-full">
-                {content}
-              </Link>
+              <div key={`${card.title}-${card.value}-${idx}`} className="h-full">
+                {showDreamGarageHeader && (
+                  <div className="sm:hidden flex items-center justify-between gap-3 mb-3 mt-1">
+                    <div>
+                      <p className="text-[#dc2626] text-[10px] font-bold uppercase tracking-[0.24em] font-rajdhani mb-1">
+                        Categoria
+                      </p>
+                      <h3 className="text-[#111827] text-lg font-rajdhani font-bold leading-none">
+                        Garagem dos Sonhos
+                      </h3>
+                    </div>
+                    <Link
+                      href="/garagem-dos-sonhos"
+                      className="inline-flex items-center gap-1.5 text-[11px] text-[#4b5563] hover:text-[#dc2626] font-rajdhani uppercase tracking-[0.14em] transition-colors duration-300"
+                    >
+                      Ver mais <ArrowRight size={12} />
+                    </Link>
+                  </div>
+                )}
+                <Link href={card.href} className="group block h-full">
+                  {content}
+                </Link>
+              </div>
             );
           }
 
-          return <div key={`${card.title}-${card.value}-${idx}`} className="h-full">{content}</div>;
+          return (
+            <div key={`${card.title}-${card.value}-${idx}`} className="h-full">
+              {showDreamGarageHeader && (
+                <div className="sm:hidden flex items-center justify-between gap-3 mb-3 mt-1">
+                  <div>
+                    <p className="text-[#dc2626] text-[10px] font-bold uppercase tracking-[0.24em] font-rajdhani mb-1">
+                      Categoria
+                    </p>
+                    <h3 className="text-[#111827] text-lg font-rajdhani font-bold leading-none">
+                      Garagem dos Sonhos
+                    </h3>
+                  </div>
+                  <Link
+                    href="/garagem-dos-sonhos"
+                    className="inline-flex items-center gap-1.5 text-[11px] text-[#4b5563] hover:text-[#dc2626] font-rajdhani uppercase tracking-[0.14em] transition-colors duration-300"
+                  >
+                    Ver mais <ArrowRight size={12} />
+                  </Link>
+                </div>
+              )}
+              {content}
+            </div>
+          );
         })}
       </div>
     </section>
