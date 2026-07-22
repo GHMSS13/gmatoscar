@@ -40,8 +40,10 @@ const socialLinks = [
 
 const navLinks = [
   { label: 'Home', href: '/' },
+  { label: 'Notícias', href: '/noticias' },
   { label: 'Marcas', href: '/marcas' },
-  { label: 'Pesquisa', href: '/pesquisa' },
+  { label: 'Rankings', href: '/ranking' },
+  { label: 'Garagem dos Sonhos', href: '/garagem-dos-sonhos' },
   { label: 'Sobre', href: '/sobre' },
 ];
 
@@ -110,7 +112,7 @@ export default function Footer() {
               <span className="text-[#dc2626]">CAR</span>
             </Link>
             <p className="text-white/40 text-sm leading-relaxed mb-6 max-w-sm font-exo">
-              GMATOSCAR é um portal brasileiro dedicado a supercarros, hipercarros e ao universo automotivo. Descubra curiosidades, notícias, rankings e histórias dos carros mais incríveis do mundo.
+              O GMATOSCAR é um portal brasileiro especializado em supercarros, hipercarros e esportivos de alto desempenho. Descubra curiosidades, notícias, rankings e histórias dos carros mais incríveis do mundo.
             </p>
 
             {/* Social icons large */}

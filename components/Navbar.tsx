@@ -8,8 +8,10 @@ import SearchBar from './SearchBar';
 
 const navLinks = [
   { label: 'Home', href: '/' },
+  { label: 'Notícias', href: '/noticias' },
   { label: 'Marcas', href: '/marcas' },
-  { label: 'Pesquisa', href: '/pesquisa' },
+  { label: 'Rankings', href: '/ranking' },
+  { label: 'Garagem dos Sonhos', href: '/garagem-dos-sonhos' },
   { label: 'Sobre', href: '/sobre' },
 ];
 
@@ -17,6 +19,11 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+
+  const isActiveLink = (href: string) => {
+    if (href === '/') return pathname === '/';
+    return pathname === href || pathname.startsWith(`${href}/`);
+  };
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 40);
@@ -41,7 +48,7 @@ export default function Navbar() {
 
           <nav className="hidden md:flex flex-1 items-center justify-center gap-6 lg:gap-10 text-xs lg:text-sm font-semibold uppercase tracking-[0.22em] lg:tracking-[0.28em] font-rajdhani">
             {navLinks.map((link) => {
-              const isActive = pathname === link.href;
+              const isActive = isActiveLink(link.href);
               return (
                 <Link
                   key={link.href}
@@ -93,7 +100,7 @@ export default function Navbar() {
       >
         <nav className="bg-[#050505]/98 border-t border-white/10 px-3 sm:px-4 py-3 sm:py-4 flex flex-col gap-1.5 sm:gap-2">
           {navLinks.map((link) => {
-            const isActive = pathname === link.href;
+            const isActive = isActiveLink(link.href);
             return (
               <Link
                 key={link.href}

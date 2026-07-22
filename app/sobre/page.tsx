@@ -9,15 +9,18 @@ export const metadata: Metadata = {
 };
 
 const aboutParagraphs = [
-  'Bem-vindo ao GMATOSCAR, um portal dedicado aos apaixonados por supercarros, carros esportivos e ao universo automotivo.',
-  'Nossa missão é reunir em um só lugar as melhores curiosidades, notícias, histórias, rankings e informações sobre os carros mais incríveis do mundo. Aqui você encontra conteúdo atualizado sobre Ferrari, Lamborghini, Porsche, Bugatti, McLaren, Koenigsegg, Pagani, Aston Martin e muitas outras marcas que marcaram a história da indústria automotiva.',
-  'Acreditamos que um supercarro vai muito além de seus números de potência ou velocidade máxima. Cada modelo possui uma história única, tecnologias inovadoras, curiosidades surpreendentes e detalhes que despertam a admiração de milhões de pessoas ao redor do mundo. É exatamente esse lado que buscamos mostrar em nossos conteúdos.',
-  'No GMATOSCAR, você acompanha as principais notícias do mundo automotivo, conhece modelos raros e exclusivos, descobre curiosidades que poucas pessoas conhecem, explora rankings dos carros mais rápidos, mais caros e mais desejados do planeta, além de encontrar artigos completos sobre modelos que fizeram história.',
-  'Nosso objetivo é transformar informação em entretenimento, tornando o universo dos supercarros acessível para todos. Seja você um grande entusiasta do automobilismo ou alguém que simplesmente gosta de conhecer máquinas extraordinárias, sempre haverá algo novo para descobrir por aqui.',
-  'Além do portal, o GMATOSCAR está presente nas principais redes sociais, compartilhando vídeos, curiosidades e notícias para levar o melhor conteúdo automotivo a cada vez mais pessoas.',
-  'Este site faz parte de um projeto maior: construir a principal referência brasileira em curiosidades, entretenimento e notícias sobre supercarros. Cada artigo publicado é desenvolvido com cuidado para oferecer informações relevantes, linguagem acessível e uma ótima experiência de leitura.',
-  'Se você procura curiosidades sobre Ferrari, Lamborghini, Porsche, Bugatti e outras marcas icônicas, quer acompanhar as últimas notícias automotivas ou simplesmente descobrir histórias fascinantes sobre os carros mais exclusivos do mundo, o GMATOSCAR é o lugar certo.',
-  'Acelere com a gente e descubra, todos os dias, um novo motivo para se apaixonar pelo universo dos supercarros.',
+  'Bem-vindo ao GMATOSCAR.',
+  'O GMATOSCAR é um portal brasileiro especializado em supercarros, hipercarros e esportivos de alto desempenho. Nosso propósito é reunir em um só lugar as melhores notícias, curiosidades, rankings, histórias e informações sobre os carros mais extraordinários do mundo.',
+  'Mais do que números de potência, velocidade máxima ou desempenho, acreditamos que cada carro possui uma história única. Alguns revolucionaram a indústria automotiva, outros quebraram recordes, tornaram-se símbolos de uma geração ou conquistaram um lugar entre os modelos mais desejados e exclusivos já produzidos. É esse universo que buscamos explorar todos os dias.',
+  'Aqui você encontra conteúdo sobre Ferrari, Lamborghini, Porsche, Bugatti, McLaren, Koenigsegg, Pagani, Aston Martin e outras marcas que marcaram a história do automobilismo de alto desempenho. Também acompanhamos os principais lançamentos, inovações, recordes, leilões, curiosidades e acontecimentos que movimentam o universo dos supercarros.',
+  'O GMATOSCAR nasceu para ir além das especificações técnicas. Nosso objetivo é transformar informação em entretenimento de qualidade, contando as histórias por trás das máquinas que despertam admiração em milhões de pessoas ao redor do mundo.',
+  'Além das notícias, você encontrará artigos completos sobre modelos icônicos, rankings dos carros mais rápidos, mais caros e mais exclusivos, curiosidades que pouca gente conhece e conteúdos desenvolvidos para quem deseja descobrir cada vez mais sobre esse universo fascinante.',
+  'Acreditamos que um grande portal não deve apenas informar, mas também inspirar. Por isso, produzimos conteúdos com responsabilidade, pesquisa e atenção aos detalhes, oferecendo uma experiência de leitura agradável tanto para quem já é apaixonado pelo mundo automotivo quanto para quem está começando a descobrir os carros mais incríveis do planeta.',
+  'O GMATOSCAR também está presente nas principais redes sociais, compartilhando diariamente vídeos, curiosidades e notícias para aproximar ainda mais os apaixonados por automóveis de alto desempenho.',
+  'Nossa missão é inspirar pessoas por meio das histórias, curiosidades e inovações dos carros mais extraordinários do mundo.',
+  'Nossa visão é ser a principal referência brasileira em conteúdo sobre supercarros, hipercarros e esportivos de alto desempenho, construindo uma comunidade apaixonada pelo universo automotivo e oferecendo conteúdo de qualidade que informe, entretenha e desperte a curiosidade de milhões de pessoas.',
+  'Se você é apaixonado por Ferrari, Lamborghini, Porsche, Bugatti e pelos carros que marcaram a história do automobilismo, este é o seu lugar.',
+  'Seja bem-vindo ao GMATOSCAR.',
 ];
 
 export default function SobrePage() {
@@ -39,8 +42,8 @@ export default function SobrePage() {
               <h1 className="text-3xl sm:text-4xl md:text-6xl font-serif font-semibold text-[#111827] leading-tight mb-5 sm:mb-6">
                 Sobre o <span className="text-[#dc2626]">GMATOSCAR</span>
               </h1>
-              <p className="text-[#4b5563] text-sm sm:text-base leading-relaxed font-exo mb-7 sm:mb-8">
-                Bem-vindo ao GMATOSCAR, um portal dedicado aos apaixonados por supercarros, carros esportivos e ao universo automotivo.
+              <p className="text-[#1f2937] text-sm sm:text-base leading-relaxed font-exo mb-7 sm:mb-8">
+                Bem-vindo ao GMATOSCAR.
               </p>
               <div className="w-20 h-1 bg-[#dc2626] rounded-full" />
             </div>
@@ -73,7 +76,7 @@ export default function SobrePage() {
             </h2>
             <div className="space-y-6">
               {aboutParagraphs.map((paragraph, index) => (
-                <p key={index} className="text-[#4b5563] text-sm sm:text-base leading-relaxed font-exo">
+                <p key={index} className="text-[#1f2937] text-sm sm:text-base leading-relaxed font-exo">
                   {paragraph}
                 </p>
               ))}

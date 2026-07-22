@@ -99,7 +99,7 @@ export default function SearchBar({
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Pesquisar supercarros..."
-          className="w-full bg-white border border-[#d1d5db] focus:border-[#dc2626]/50 text-[#111827] placeholder-[#9ca3af] pl-11 pr-11 sm:pr-28 py-3 rounded-sm outline-none transition-all duration-300 font-exo text-sm"
+          className="w-full bg-white border border-[#d1d5db] focus:border-[#dc2626]/50 text-[#111827] placeholder-[#9ca3af] pl-11 pr-11 sm:pr-28 py-3 lg:py-2.5 rounded-sm outline-none transition-all duration-300 font-exo text-sm"
         />
         {query && (
           <button
@@ -112,7 +112,7 @@ export default function SearchBar({
         )}
         <button
           type="submit"
-          className="w-full sm:w-auto sm:absolute sm:right-2 bg-[#dc2626] hover:bg-[#b91c1c] text-white font-rajdhani font-bold uppercase tracking-widest px-4 py-2 sm:py-1.5 rounded-sm transition-all duration-300 text-xs"
+          className="w-full sm:w-auto sm:absolute sm:right-2 bg-[#dc2626] hover:bg-[#b91c1c] text-white font-rajdhani font-bold uppercase tracking-widest px-4 py-2 sm:py-1.5 lg:py-1 rounded-sm transition-all duration-300 text-xs"
         >
           Buscar
         </button>
