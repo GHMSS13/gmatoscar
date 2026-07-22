@@ -100,12 +100,38 @@ export default function HomeTopNewsSection({
     fallbackIndex += 1;
   }
 
-  const normalizedSidePosts = [...sidePosts];
-  let sideFallbackIndex = 0;
+  const sideFallbackCards = [
+    {
+      title: 'Noticias em atualizacao',
+      read_time: 'Em breve',
+      image_url: heroPosts[0]?.image_url || placeholderImage,
+    },
+    {
+      title: 'Novas noticias chegando',
+      read_time: 'Em breve',
+      image_url: heroPosts[1]?.image_url || heroPosts[0]?.image_url || placeholderImage,
+    },
+  ];
 
-  while (normalizedSidePosts.length < 2 && heroPosts.length > 0) {
-    normalizedSidePosts.push(heroPosts[sideFallbackIndex % heroPosts.length]);
-    sideFallbackIndex += 1;
+  const normalizedSidePosts = [...sidePosts.slice(0, 2)];
+
+  while (normalizedSidePosts.length < 2) {
+    const fallback = sideFallbackCards[normalizedSidePosts.length];
+    normalizedSidePosts.push({
+      id: `fallback-side-${normalizedSidePosts.length}`,
+      title: fallback.title,
+      slug: '',
+      excerpt: '',
+      content: '',
+      category: 'Noticias',
+      date: '',
+      read_time: fallback.read_time,
+      image_url: fallback.image_url,
+      featured: false,
+      hot: false,
+      published: true,
+      external_url: null,
+    });
   }
 
   return (
@@ -216,24 +242,41 @@ export default function HomeTopNewsSection({
               </Link>
             </article>
           ) : (
-            <div className="rounded-sm border border-[#e5e7eb] bg-[#f8fafc] h-full p-3.5">
-              <p className="text-[#6b7280] text-[9px] font-rajdhani font-bold uppercase tracking-[0.18em] mb-1.5">
-                Destaque
-              </p>
-              <p className="text-[#111827] text-sm font-rajdhani font-bold leading-tight mb-2">
-                Mais Conteudos
-              </p>
-              <p className="text-[#4b5563] text-[11px] leading-relaxed font-exo">
-                Veja as ultimas atualizacoes de noticias, rankings e garagem dos sonhos.
-              </p>
-            </div>
+            <article className="rounded-sm overflow-hidden border border-[#e5e7eb] bg-white h-full">
+              <Link href="/noticias" className="block h-full">
+                <div className="relative h-[160px] sm:h-[170px] lg:h-full overflow-hidden">
+                  <Image
+                    src={heroPosts[0]?.image_url || placeholderImage}
+                    alt="Noticias em breve"
+                    fill
+                    className="object-cover"
+                    sizes="25vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-3">
+                    <p className="inline-flex bg-[#dc2626] text-white text-[9px] font-rajdhani font-bold uppercase tracking-[0.16em] px-2 py-0.5 rounded-sm mb-1.5">
+                      Noticias
+                    </p>
+                    <h3 className="text-white font-rajdhani font-bold text-[1.05rem] leading-[1.08] line-clamp-3 mb-1.5">
+                      Novas noticias em breve
+                    </h3>
+                    <p className="text-white/75 text-[10px] font-exo inline-flex items-center gap-1">
+                      <Clock size={10} /> Em breve
+                    </p>
+                  </div>
+                </div>
+              </Link>
+            </article>
           )}
         </div>
 
         <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 lg:grid-rows-2 gap-3 sm:gap-4 lg:gap-3 lg:h-full">
-          {normalizedSidePosts.slice(0, 2).map((item, idx) => (
+          {normalizedSidePosts.slice(0, 2).map((item, idx) => {
+            const href = item.slug ? `/noticias/${item.slug}` : '/noticias';
+
+            return (
             <article key={`${item.id}-${idx}`} className="group rounded-sm overflow-hidden border border-[#e5e7eb] bg-white lg:h-full">
-              <Link href={`/noticias/${item.slug}`} className="block h-full">
+              <Link href={href} className="block h-full">
                 <div className="relative h-[160px] sm:h-[170px] lg:h-full overflow-hidden">
                   <Image
                     src={item.image_url || heroPosts[0]?.image_url || placeholderImage}
@@ -254,7 +297,8 @@ export default function HomeTopNewsSection({
                 </div>
               </Link>
             </article>
-          ))}
+            );
+          })}
         </div>
       </div>
 

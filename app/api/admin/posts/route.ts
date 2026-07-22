@@ -16,6 +16,31 @@ interface PostPayload {
   published: boolean;
 }
 
+const normalizeCategoryValue = (value: string) =>
+  value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+
+const resolvePublicationCategory = (value: string): 'Noticias' | 'Rankings' | 'Garagem dos Sonhos' => {
+  const normalized = normalizeCategoryValue(value);
+
+  if (normalized.includes('ranking')) {
+    return 'Rankings';
+  }
+
+  if (normalized.includes('garagem dos sonhos') || (normalized.includes('garagem') && normalized.includes('sonho'))) {
+    return 'Garagem dos Sonhos';
+  }
+
+  return 'Noticias';
+};
+
+const sanitizePostPayload = (post: PostPayload): PostPayload => ({
+  ...post,
+  category: resolvePublicationCategory(post.category),
+});
+
 type SupabaseClientResult =
   | { ok: true; supabase: SupabaseClient }
   | { ok: false; error: string };
@@ -216,7 +241,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: client.error }, { status: 500 });
     }
 
-    const { error } = await client.supabase.from('posts').insert([post]);
+    const sanitizedPost = sanitizePostPayload(post);
+    const { error } = await client.supabase.from('posts').insert([sanitizedPost]);
 
     if (error) {
       if (isRlsViolation(error.message)) {
@@ -274,9 +300,11 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: client.error }, { status: 500 });
     }
 
+    const sanitizedPost = sanitizePostPayload(post);
+
     const { data, error } = await client.supabase
       .from('posts')
-      .update(post)
+      .update(sanitizedPost)
       .eq('id', postId)
       .select('id')
       .maybeSingle();

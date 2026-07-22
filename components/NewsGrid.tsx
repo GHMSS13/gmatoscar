@@ -1,6 +1,6 @@
 import HomeTopNewsSection from './HomeTopNewsSection';
 import NewsCard from './NewsCard';
-import type { Post } from '@/lib/posts';
+import { getPostSection, type Post } from '@/lib/posts';
 
 interface NewsGridProps {
   posts: Post[];
@@ -8,54 +8,80 @@ interface NewsGridProps {
 }
 
 export default function NewsGrid({ posts, theme = 'dark' }: NewsGridProps) {
-  const normalized = (value: string) =>
-    value
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '');
-
-  const isRankingOrDreamGarage = (post: Post) => {
-    const text = normalized([post.title, post.excerpt, post.category, post.slug].join(' '));
-    return text.includes('ranking') || (text.includes('garagem') && text.includes('sonho'));
-  };
+  const isNewsPost = (post: Post) => getPostSection(post) === 'Noticias';
+  const isRankingPost = (post: Post) => getPostSection(post) === 'Rankings';
+  const isDreamGaragePost = (post: Post) => getPostSection(post) === 'Garagem dos Sonhos';
 
   const sourcePosts = posts.length > 0 ? posts : [];
-  const fromRankingAndGarage = sourcePosts.filter((post) => isRankingOrDreamGarage(post));
-  const heroPosts = [...fromRankingAndGarage, ...sourcePosts].filter(
-    (post, index, list) => list.findIndex((item) => item.id === post.id) === index
-  ).slice(0, 8);
+  const heroPosts = sourcePosts.slice(0, 8);
+  const heroIds = new Set(heroPosts.map((post) => post.id));
 
-  const newsOnlyPosts = sourcePosts.filter((post) => !isRankingOrDreamGarage(post));
-  const recentNewsPool = newsOnlyPosts.length > 0 ? newsOnlyPosts : sourcePosts;
-  const sidePosts = [
-    ...recentNewsPool.slice(1, 3),
-    ...recentNewsPool.slice(0, 2),
-  ].filter((post, index, list) => list.findIndex((item) => item.id === post.id) === index).slice(0, 2);
-  const middlePost = sourcePosts.find(
-    (post) =>
-      !heroPosts.some((heroItem) => heroItem.id === post.id) &&
-      !sidePosts.some((sideItem) => sideItem.id === post.id)
-  ) ?? sourcePosts[3] ?? sourcePosts[0];
+  const newsOnlyPosts = sourcePosts.filter((post) => isNewsPost(post) && !heroIds.has(post.id));
+  const middlePost = newsOnlyPosts[0];
+  const sidePosts = newsOnlyPosts.slice(1, 3);
 
-  const uniqueCategories = new Set(sourcePosts.map((post) => post.category));
-  const infoHighlights = sourcePosts.slice(0, 3);
+  const rankingPosts = sourcePosts.filter((post) => isRankingPost(post));
+  const dreamGaragePosts = sourcePosts.filter((post) => isDreamGaragePost(post));
 
-  const infoCards = [
+  const rankingFallbackCards = [
     {
-      title: 'Radar GMATOSCAR',
-      value: `${sourcePosts.length} publicacoes`,
-      description: `Conteudos ativos em ${uniqueCategories.size} categorias diferentes.`,
-      imageUrl: sourcePosts[0]?.image_url,
-      href: '/pesquisa',
+      title: 'Ranking',
+      value: 'Novo ranking em breve',
+      description: 'Estamos preparando um novo comparativo para atualizar esta secao.',
+      imageUrl: heroPosts[0]?.image_url,
+      href: '/ranking',
     },
-    ...infoHighlights.map((post) => ({
-      title: post.category,
-      value: post.title,
-      description: post.excerpt,
-      imageUrl: post.image_url,
-      href: `/noticias/${post.slug}`,
-    })),
+    {
+      title: 'Ranking',
+      value: 'Mais dados e listas chegando',
+      description: 'Em breve, novas listas com desempenho, preco e exclusividade.',
+      imageUrl: heroPosts[1]?.image_url || heroPosts[0]?.image_url,
+      href: '/ranking',
+    },
   ];
+
+  const dreamGarageFallbackCards = [
+    {
+      title: 'Garagem dos Sonhos',
+      value: 'Selecao especial em producao',
+      description: 'Novas sugestoes de garagem serao publicadas em breve.',
+      imageUrl: heroPosts[2]?.image_url || heroPosts[0]?.image_url,
+      href: '/garagem-dos-sonhos',
+    },
+    {
+      title: 'Garagem dos Sonhos',
+      value: 'Modelos iconicos em breve',
+      description: 'Estamos preparando uma nova curadoria para esta secao.',
+      imageUrl: heroPosts[3]?.image_url || heroPosts[0]?.image_url,
+      href: '/garagem-dos-sonhos',
+    },
+  ];
+
+  const rankingInfoCards = rankingPosts.slice(0, 2).map((post) => ({
+    title: 'Ranking',
+    value: post.title,
+    description: post.excerpt,
+    imageUrl: post.image_url,
+    href: `/noticias/${post.slug}`,
+  }));
+
+  const dreamGarageInfoCards = dreamGaragePosts.slice(0, 2).map((post) => ({
+    title: 'Garagem dos Sonhos',
+    value: post.title,
+    description: post.excerpt,
+    imageUrl: post.image_url,
+    href: `/noticias/${post.slug}`,
+  }));
+
+  while (rankingInfoCards.length < 2) {
+    rankingInfoCards.push(rankingFallbackCards[rankingInfoCards.length]);
+  }
+
+  while (dreamGarageInfoCards.length < 2) {
+    dreamGarageInfoCards.push(dreamGarageFallbackCards[dreamGarageInfoCards.length]);
+  }
+
+  const infoCards = [...rankingInfoCards, ...dreamGarageInfoCards];
 
   const morePosts = sourcePosts.slice(8, 14);
 

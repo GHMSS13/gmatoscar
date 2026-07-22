@@ -49,6 +49,9 @@ export interface Post {
   published: boolean;
 }
 
+export const POST_SECTION_VALUES = ['Noticias', 'Rankings', 'Garagem dos Sonhos'] as const;
+export type PostSection = (typeof POST_SECTION_VALUES)[number];
+
 interface GetPostsOptions {
   includePrivateModelPosts?: boolean;
 }
@@ -58,6 +61,38 @@ function normalize(value: string) {
     .toLowerCase()
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '');
+}
+
+function resolvePostSection(value: string): PostSection | null {
+  const normalizedValue = normalize(value);
+
+  if (normalizedValue.includes('ranking')) {
+    return 'Rankings';
+  }
+
+  if (normalizedValue.includes('garagem dos sonhos') || (normalizedValue.includes('garagem') && normalizedValue.includes('sonho'))) {
+    return 'Garagem dos Sonhos';
+  }
+
+  if (normalizedValue.includes('noticia')) {
+    return 'Noticias';
+  }
+
+  return null;
+}
+
+export function getPostSection(post: Pick<Post, 'category' | 'title' | 'excerpt' | 'slug'>): PostSection {
+  const sectionFromCategory = resolvePostSection(post.category);
+  if (sectionFromCategory) {
+    return sectionFromCategory;
+  }
+
+  const sectionFromContent = resolvePostSection([post.title, post.excerpt, post.slug].join(' '));
+  return sectionFromContent ?? 'Noticias';
+}
+
+export function isPostInSection(post: Pick<Post, 'category' | 'title' | 'excerpt' | 'slug'>, section: PostSection) {
+  return getPostSection(post) === section;
 }
 
 function isFerrariF80Post(post: Post) {

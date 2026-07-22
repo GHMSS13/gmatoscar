@@ -23,6 +23,29 @@ interface PostFormState {
   published: boolean;
 }
 
+const PUBLICATION_OPTIONS = ['Noticias', 'Rankings', 'Garagem dos Sonhos'] as const;
+type PublicationCategory = (typeof PUBLICATION_OPTIONS)[number];
+
+const normalizeCategoryValue = (value: string) =>
+  value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+
+const resolvePublicationCategory = (value: string): PublicationCategory => {
+  const normalized = normalizeCategoryValue(value);
+
+  if (normalized.includes('ranking')) {
+    return 'Rankings';
+  }
+
+  if (normalized.includes('garagem dos sonhos') || (normalized.includes('garagem') && normalized.includes('sonho'))) {
+    return 'Garagem dos Sonhos';
+  }
+
+  return 'Noticias';
+};
+
 interface PublishedPost {
   id: string;
   title: string;
@@ -472,7 +495,7 @@ export default function AdminPage() {
         slug: data.slug,
         excerpt: data.excerpt,
         content: data.content,
-        category: data.category,
+        category: resolvePublicationCategory(data.category),
         date: data.date,
         read_time: data.read_time,
         image_url: data.image_url,
@@ -707,7 +730,7 @@ export default function AdminPage() {
         slug: form.slug.trim().toLowerCase(),
         excerpt: form.excerpt.trim(),
         content: form.content.trim(),
-        category: form.category.trim(),
+        category: resolvePublicationCategory(form.category),
         date: form.date,
         read_time: form.read_time.trim(),
         image_url: form.image_url.trim(),
@@ -1046,6 +1069,19 @@ export default function AdminPage() {
 
                 <div className="grid gap-6 lg:grid-cols-2">
                   <label className="block lg:col-span-1">
+                    <span className="text-[#374151] text-sm font-exo">Publicar em</span>
+                    <select
+                      value={form.category}
+                      onChange={(event) => handleInput('category', event.target.value)}
+                      className="mt-2 w-full rounded-xl border border-[#d1d5db] bg-white px-4 py-3 text-[#111827] outline-none transition-all focus:border-[#dc2626]"
+                      required
+                    >
+                      <option value="Noticias">Notícias</option>
+                      <option value="Rankings">Rankings</option>
+                      <option value="Garagem dos Sonhos">Garagem dos Sonhos</option>
+                    </select>
+                  </label>
+                  <label className="block lg:col-span-1">
                     <span className="text-[#374151] text-sm font-exo">Data</span>
                     <input
                       type="date"
@@ -1055,7 +1091,6 @@ export default function AdminPage() {
                       required
                     />
                   </label>
-                  <div className="hidden lg:block" />
                 </div>
 
                 <div className="grid gap-6 lg:grid-cols-2">
