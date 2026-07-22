@@ -162,7 +162,7 @@ export default function HomeTopNewsSection({
                 <CarouselItem key={item.id} className="pl-0 lg:h-full">
                   <article className="group rounded-sm overflow-hidden border border-[#e5e7eb] bg-white lg:h-full">
                     <Link href={`/noticias/${item.slug}`} className="block">
-                      <div className="relative min-h-[250px] sm:min-h-[320px] lg:min-h-0 lg:h-[360px] overflow-hidden">
+                      <div className="relative min-h-[330px] sm:min-h-[320px] lg:min-h-0 lg:h-[360px] overflow-hidden">
                         <Image
                           src={item.image_url}
                           alt={item.title}
