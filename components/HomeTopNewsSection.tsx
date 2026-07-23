@@ -27,6 +27,7 @@ interface HomeTopNewsSectionProps {
   middlePost?: Post;
   sidePosts: Post[];
   infoCards: InfoCard[];
+  dreamGaragePosts: Post[];
 }
 
 export default function HomeTopNewsSection({
@@ -34,6 +35,7 @@ export default function HomeTopNewsSection({
   middlePost,
   sidePosts,
   infoCards,
+  dreamGaragePosts,
 }: HomeTopNewsSectionProps) {
   const [api, setApi] = useState<CarouselApi>();
   const [activeSlide, setActiveSlide] = useState(0);
@@ -134,9 +136,65 @@ export default function HomeTopNewsSection({
     });
   }
 
+  const normalizedDreamGaragePosts = [...dreamGaragePosts.slice(0, 5)];
+
+  while (normalizedDreamGaragePosts.length < 5) {
+    normalizedDreamGaragePosts.push({
+      id: `fallback-garage-${normalizedDreamGaragePosts.length}`,
+      title: 'Garagem dos Sonhos em atualizacao',
+      slug: '',
+      excerpt: 'Novas selecoes e conteudos especiais chegando em breve.',
+      content: '',
+      category: 'Garagem dos Sonhos',
+      date: '',
+      read_time: 'Em breve',
+      image_url:
+        heroPosts[normalizedDreamGaragePosts.length]?.image_url ||
+        heroPosts[0]?.image_url ||
+        placeholderImage,
+      featured: false,
+      hot: false,
+      published: true,
+      external_url: null,
+    });
+  }
+
+  const getSmartObjectPosition = (
+    title: string,
+    variant: 'featured' | 'highlight' | 'default'
+  ) => {
+    const normalizedTitle = title.toLowerCase();
+
+    if (/(traseira|rear|tail|spoiler|difusor)/.test(normalizedTitle)) {
+      return 'center 58%';
+    }
+
+    if (/(frente|front|grille|farol|headlight)/.test(normalizedTitle)) {
+      return 'center 38%';
+    }
+
+    if (/(interior|cockpit|painel|cabine)/.test(normalizedTitle)) {
+      return 'center 30%';
+    }
+
+    if (/(suv|pickup|caminhonete)/.test(normalizedTitle)) {
+      return 'center 45%';
+    }
+
+    if (variant === 'featured') {
+      return 'center 42%';
+    }
+
+    if (variant === 'highlight') {
+      return 'center 38%';
+    }
+
+    return 'center 35%';
+  };
+
   return (
-    <section className="pt-8 sm:pt-9 lg:pt-14 pb-7 sm:pb-10 lg:pb-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-      <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-2 sm:gap-4 mb-4 sm:mb-5 lg:mb-3">
+    <section className="pt-0 sm:pt-9 lg:pt-14 pb-7 sm:pb-10 lg:pb-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div className="hidden sm:flex sm:flex-row items-start sm:items-end justify-between gap-2 sm:gap-4 mb-4 sm:mb-5 lg:mb-3">
         <div>
           <p className="text-[#dc2626] text-[11px] font-bold uppercase tracking-[0.28em] font-rajdhani mb-1.5">
             Ultimas Noticias
@@ -216,7 +274,7 @@ export default function HomeTopNewsSection({
 
         <div className="hidden lg:block lg:col-span-3 lg:h-full">
           {middlePost ? (
-            <article className="group rounded-sm overflow-hidden border border-[#e5e7eb] bg-white h-full">
+            <article className="group rounded-xl overflow-hidden border border-[#e5e7eb] bg-white h-full">
               <Link href={`/noticias/${middlePost.slug}`} className="block h-full">
                 <div className="relative h-full overflow-hidden">
                   <Image
@@ -242,7 +300,7 @@ export default function HomeTopNewsSection({
               </Link>
             </article>
           ) : (
-            <article className="rounded-sm overflow-hidden border border-[#e5e7eb] bg-white h-full">
+            <article className="rounded-xl overflow-hidden border border-[#e5e7eb] bg-white h-full">
               <Link href="/noticias" className="block h-full">
                 <div className="relative h-[190px] sm:h-[170px] lg:h-full overflow-hidden">
                   <Image
@@ -270,14 +328,26 @@ export default function HomeTopNewsSection({
           )}
         </div>
 
-        <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 lg:grid-rows-2 gap-3 sm:gap-4 lg:gap-3 lg:h-full">
+        <div className="lg:col-span-3 lg:h-full">
+          <div className="sm:hidden mb-2">
+            <h3 className="text-[#111827] text-[1.7rem] font-serif font-semibold leading-none whitespace-nowrap">
+              Notícias Recentes
+            </h3>
+          </div>
+
+          <div className="flex overflow-x-auto gap-3 pb-1 snap-x snap-mandatory sm:grid sm:grid-cols-2 sm:overflow-visible sm:gap-4 lg:grid-cols-1 lg:grid-rows-2 lg:gap-3 lg:h-full">
           {normalizedSidePosts.slice(0, 2).map((item, idx) => {
             const href = item.slug ? `/noticias/${item.slug}` : '/noticias';
 
             return (
-            <article key={`${item.id}-${idx}`} className="group rounded-sm overflow-hidden border border-[#e5e7eb] bg-white lg:h-full">
+            <article
+              key={`${item.id}-${idx}`}
+              className={`group rounded-xl overflow-hidden border border-[#e5e7eb] bg-white shrink-0 snap-start ${
+                idx === 0 ? 'w-[72%]' : 'w-[56%]'
+              } sm:w-auto sm:shrink sm:snap-none lg:h-full`}
+            >
               <Link href={href} className="block h-full">
-                <div className="relative h-[190px] sm:h-[170px] lg:h-full overflow-hidden">
+                <div className="relative h-[170px] sm:h-[170px] lg:h-full overflow-hidden">
                   <Image
                     src={item.image_url || heroPosts[0]?.image_url || placeholderImage}
                     alt={item.title}
@@ -299,111 +369,133 @@ export default function HomeTopNewsSection({
             </article>
             );
           })}
+          </div>
+
+          <div className="sm:hidden mt-3 h-px w-full bg-gradient-to-r from-transparent via-[#d1d5db] to-transparent" />
         </div>
       </div>
 
-      <div className="sm:hidden flex items-center justify-between gap-3 mb-3">
-        <div>
-          <p className="text-[#dc2626] text-[10px] font-bold uppercase tracking-[0.24em] font-rajdhani mb-1">
-            Categoria
-          </p>
-          <h3 className="text-[#111827] text-lg font-rajdhani font-bold leading-none">
-            Rankings
-          </h3>
+      <section className="mt-8 sm:mt-9 lg:mt-11">
+        <div className="flex items-end justify-between gap-3 mb-3 sm:mb-4">
+          <div>
+            <p className="text-[#bc2a1f] text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.26em] font-rajdhani mb-1">
+              Categoria
+            </p>
+            <h3 className="text-[#111827] text-[1.45rem] sm:text-[2.2rem] font-rajdhani font-bold leading-[1.02] whitespace-nowrap">
+              Garagem dos Sonhos
+            </h3>
+          </div>
+          <Link
+            href="/garagem-dos-sonhos"
+            className="inline-flex items-center gap-2 text-[12px] sm:text-[13px] text-[#8b95a5] hover:text-[#dc2626] font-rajdhani uppercase tracking-[0.2em] transition-colors duration-300"
+          >
+            Ver mais <ArrowRight size={14} />
+          </Link>
         </div>
-        <Link
-          href="/ranking"
-          className="inline-flex items-center gap-1.5 text-[11px] text-[#4b5563] hover:text-[#dc2626] font-rajdhani uppercase tracking-[0.14em] transition-colors duration-300"
-        >
-          Ver mais <ArrowRight size={12} />
-        </Link>
-      </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 lg:gap-3">
-        {normalizedInfoCards.slice(0, 4).map((card, idx) => {
-          const showDreamGarageHeader = idx === 2;
-          const content = (
-            <div className="rounded-sm border border-[#e5e7eb] bg-[#f8fafc] h-full overflow-hidden transition-colors duration-300 hover:border-[#dc2626]/35 hover:bg-white">
-              <div className="relative aspect-[16/10] w-full bg-[#e5e7eb]">
-                <Image
-                  src={card.imageUrl || heroPosts[0]?.image_url || placeholderImage}
-                  alt={card.value}
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent sm:hidden" />
-                <div className="absolute bottom-0 left-0 right-0 p-3 sm:hidden">
-                  <p className="text-white text-[1rem] font-rajdhani font-bold leading-[1.08] line-clamp-2">
-                    {card.value}
+        <article className="group rounded-xl overflow-hidden border border-[#dfe4ea] bg-white mb-3 sm:mb-4">
+          <Link
+            href={normalizedDreamGaragePosts[0]?.slug ? `/noticias/${normalizedDreamGaragePosts[0].slug}` : '/garagem-dos-sonhos'}
+            className="grid min-h-[210px] sm:min-h-[230px] lg:min-h-[250px]"
+            style={{ gridTemplateColumns: '66.6667% 33.3333%' }}
+          >
+            <div className="relative h-full overflow-hidden">
+              <Image
+                src={normalizedDreamGaragePosts[0]?.image_url || heroPosts[0]?.image_url || placeholderImage}
+                alt={normalizedDreamGaragePosts[0]?.title || 'Garagem dos Sonhos'}
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                style={{ objectPosition: getSmartObjectPosition(normalizedDreamGaragePosts[0]?.title || '', 'featured') }}
+                sizes="(max-width: 640px) 64vw, 66vw"
+              />
+            </div>
+
+            <div className="relative bg-[#070707] text-white px-3.5 py-4 sm:px-5 sm:py-5 flex flex-col justify-center">
+              <h4 className="text-[1.35rem] sm:text-[1.55rem] font-rajdhani font-bold leading-[1.02] line-clamp-3 mb-1.5 normal-case">
+                {normalizedDreamGaragePosts[0]?.title || 'Noticias em atualizacao'}
+              </h4>
+              <p className="text-white/72 text-[12px] sm:text-[13px] font-exo mb-1.5 line-clamp-3">
+                {normalizedDreamGaragePosts[0]?.excerpt || 'Novas selecoes e conteudos especiais chegando em breve.'}
+              </p>
+              <p className="text-white/70 text-[11px] sm:text-[12px] font-exo mb-3">
+                {normalizedDreamGaragePosts[0]?.read_time || 'Em breve'}
+              </p>
+              <span className="inline-flex w-fit items-center rounded-md border border-white/70 px-3 py-1.5 text-[11px] sm:text-[12px] font-rajdhani font-bold uppercase tracking-[0.08em]">
+                Ler mais
+              </span>
+            </div>
+          </Link>
+        </article>
+
+        <div className="flex gap-2.5 overflow-x-auto pb-1 snap-x snap-mandatory sm:grid sm:grid-cols-4 sm:overflow-visible sm:gap-3">
+          {normalizedDreamGaragePosts.slice(1, 5).map((post, idx) => {
+            const href = post.slug ? `/noticias/${post.slug}` : '/garagem-dos-sonhos';
+
+            if (idx === 0) {
+              return (
+                <Link
+                  key={`${post.id}-${idx}`}
+                  href={href}
+                  className="group rounded-xl overflow-hidden border border-[#dfe4ea] bg-white shrink-0 snap-start w-[44%] sm:w-auto"
+                >
+                  <div className="relative h-[138px] sm:h-[148px] lg:h-[160px] overflow-hidden bg-[#0a0a0a]">
+                    <Image
+                      src={post.image_url || heroPosts[0]?.image_url || placeholderImage}
+                      alt={post.title}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                      style={{ objectPosition: getSmartObjectPosition(post.title, 'highlight') }}
+                      sizes="(max-width: 640px) 50vw, 25vw"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/78 to-transparent" />
+                    <p className="absolute top-2 left-2 inline-flex rounded-md bg-[#dc2626] text-white text-[9px] font-rajdhani font-bold px-1.5 py-0.5">
+                      Mais Lidos
+                    </p>
+                    <div className="absolute inset-x-0 bottom-0 p-2 sm:p-3">
+                      <p className="text-white text-[0.95rem] sm:text-[1.2rem] font-rajdhani font-bold uppercase leading-[1.02] line-clamp-2 mb-1.5 max-w-[92%]">
+                        {post.title}
+                      </p>
+                      <p className="text-white/82 text-[10px] sm:text-[12px] font-exo leading-[1.22] line-clamp-3 mb-2">
+                        {post.excerpt || 'Novidades de supercarros em destaque.'}
+                      </p>
+                      <span className="inline-flex w-fit items-center rounded-md border border-white/80 bg-white text-[#111827] px-2 py-1 text-[9px] sm:text-[11px] font-rajdhani font-bold whitespace-nowrap">
+                        Ver Ranking Completo
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              );
+            }
+
+            return (
+              <Link
+                key={`${post.id}-${idx}`}
+                href={href}
+                className="group rounded-xl overflow-hidden border border-[#dfe4ea] bg-white shrink-0 snap-start w-[44%] sm:w-auto"
+              >
+                <div className="relative h-[138px] sm:h-[148px] lg:h-[160px] overflow-hidden">
+                  <Image
+                    src={post.image_url || heroPosts[0]?.image_url || placeholderImage}
+                    alt={post.title}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                    style={{ objectPosition: getSmartObjectPosition(post.title, 'default') }}
+                    sizes="(max-width: 640px) 50vw, 25vw"
+                  />
+                </div>
+                <div className="p-2.5 sm:p-3">
+                  <p className="text-[#111827] text-[1.03rem] sm:text-[1.2rem] font-rajdhani font-bold leading-[1.04] line-clamp-2 mb-1.5 uppercase">
+                    {post.title}
+                  </p>
+                  <p className="text-[#1f2937] text-[12px] sm:text-[12.5px] leading-[1.32] font-exo line-clamp-3">
+                    {post.excerpt || 'Conteudo especial em breve.'}
                   </p>
                 </div>
-              </div>
-              <div className="hidden sm:block p-2.5 sm:p-3 lg:p-3 min-h-[110px] sm:min-h-[120px] lg:min-h-[128px]">
-                <p className="text-[#6b7280] text-[9px] font-rajdhani font-bold uppercase tracking-[0.18em] mb-1">
-                  {card.title}
-                </p>
-                <p className="text-[#111827] text-[0.95rem] sm:text-[1.02rem] lg:text-[1rem] font-rajdhani font-bold leading-[1.1] mb-1 line-clamp-2">
-                  {card.value}
-                </p>
-                <p className="text-[#4b5563] text-[11px] sm:text-[12px] leading-[1.35] font-exo line-clamp-3">{card.description}</p>
-              </div>
-            </div>
-          );
-
-          if (card.href) {
-            return (
-              <div key={`${card.title}-${card.value}-${idx}`} className="h-full">
-                {showDreamGarageHeader && (
-                  <div className="sm:hidden flex items-center justify-between gap-3 mb-3 mt-1">
-                    <div>
-                      <p className="text-[#dc2626] text-[10px] font-bold uppercase tracking-[0.24em] font-rajdhani mb-1">
-                        Categoria
-                      </p>
-                      <h3 className="text-[#111827] text-lg font-rajdhani font-bold leading-none">
-                        Garagem dos Sonhos
-                      </h3>
-                    </div>
-                    <Link
-                      href="/garagem-dos-sonhos"
-                      className="inline-flex items-center gap-1.5 text-[11px] text-[#4b5563] hover:text-[#dc2626] font-rajdhani uppercase tracking-[0.14em] transition-colors duration-300"
-                    >
-                      Ver mais <ArrowRight size={12} />
-                    </Link>
-                  </div>
-                )}
-                <Link href={card.href} className="group block h-full">
-                  {content}
-                </Link>
-              </div>
+              </Link>
             );
-          }
-
-          return (
-            <div key={`${card.title}-${card.value}-${idx}`} className="h-full">
-              {showDreamGarageHeader && (
-                <div className="sm:hidden flex items-center justify-between gap-3 mb-3 mt-1">
-                  <div>
-                    <p className="text-[#dc2626] text-[10px] font-bold uppercase tracking-[0.24em] font-rajdhani mb-1">
-                      Categoria
-                    </p>
-                    <h3 className="text-[#111827] text-lg font-rajdhani font-bold leading-none">
-                      Garagem dos Sonhos
-                    </h3>
-                  </div>
-                  <Link
-                    href="/garagem-dos-sonhos"
-                    className="inline-flex items-center gap-1.5 text-[11px] text-[#4b5563] hover:text-[#dc2626] font-rajdhani uppercase tracking-[0.14em] transition-colors duration-300"
-                  >
-                    Ver mais <ArrowRight size={12} />
-                  </Link>
-                </div>
-              )}
-              {content}
-            </div>
-          );
-        })}
-      </div>
+          })}
+        </div>
+      </section>
     </section>
   );
 }

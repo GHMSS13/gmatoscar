@@ -15,7 +15,7 @@ export default function NewsCard({ item, variant = 'default', theme = 'dark' }: 
   if (variant === 'featured') {
     if (isLight) {
       return (
-        <article className="news-card group rounded-sm overflow-hidden cursor-pointer border border-[#e5e7eb] bg-white">
+        <article className="news-card group rounded-xl overflow-hidden cursor-pointer border border-[#e5e7eb] bg-white">
           <Link href={`/noticias/${item.slug}`} className="block h-full">
             <div className="relative aspect-[16/10] sm:hidden overflow-hidden">
               <Image
@@ -78,7 +78,7 @@ export default function NewsCard({ item, variant = 'default', theme = 'dark' }: 
     }
 
     return (
-      <article className={`news-card relative group h-full rounded-sm overflow-hidden cursor-pointer ${isLight ? 'bg-white border border-[#e5e7eb]' : 'card-glow bg-[#111]'}`}>
+      <article className={`news-card relative group h-full rounded-xl overflow-hidden cursor-pointer ${isLight ? 'bg-white border border-[#e5e7eb]' : 'card-glow bg-[#111]'}`}>
         <Link href={`/noticias/${item.slug}`} className="block h-full">
           <div className="relative h-full min-h-[250px] sm:min-h-[320px] md:min-h-[430px] overflow-hidden">
             <Image
@@ -118,9 +118,9 @@ export default function NewsCard({ item, variant = 'default', theme = 'dark' }: 
 
   if (variant === 'horizontal') {
     return (
-      <article className={`news-card group flex flex-col sm:flex-row gap-4 rounded-sm overflow-hidden transition-all duration-300 cursor-pointer ${isLight ? 'bg-white border border-[#e5e7eb] hover:border-[#dc2626]/40' : 'bg-[#111] border border-[#1e1e1e] hover:border-[#dc2626]/30'}`}>
+      <article className={`news-card group flex flex-col sm:flex-row gap-4 rounded-xl overflow-hidden transition-all duration-300 cursor-pointer ${isLight ? 'bg-white border border-[#e5e7eb] hover:border-[#dc2626]/40' : 'bg-[#111] border border-[#1e1e1e] hover:border-[#dc2626]/30'}`}>
         <Link href={`/noticias/${item.slug}`} className="flex flex-col sm:flex-row gap-4 w-full p-4">
-          <div className="relative w-full h-44 sm:w-32 sm:h-32 flex-shrink-0 rounded-sm overflow-hidden">
+          <div className="relative w-full h-44 sm:w-32 sm:h-32 flex-shrink-0 rounded-lg overflow-hidden">
             <Image
               src={item.image_url}
               alt={item.title}
@@ -174,7 +174,7 @@ export default function NewsCard({ item, variant = 'default', theme = 'dark' }: 
 
   if (variant === 'mobile-medium') {
     return (
-      <article className={`group rounded-sm overflow-hidden transition-all duration-300 cursor-pointer ${isLight ? 'bg-white border border-[#e5e7eb] hover:border-[#d1d5db]' : 'bg-[#111] border border-[#1e1e1e] hover:border-[#dc2626]/30'}`}>
+      <article className={`group rounded-xl overflow-hidden transition-all duration-300 cursor-pointer ${isLight ? 'bg-white border border-[#e5e7eb] hover:border-[#d1d5db]' : 'bg-[#111] border border-[#1e1e1e] hover:border-[#dc2626]/30'}`}>
         <Link href={`/noticias/${item.slug}`} className="flex gap-3 p-3.5">
           <div className="relative w-[124px] h-[92px] flex-shrink-0 rounded-[2px] overflow-hidden">
             <Image
@@ -204,7 +204,7 @@ export default function NewsCard({ item, variant = 'default', theme = 'dark' }: 
 
   if (variant === 'related') {
     return (
-      <article className={`news-card group rounded-sm overflow-hidden cursor-pointer h-full flex flex-col ${isLight ? 'bg-white border border-[#e5e7eb]' : 'bg-[#111] border border-[#1e1e1e] card-glow'}`}>
+      <article className={`news-card group rounded-xl overflow-hidden cursor-pointer h-full flex flex-col ${isLight ? 'bg-white border border-[#e5e7eb]' : 'bg-[#111] border border-[#1e1e1e] card-glow'}`}>
         <Link href={`/noticias/${item.slug}`} className="flex flex-col h-full">
           <div className="relative aspect-[16/9] overflow-hidden">
             <Image
@@ -239,7 +239,7 @@ export default function NewsCard({ item, variant = 'default', theme = 'dark' }: 
   }
 
   return (
-    <article className={`news-card group rounded-sm overflow-hidden cursor-pointer h-full flex flex-col ${isLight ? 'bg-white border border-[#e5e7eb]' : 'bg-[#111] border border-[#1e1e1e] card-glow'}`}>
+    <article className={`news-card group rounded-xl overflow-hidden cursor-pointer h-full flex flex-col ${isLight ? 'bg-white border border-[#e5e7eb]' : 'bg-[#111] border border-[#1e1e1e] card-glow'}`}>
       <Link href={`/noticias/${item.slug}`} className="flex flex-col h-full">
         <div className="relative aspect-[16/9] overflow-hidden">
           <Image
