@@ -138,13 +138,13 @@ export default function HomeTopNewsSection({
     });
   }
 
-  const normalizedDreamGaragePosts = [...dreamGaragePosts.slice(0, 5)];
+  const normalizedDreamGaragePosts = [...dreamGaragePosts.slice(0, 7)];
 
   const additionalRecentPosts = heroPosts
     .slice(2, 6)
     .filter((post) => !normalizedSidePosts.some((sidePost) => sidePost.id === post.id));
 
-  while (normalizedDreamGaragePosts.length < 5) {
+  while (normalizedDreamGaragePosts.length < 7) {
     normalizedDreamGaragePosts.push({
       id: `fallback-garage-${normalizedDreamGaragePosts.length}`,
       title: 'Garagem dos Sonhos em atualizacao',
@@ -507,7 +507,7 @@ export default function HomeTopNewsSection({
         </article>
 
         <div className="flex gap-2.5 overflow-x-auto pb-1 snap-x snap-mandatory sm:grid sm:grid-cols-4 sm:overflow-visible sm:gap-3">
-          {normalizedDreamGaragePosts.slice(1, 5).map((post, idx) => {
+          {normalizedDreamGaragePosts.slice(1, 7).map((post, idx) => {
             const href = post.slug ? `/noticias/${post.slug}` : '/garagem-dos-sonhos';
 
             return (
@@ -537,6 +537,21 @@ export default function HomeTopNewsSection({
               </Link>
             );
           })}
+
+          <Link
+            href="/garagem-dos-sonhos"
+            className="group rounded-xl border border-dashed border-[#d1d5db] bg-[#fafafa] shrink-0 snap-start w-[44%] sm:w-auto p-3 sm:p-3.5 flex flex-col justify-center min-h-[138px] sm:min-h-[148px] lg:min-h-[160px] hover:border-[#dc2626]/35 hover:bg-white transition-colors duration-300"
+          >
+            <p className="text-[#dc2626] text-[10px] font-rajdhani font-bold uppercase tracking-[0.18em] mb-1.5">
+              Continue
+            </p>
+            <p className="text-[#111827] text-[1.02rem] sm:text-[1.15rem] font-rajdhani font-bold uppercase leading-[1.06]">
+              Ver mais
+            </p>
+            <span className="mt-2 inline-flex items-center gap-1 text-[#6b7280] group-hover:text-[#dc2626] text-[12px] font-rajdhani font-bold uppercase tracking-[0.12em] transition-colors duration-300">
+              Abrir <ArrowRight size={13} />
+            </span>
+          </Link>
         </div>
       </section>
 
