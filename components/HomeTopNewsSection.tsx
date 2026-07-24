@@ -115,10 +115,10 @@ export default function HomeTopNewsSection({
     },
   ];
 
-  const normalizedSidePosts = [...sidePosts.slice(0, 2)];
+  const normalizedSidePosts = [...sidePosts.slice(0, 5)];
 
-  while (normalizedSidePosts.length < 2) {
-    const fallback = sideFallbackCards[normalizedSidePosts.length];
+  while (normalizedSidePosts.length < 5) {
+    const fallback = sideFallbackCards[normalizedSidePosts.length % sideFallbackCards.length];
     normalizedSidePosts.push({
       id: `fallback-side-${normalizedSidePosts.length}`,
       title: fallback.title,
@@ -137,6 +137,10 @@ export default function HomeTopNewsSection({
   }
 
   const normalizedDreamGaragePosts = [...dreamGaragePosts.slice(0, 5)];
+
+  const additionalRecentPosts = heroPosts
+    .slice(2, 6)
+    .filter((post) => !normalizedSidePosts.some((sidePost) => sidePost.id === post.id));
 
   while (normalizedDreamGaragePosts.length < 5) {
     normalizedDreamGaragePosts.push({
@@ -336,15 +340,13 @@ export default function HomeTopNewsSection({
           </div>
 
           <div className="flex overflow-x-auto gap-3 pb-1 snap-x snap-mandatory sm:grid sm:grid-cols-2 sm:overflow-visible sm:gap-4 lg:grid-cols-1 lg:grid-rows-2 lg:gap-3 lg:h-full">
-          {normalizedSidePosts.slice(0, 2).map((item, idx) => {
+          {normalizedSidePosts.slice(0, 5).map((item, idx) => {
             const href = item.slug ? `/noticias/${item.slug}` : '/noticias';
 
             return (
             <article
               key={`${item.id}-${idx}`}
-              className={`group rounded-xl overflow-hidden border border-[#e5e7eb] bg-white shrink-0 snap-start ${
-                idx === 0 ? 'w-[72%]' : 'w-[56%]'
-              } sm:w-auto sm:shrink sm:snap-none lg:h-full`}
+              className="group rounded-xl overflow-hidden border border-[#e5e7eb] bg-white shrink-0 snap-start w-[72%] sm:w-auto sm:shrink sm:snap-none lg:h-full"
             >
               <Link href={href} className="block h-full">
                 <div className="relative h-[170px] sm:h-[170px] lg:h-full overflow-hidden">
@@ -370,6 +372,53 @@ export default function HomeTopNewsSection({
             );
           })}
           </div>
+
+          {additionalRecentPosts.length > 0 && (
+            <div className="sm:hidden mt-3 space-y-3">
+              {additionalRecentPosts.map((item) => (
+                <Link
+                  key={item.id}
+                  href={`/noticias/${item.slug}`}
+                  className="group flex gap-3 rounded-xl overflow-hidden border border-[#e5e7eb] bg-white p-3"
+                >
+                  <div className="relative w-[124px] h-[92px] flex-shrink-0 rounded-lg overflow-hidden">
+                    <Image
+                      src={item.image_url || heroPosts[0]?.image_url || placeholderImage}
+                      alt={item.title}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                      sizes="124px"
+                    />
+                  </div>
+
+                  <div className="min-w-0 flex-1 flex flex-col justify-between py-0.5">
+                    <div>
+                      <p className="text-[#dc2626] text-[9px] font-bold uppercase tracking-[0.22em] font-rajdhani mb-1">
+                        {item.category}
+                      </p>
+                      <h3 className="text-[#111827] font-rajdhani font-bold text-[1.02rem] leading-[1.08] line-clamp-2">
+                        {item.title}
+                      </h3>
+                    </div>
+
+                    <div className="flex items-center gap-2 text-[10px] text-[#6b7280] font-exo mt-2">
+                      <span>{item.date}</span>
+                      <span className="inline-flex items-center gap-1">
+                        <Clock size={10} /> {item.read_time}
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+
+              <Link
+                href="/noticias"
+                className="flex items-center justify-center rounded-xl border border-[#e5e7eb] bg-white px-4 py-3 text-[11px] font-rajdhani font-bold uppercase tracking-[0.18em] text-[#4b5563] hover:text-[#dc2626] hover:border-[#dc2626]/35 transition-colors duration-300"
+              >
+                Ver mais notícias <ArrowRight size={13} className="ml-1 transition-transform group-hover:translate-x-1" />
+              </Link>
+            </div>
+          )}
 
           <div className="sm:hidden mt-3 h-px w-full bg-gradient-to-r from-transparent via-[#d1d5db] to-transparent" />
         </div>
