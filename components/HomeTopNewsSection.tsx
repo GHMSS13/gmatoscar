@@ -408,6 +408,21 @@ export default function HomeTopNewsSection({
             </article>
             );
           })}
+
+          <Link
+            href="/noticias"
+            className="group sm:hidden rounded-xl border border-dashed border-[#d1d5db] bg-[#fafafa] shrink-0 snap-start w-[72%] p-4 flex flex-col justify-center hover:border-[#dc2626]/35 hover:bg-white transition-colors duration-300"
+          >
+            <p className="text-[#dc2626] text-[10px] font-rajdhani font-bold uppercase tracking-[0.18em] mb-1.5">
+              Continue
+            </p>
+            <p className="text-[#111827] text-[1.08rem] font-rajdhani font-bold uppercase leading-[1.05]">
+              Ver mais
+            </p>
+            <span className="mt-2 inline-flex items-center gap-1 text-[#6b7280] group-hover:text-[#dc2626] text-[12px] font-rajdhani font-bold uppercase tracking-[0.12em] transition-colors duration-300">
+              Noticias <ArrowRight size={13} />
+            </span>
+          </Link>
           </div>
 
           {additionalRecentPosts.length > 0 && (
