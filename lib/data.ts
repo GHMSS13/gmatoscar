@@ -72,7 +72,7 @@ export const brands: Brand[] = [
     country: 'Italia',
     description: 'Referência absoluta em superesportivos italianos, com foco em desempenho, tradição e design.',
     logo: createBrandLogo('Ferrari', '#ff2800'),
-    topModelImage: 'https://images.pexels.com/photos/1007410/pexels-photo-1007410.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    topModelImage: '/api/images/f935929c-c5eb-402d-8ea3-a07f758f070c?filename=Ferrari.avif',
     founded: 1939,
     topModel: 'Ferrari F80',
     maxSpeed: '350+ km/h',
