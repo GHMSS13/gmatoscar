@@ -144,7 +144,7 @@ export const brands: Brand[] = [
     country: 'Reino Unido',
     description: 'Marca britânica famosa pela leveza, aerodinâmica e herança direta da Fórmula 1.',
     logo: createBrandLogo('McLaren', '#ff8000'),
-    topModelImage: 'https://images.pexels.com/photos/128794/pexels-photo-128794.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    topModelImage: '/api/images/5683b6f0-4732-436e-8d29-53851d0c8c3e?filename=mclaren-logo.avif',
     founded: 1963,
     topModel: 'McLaren W1',
     maxSpeed: '350 km/h',
