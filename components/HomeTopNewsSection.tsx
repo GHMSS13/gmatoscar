@@ -28,6 +28,7 @@ interface HomeTopNewsSectionProps {
   sidePosts: Post[];
   infoCards: InfoCard[];
   dreamGaragePosts: Post[];
+  rankingPosts: Post[];
 }
 
 export default function HomeTopNewsSection({
@@ -36,6 +37,7 @@ export default function HomeTopNewsSection({
   sidePosts,
   infoCards,
   dreamGaragePosts,
+  rankingPosts,
 }: HomeTopNewsSectionProps) {
   const [api, setApi] = useState<CarouselApi>();
   const [activeSlide, setActiveSlide] = useState(0);
@@ -154,6 +156,41 @@ export default function HomeTopNewsSection({
       read_time: 'Em breve',
       image_url:
         heroPosts[normalizedDreamGaragePosts.length]?.image_url ||
+        heroPosts[0]?.image_url ||
+        placeholderImage,
+      featured: false,
+      hot: false,
+      published: true,
+      external_url: null,
+    });
+  }
+
+  const normalizedRankingPosts = [...rankingPosts.slice(0, 8)];
+
+  const rankingFallbackTitles = [
+    'Os 20 carros mais rapidos do mundo',
+    'Os 10 modelos mais caros do planeta',
+    'Os 10 carros mais odiados da Ferrari',
+    'As 12 lendas japonesas mais desejadas',
+    'Top 15 V8 com o ronco mais marcante',
+    'Os 8 hipercarros com melhor relacao peso-potencia',
+    '10 supercarros subestimados que valem cada centavo',
+    'Top 12 classicos que ainda impressionam em 2026',
+  ];
+
+  while (normalizedRankingPosts.length < 8) {
+    const fallbackIdx = normalizedRankingPosts.length;
+    normalizedRankingPosts.push({
+      id: `fallback-ranking-${fallbackIdx}`,
+      title: rankingFallbackTitles[fallbackIdx] || 'Ranking em atualizacao',
+      slug: '',
+      excerpt: 'Estamos preparando novas listas e comparativos para esta secao.',
+      content: '',
+      category: 'Rankings',
+      date: '',
+      read_time: 'Em breve',
+      image_url:
+        heroPosts[fallbackIdx + 1]?.image_url ||
         heroPosts[0]?.image_url ||
         placeholderImage,
       featured: false,
@@ -442,28 +479,29 @@ export default function HomeTopNewsSection({
           </Link>
         </div>
 
-        <article className="group rounded-xl overflow-hidden border border-[#dfe4ea] bg-white mb-3 sm:mb-4">
+        <article className="group rounded-xl overflow-hidden border border-[#e5e7eb] bg-white mb-3 sm:mb-4">
           <Link href={normalizedDreamGaragePosts[0]?.slug ? `/noticias/${normalizedDreamGaragePosts[0].slug}` : '/garagem-dos-sonhos'} className="block h-full">
-            <div className="relative h-[190px] sm:h-[210px] lg:h-[230px] overflow-hidden bg-[#0a0a0a]">
+            <div className="relative h-[170px] sm:h-[185px] lg:h-[205px] overflow-hidden bg-[#0a0a0a]">
               <Image
                 src={normalizedDreamGaragePosts[0]?.image_url || heroPosts[0]?.image_url || placeholderImage}
                 alt={normalizedDreamGaragePosts[0]?.title || 'Garagem dos Sonhos'}
                 fill
-                className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.03]"
+                className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                 style={{ objectPosition: getSmartObjectPosition(normalizedDreamGaragePosts[0]?.title || '', 'featured') }}
-                sizes="100vw"
+                sizes="(max-width: 640px) 50vw, 25vw"
               />
-            </div>
-            <div className="p-2.5 sm:p-3">
-              <p className="text-[#dc2626] text-[9px] font-bold uppercase tracking-[0.22em] font-rajdhani mb-1">
-                Garagem dos Sonhos
-              </p>
-              <h3 className="text-[#111827] text-[1.03rem] sm:text-[1.2rem] font-rajdhani font-bold leading-[1.04] line-clamp-2 mb-1.5 uppercase">
-                {normalizedDreamGaragePosts[0]?.title || 'Noticias em atualizacao'}
-              </h3>
-              <p className="text-[#1f2937] text-[12px] sm:text-[12.5px] leading-[1.32] font-exo line-clamp-3">
-                {normalizedDreamGaragePosts[0]?.excerpt || 'Novas selecoes e conteudos especiais chegando em breve.'}
-              </p>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 p-3 sm:p-3.5">
+                <p className="inline-flex bg-[#dc2626] text-white text-[9px] font-rajdhani font-bold uppercase tracking-[0.16em] px-2 py-0.5 rounded-sm mb-1.5">
+                  Garagem dos Sonhos
+                </p>
+                <h3 className="text-white text-[1.18rem] sm:text-[1.32rem] font-rajdhani font-bold leading-[1.03] line-clamp-2 uppercase mb-1">
+                  {normalizedDreamGaragePosts[0]?.title || 'Garagem dos Sonhos em atualizacao'}
+                </h3>
+                <p className="text-white/75 text-[11px] sm:text-[12px] leading-[1.3] font-exo line-clamp-2">
+                  {normalizedDreamGaragePosts[0]?.excerpt || 'Novas selecoes e conteudos especiais chegando em breve.'}
+                </p>
+              </div>
             </div>
           </Link>
         </article>
@@ -472,49 +510,13 @@ export default function HomeTopNewsSection({
           {normalizedDreamGaragePosts.slice(1, 5).map((post, idx) => {
             const href = post.slug ? `/noticias/${post.slug}` : '/garagem-dos-sonhos';
 
-            if (idx === 0) {
-              return (
-                <Link
-                  key={`${post.id}-${idx}`}
-                  href={href}
-                  className="group rounded-xl overflow-hidden border border-[#dfe4ea] bg-white shrink-0 snap-start w-[44%] sm:w-auto"
-                >
-                  <div className="relative h-[138px] sm:h-[148px] lg:h-[160px] overflow-hidden bg-[#0a0a0a]">
-                    <Image
-                      src={post.image_url || heroPosts[0]?.image_url || placeholderImage}
-                      alt={post.title}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                      style={{ objectPosition: getSmartObjectPosition(post.title, 'highlight') }}
-                      sizes="(max-width: 640px) 50vw, 25vw"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/78 to-transparent" />
-                    <p className="absolute top-2 left-2 inline-flex rounded-md bg-[#dc2626] text-white text-[9px] font-rajdhani font-bold px-1.5 py-0.5">
-                      Mais Lidos
-                    </p>
-                    <div className="absolute inset-x-0 bottom-0 p-2 sm:p-3">
-                      <p className="text-white text-[0.95rem] sm:text-[1.2rem] font-rajdhani font-bold uppercase leading-[1.02] line-clamp-2 mb-1.5 max-w-[92%]">
-                        {post.title}
-                      </p>
-                      <p className="text-white/82 text-[10px] sm:text-[12px] font-exo leading-[1.22] line-clamp-3 mb-2">
-                        {post.excerpt || 'Novidades de supercarros em destaque.'}
-                      </p>
-                      <span className="inline-flex w-fit items-center rounded-md border border-white/80 bg-white text-[#111827] px-2 py-1 text-[9px] sm:text-[11px] font-rajdhani font-bold whitespace-nowrap">
-                        Ver Ranking Completo
-                      </span>
-                    </div>
-                  </div>
-                </Link>
-              );
-            }
-
             return (
               <Link
                 key={`${post.id}-${idx}`}
                 href={href}
                 className="group rounded-xl overflow-hidden border border-[#dfe4ea] bg-white shrink-0 snap-start w-[44%] sm:w-auto"
               >
-                <div className="relative h-[138px] sm:h-[148px] lg:h-[160px] overflow-hidden">
+                <div className="relative h-[138px] sm:h-[148px] lg:h-[160px] overflow-hidden bg-[#0a0a0a]">
                   <Image
                     src={post.image_url || heroPosts[0]?.image_url || placeholderImage}
                     alt={post.title}
@@ -535,6 +537,156 @@ export default function HomeTopNewsSection({
               </Link>
             );
           })}
+        </div>
+      </section>
+
+      <section className="mt-8 sm:mt-9 lg:mt-11 rounded-2xl border border-[#e5e7eb] bg-white p-3 sm:p-5">
+        <div className="flex items-end justify-between gap-3 mb-3 sm:mb-4">
+          <div>
+            <p className="text-[#dc2626] text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.26em] font-rajdhani mb-1">
+              Especial
+            </p>
+            <h3 className="text-[#111827] text-[1.45rem] sm:text-[2.2rem] font-rajdhani font-bold leading-[1.02] whitespace-nowrap">
+              Ranking
+            </h3>
+          </div>
+          <Link
+            href="/ranking"
+            className="inline-flex items-center gap-2 text-[12px] sm:text-[13px] text-[#8b95a5] hover:text-[#dc2626] font-rajdhani uppercase tracking-[0.2em] transition-colors duration-300"
+          >
+            Ver mais <ArrowRight size={14} />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-4">
+          <article className="sm:col-span-7 group rounded-xl overflow-hidden border border-[#e5e7eb] bg-white">
+            <Link href={normalizedRankingPosts[0]?.slug ? `/noticias/${normalizedRankingPosts[0].slug}` : '/ranking'} className="block h-full">
+              <div className="relative h-[220px] sm:h-full sm:min-h-[336px] overflow-hidden">
+                <Image
+                  src={normalizedRankingPosts[0]?.image_url || heroPosts[0]?.image_url || placeholderImage}
+                  alt={normalizedRankingPosts[0]?.title || 'Ranking'}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                  style={{ objectPosition: getSmartObjectPosition(normalizedRankingPosts[0]?.title || '', 'featured') }}
+                  sizes="(max-width: 640px) 100vw, 58vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-transparent" />
+                <span className="absolute top-2.5 left-2.5 inline-flex items-center rounded-md border border-white/40 bg-[#dc2626]/90 px-2 py-0.5 text-[10px] font-rajdhani font-bold uppercase tracking-[0.16em] text-white">
+                  #01
+                </span>
+                <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4">
+                  <h3 className="text-white text-[1.22rem] sm:text-[1.48rem] font-rajdhani font-bold leading-[1.02] line-clamp-2 uppercase mb-1.5">
+                    {normalizedRankingPosts[0]?.title || 'Ranking em atualizacao'}
+                  </h3>
+                  <p className="text-white/80 text-[11px] sm:text-[12px] leading-[1.35] font-exo line-clamp-2 mb-2">
+                    {normalizedRankingPosts[0]?.excerpt || 'Novos comparativos e listas especiais chegando em breve.'}
+                  </p>
+                  <p className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] text-white/75 font-exo">
+                    <Clock size={10} /> {normalizedRankingPosts[0]?.read_time || 'Em breve'}
+                  </p>
+                </div>
+              </div>
+            </Link>
+          </article>
+
+          <div className="sm:col-span-5 grid grid-cols-1 gap-2.5">
+            {normalizedRankingPosts.slice(1, 5).map((post, idx) => {
+              const href = post.slug ? `/noticias/${post.slug}` : '/ranking';
+              const rank = String(idx + 2).padStart(2, '0');
+
+              return (
+                <Link
+                  key={`${post.id}-ranking-editorial-${idx}`}
+                  href={href}
+                  className="group flex items-center gap-2.5 rounded-xl border border-[#e5e7eb] bg-[#fafafa] p-2.5 hover:border-[#dc2626]/35 hover:bg-white transition-colors duration-300"
+                >
+                  <span className="inline-flex w-9 h-9 items-center justify-center rounded-lg border border-[#dc2626]/35 bg-[#dc2626]/8 text-[#dc2626] text-[11px] font-rajdhani font-bold tracking-[0.08em]">
+                    #{rank}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[#111827] text-[1rem] sm:text-[1.05rem] font-rajdhani font-bold leading-[1.04] line-clamp-2 uppercase group-hover:text-[#dc2626] transition-colors duration-300">
+                      {post.title}
+                    </p>
+                    <p className="text-[#6b7280] text-[11px] font-exo mt-1 line-clamp-1">
+                      {post.excerpt || 'Novo ranking em breve.'}
+                    </p>
+                  </div>
+                  <ArrowRight size={14} className="text-[#9ca3af] group-hover:text-[#dc2626] transition-colors duration-300" />
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="mt-4 sm:mt-5 pt-4 sm:pt-5 border-t border-[#e5e7eb]">
+          <div className="flex items-center justify-between gap-3 mb-3 sm:mb-4">
+            <h4 className="text-[#111827] text-[1.08rem] sm:text-[1.22rem] font-rajdhani font-bold uppercase tracking-[0.08em]">
+              Mais Rankings Para Explorar
+            </h4>
+            <span className="text-[10px] sm:text-[11px] text-[#6b7280] font-exo uppercase tracking-[0.16em]">
+              Top listas da semana
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+            {normalizedRankingPosts.slice(5, 8).map((post, idx) => {
+              const href = post.slug ? `/noticias/${post.slug}` : '/ranking';
+              const rank = String(idx + 6).padStart(2, '0');
+
+              return (
+                <article
+                  key={`${post.id}-ranking-extended-${idx}`}
+                  className="group rounded-xl overflow-hidden border border-[#e5e7eb] bg-white"
+                >
+                  <Link href={href} className="block">
+                    <div className="relative h-[155px] sm:h-[165px] overflow-hidden">
+                      <Image
+                        src={post.image_url || heroPosts[0]?.image_url || placeholderImage}
+                        alt={post.title}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                        style={{ objectPosition: getSmartObjectPosition(post.title, 'default') }}
+                        sizes="(max-width: 640px) 100vw, 50vw"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-transparent" />
+                      <span className="absolute left-2.5 top-2.5 inline-flex items-center rounded-md bg-white/95 px-2 py-1 text-[10px] font-rajdhani font-bold uppercase tracking-[0.14em] text-[#111827]">
+                        #{rank}
+                      </span>
+                    </div>
+                    <div className="p-3">
+                      <h5 className="text-[#111827] text-[1.05rem] sm:text-[1.15rem] font-rajdhani font-bold leading-[1.05] line-clamp-2 uppercase group-hover:text-[#dc2626] transition-colors duration-300">
+                        {post.title}
+                      </h5>
+                      <p className="text-[#4b5563] text-[12px] leading-[1.35] font-exo mt-1.5 line-clamp-2">
+                        {post.excerpt || 'Conteudo de ranking em atualizacao.'}
+                      </p>
+                      <p className="mt-2 text-[#6b7280] text-[11px] font-exo inline-flex items-center gap-1">
+                        <Clock size={10} /> {post.read_time || 'Em breve'}
+                      </p>
+                    </div>
+                  </Link>
+                </article>
+              );
+            })}
+
+            <Link
+              href="/ranking"
+              className="group rounded-xl border border-dashed border-[#d1d5db] bg-[#fafafa] p-4 sm:p-5 flex flex-col justify-center min-h-[140px] sm:min-h-[165px] hover:border-[#dc2626]/40 hover:bg-white transition-colors duration-300"
+            >
+              <p className="text-[#dc2626] text-[10px] sm:text-[11px] font-rajdhani font-bold uppercase tracking-[0.2em] mb-1.5">
+                Continue navegando
+              </p>
+              <h5 className="text-[#111827] text-[1.12rem] sm:text-[1.22rem] font-rajdhani font-bold uppercase leading-[1.05]">
+                Ver o Ranking Completo
+              </h5>
+              <p className="text-[#6b7280] text-[12px] font-exo mt-2 leading-[1.35]">
+                Explore mais comparativos e listas exclusivas para descobrir os supercarros mais extremos.
+              </p>
+              <span className="mt-3 inline-flex items-center gap-1 text-[#111827] group-hover:text-[#dc2626] text-[12px] font-rajdhani font-bold uppercase tracking-[0.12em] transition-colors duration-300">
+                Abrir ranking <ArrowRight size={13} />
+              </span>
+            </Link>
+          </div>
         </div>
       </section>
     </section>

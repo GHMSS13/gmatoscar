@@ -93,6 +93,7 @@ export default function NewsGrid({ posts, theme = 'dark' }: NewsGridProps) {
         sidePosts={sidePosts}
         infoCards={infoCards}
         dreamGaragePosts={dreamGaragePosts}
+        rankingPosts={rankingPosts}
       />
 
       {morePosts.length > 0 && (
