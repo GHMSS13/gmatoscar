@@ -379,29 +379,29 @@ export default function HomeTopNewsSection({
                 <Link
                   key={item.id}
                   href={`/noticias/${item.slug}`}
-                  className="group flex gap-3 rounded-xl overflow-hidden border border-[#e5e7eb] bg-white p-3"
+                  className="group flex gap-4 rounded-xl overflow-hidden border border-[#e5e7eb] bg-white p-3.5"
                 >
-                  <div className="relative w-[124px] h-[92px] flex-shrink-0 rounded-lg overflow-hidden">
+                  <div className="relative w-[138px] h-[102px] flex-shrink-0 rounded-lg overflow-hidden">
                     <Image
                       src={item.image_url || heroPosts[0]?.image_url || placeholderImage}
                       alt={item.title}
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                      sizes="124px"
+                      sizes="138px"
                     />
                   </div>
 
                   <div className="min-w-0 flex-1 flex flex-col justify-between py-0.5">
                     <div>
-                      <p className="text-[#dc2626] text-[9px] font-bold uppercase tracking-[0.22em] font-rajdhani mb-1">
-                        {item.category}
-                      </p>
-                      <h3 className="text-[#111827] font-rajdhani font-bold text-[1.02rem] leading-[1.08] line-clamp-2">
+                      <h3 className="text-[#111827] font-rajdhani font-bold text-[1.08rem] leading-[1.06] line-clamp-3">
                         {item.title}
                       </h3>
+                      <p className="mt-1.5 text-[10px] leading-[1.35] text-[#6b7280] font-exo line-clamp-2">
+                        {item.excerpt || 'Veja mais detalhes deste artigo antes de abrir.'}
+                      </p>
                     </div>
 
-                    <div className="flex items-center gap-2 text-[10px] text-[#6b7280] font-exo mt-2">
+                    <div className="flex items-center gap-2 text-[11px] text-[#6b7280] font-exo mt-2.5">
                       <span>{item.date}</span>
                       <span className="inline-flex items-center gap-1">
                         <Clock size={10} /> {item.read_time}
@@ -443,35 +443,27 @@ export default function HomeTopNewsSection({
         </div>
 
         <article className="group rounded-xl overflow-hidden border border-[#dfe4ea] bg-white mb-3 sm:mb-4">
-          <Link
-            href={normalizedDreamGaragePosts[0]?.slug ? `/noticias/${normalizedDreamGaragePosts[0].slug}` : '/garagem-dos-sonhos'}
-            className="grid min-h-[210px] sm:min-h-[230px] lg:min-h-[250px]"
-            style={{ gridTemplateColumns: '66.6667% 33.3333%' }}
-          >
-            <div className="relative h-full overflow-hidden">
+          <Link href={normalizedDreamGaragePosts[0]?.slug ? `/noticias/${normalizedDreamGaragePosts[0].slug}` : '/garagem-dos-sonhos'} className="block h-full">
+            <div className="relative h-[190px] sm:h-[210px] lg:h-[230px] overflow-hidden bg-[#0a0a0a]">
               <Image
                 src={normalizedDreamGaragePosts[0]?.image_url || heroPosts[0]?.image_url || placeholderImage}
                 alt={normalizedDreamGaragePosts[0]?.title || 'Garagem dos Sonhos'}
                 fill
-                className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.03]"
                 style={{ objectPosition: getSmartObjectPosition(normalizedDreamGaragePosts[0]?.title || '', 'featured') }}
-                sizes="(max-width: 640px) 64vw, 66vw"
+                sizes="100vw"
               />
             </div>
-
-            <div className="relative bg-[#070707] text-white px-3.5 py-4 sm:px-5 sm:py-5 flex flex-col justify-center">
-              <h4 className="text-[1.35rem] sm:text-[1.55rem] font-rajdhani font-bold leading-[1.02] line-clamp-3 mb-1.5 normal-case">
+            <div className="p-2.5 sm:p-3">
+              <p className="text-[#dc2626] text-[9px] font-bold uppercase tracking-[0.22em] font-rajdhani mb-1">
+                Garagem dos Sonhos
+              </p>
+              <h3 className="text-[#111827] text-[1.03rem] sm:text-[1.2rem] font-rajdhani font-bold leading-[1.04] line-clamp-2 mb-1.5 uppercase">
                 {normalizedDreamGaragePosts[0]?.title || 'Noticias em atualizacao'}
-              </h4>
-              <p className="text-white/72 text-[12px] sm:text-[13px] font-exo mb-1.5 line-clamp-3">
+              </h3>
+              <p className="text-[#1f2937] text-[12px] sm:text-[12.5px] leading-[1.32] font-exo line-clamp-3">
                 {normalizedDreamGaragePosts[0]?.excerpt || 'Novas selecoes e conteudos especiais chegando em breve.'}
               </p>
-              <p className="text-white/70 text-[11px] sm:text-[12px] font-exo mb-3">
-                {normalizedDreamGaragePosts[0]?.read_time || 'Em breve'}
-              </p>
-              <span className="inline-flex w-fit items-center rounded-md border border-white/70 px-3 py-1.5 text-[11px] sm:text-[12px] font-rajdhani font-bold uppercase tracking-[0.08em]">
-                Ler mais
-              </span>
             </div>
           </Link>
         </article>
