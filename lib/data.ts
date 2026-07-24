@@ -167,7 +167,7 @@ export const brands: Brand[] = [
     country: 'Alemanha',
     description: 'Combina tradição de pista, engenharia precisa e um portfólio amplo de esportivos icônicos.',
     logo: createBrandLogo('Porsche', '#c8102e'),
-    topModelImage: 'https://images.pexels.com/photos/164634/pexels-photo-164634.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    topModelImage: '/api/images/e225662f-c64d-4154-90a1-c90d76fb6e4f?filename=porsche-logo.avif',
     founded: 1931,
     topModel: '911 GT3 RS',
     maxSpeed: '296 km/h',
