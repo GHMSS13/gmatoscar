@@ -190,7 +190,7 @@ export const brands: Brand[] = [
     country: 'Suecia',
     description: 'Especialista em hipercarros de produção limitada, recordes e soluções de engenharia ousadas.',
     logo: createBrandLogo('Koenigsegg', '#1a1a1a'),
-    topModelImage: 'https://images.pexels.com/photos/1753086/pexels-photo-1753086.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    topModelImage: '/api/images/49449266-8d85-4dec-b845-37f189f9984b?filename=Koeningsseg-logo.avif',
     founded: 1994,
     topModel: 'Gemera',
     maxSpeed: '400+ km/h',
