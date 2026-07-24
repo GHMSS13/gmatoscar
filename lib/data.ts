@@ -98,7 +98,7 @@ export const brands: Brand[] = [
     country: 'Italia',
     description: 'Marca conhecida pelo visual agressivo, V12 aspirado e uma identidade muito forte nas pistas e nas ruas.',
     logo: createBrandLogo('Lamborghini', '#d4af37'),
-    topModelImage: 'https://images.pexels.com/photos/1149831/pexels-photo-1149831.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    topModelImage: '/api/images/85dfc3ff-ac15-46e4-8fca-88b3c0425b60?filename=Lamborghini-logo.avif',
     founded: 1963,
     topModel: 'Revuelto',
     maxSpeed: '350 km/h',
