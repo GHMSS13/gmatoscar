@@ -213,7 +213,7 @@ export const brands: Brand[] = [
     country: 'Italia',
     description: 'Hipercarros artesanais com acabamento escultural e atenção obsessiva aos detalhes.',
     logo: createBrandLogo('Pagani', '#c0c0c0'),
-    topModelImage: 'https://images.pexels.com/photos/2402142/pexels-photo-2402142.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    topModelImage: '/api/images/541a8137-597b-48a2-bb80-570b8c875fd4?filename=Pagani-logo.avif',
     founded: 1992,
     topModel: 'Utopia',
     maxSpeed: '340 km/h',
