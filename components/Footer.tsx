@@ -47,15 +47,6 @@ const navLinks = [
   { label: 'Sobre', href: '/sobre' },
 ];
 
-const categories = [
-  { label: 'Ferrari', href: '/pesquisa?q=ferrari' },
-  { label: 'Lamborghini', href: '/pesquisa?q=lamborghini' },
-  { label: 'Bugatti', href: '/pesquisa?q=bugatti' },
-  { label: 'McLaren', href: '/pesquisa?q=mclaren' },
-  { label: 'Porsche', href: '/pesquisa?q=porsche' },
-  { label: 'Koenigsegg', href: '/pesquisa?q=koenigsegg' },
-];
-
 const legalLinks = [
   { label: 'Contato', href: '/contato' },
   { label: 'Política de Privacidade', href: '/politica-de-privacidade' },
@@ -104,7 +95,7 @@ export default function Footer() {
 
       {/* Main footer content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-14">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 sm:gap-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10">
           {/* Brand */}
           <div className="lg:col-span-2">
             <Link href="/" className="inline-block mb-5 text-xl sm:text-2xl font-bold uppercase tracking-[0.18em] sm:tracking-[0.32em] text-white font-rajdhani whitespace-nowrap">
@@ -114,26 +105,6 @@ export default function Footer() {
             <p className="text-white/40 text-sm leading-relaxed mb-6 max-w-sm font-exo">
               O GMATOSCAR é um portal brasileiro especializado em supercarros, hipercarros e esportivos de alto desempenho. Descubra curiosidades, notícias, rankings e histórias dos carros mais incríveis do mundo.
             </p>
-
-            {/* Social icons large */}
-            <div className="flex flex-wrap items-center gap-3">
-              {socialLinks.map((s) => {
-                const Icon = s.icon;
-                return (
-                  <a
-                    key={s.label}
-                    href={s.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={s.label}
-                    className="w-10 h-10 flex items-center justify-center rounded-sm bg-[#1a1a1a] border border-[#2a2a2a] hover:border-[#dc2626]/50 text-white/40 hover:text-white transition-all duration-300 hover:shadow-[0_0_10px_rgba(220,38,38,0.2)]"
-                    style={{ '--hover-color': s.color } as React.CSSProperties}
-                  >
-                    <Icon size={18} />
-                  </a>
-                );
-              })}
-            </div>
           </div>
 
           {/* Navigation */}
@@ -151,27 +122,6 @@ export default function Footer() {
                   >
                     <span className="w-0 h-px bg-[#dc2626] group-hover:w-3 transition-all duration-300" />
                     {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Categories */}
-          <div>
-            <h4 className="font-rajdhani font-bold uppercase tracking-[0.2em] text-white text-sm mb-5 flex items-center gap-2">
-              <span className="w-4 h-0.5 bg-[#dc2626]" />
-              Marcas
-            </h4>
-            <ul className="space-y-3">
-              {categories.map((cat) => (
-                <li key={cat.href}>
-                  <Link
-                    href={cat.href}
-                    className="text-white/40 hover:text-[#dc2626] text-sm font-exo transition-colors duration-300 flex items-center gap-2 group"
-                  >
-                    <span className="w-0 h-px bg-[#dc2626] group-hover:w-3 transition-all duration-300" />
-                    {cat.label}
                   </Link>
                 </li>
               ))}
