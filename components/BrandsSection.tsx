@@ -32,7 +32,7 @@ export default function BrandsSection() {
               Pagina Marcas
             </p>
             <h2 className="text-[1.95rem] sm:text-4xl font-serif font-semibold text-[#111] red-line leading-[1.04]">
-              Marcas em Destaque
+              História das Marcas
             </h2>
           </div>
           <Link

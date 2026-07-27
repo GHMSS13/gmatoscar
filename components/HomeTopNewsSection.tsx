@@ -165,6 +165,27 @@ export default function HomeTopNewsSection({
     });
   }
 
+  const dreamGarageCategoryHighlights = [
+    {
+      title: 'Carros de Luxo',
+      description: 'Modelos com acabamento premium, conforto extremo e foco em exclusividade.',
+      href: '/pesquisa?q=carros%20de%20luxo',
+      badge: 'Luxo',
+    },
+    {
+      title: 'Carros Esportivos',
+      description: 'Selecoes para quem busca dirigibilidade, desempenho e design agressivo.',
+      href: '/pesquisa?q=carros%20esportivos',
+      badge: 'Esportivos',
+    },
+    {
+      title: 'Modelos Mais Caros',
+      description: 'Veja os supercarros mais valiosos e desejados do mercado global.',
+      href: '/pesquisa?q=modelos%20mais%20caros',
+      badge: 'Top Preco',
+    },
+  ];
+
   const normalizedRankingPosts = [...rankingPosts.slice(0, 8)];
 
   const rankingFallbackTitles = [
@@ -567,6 +588,40 @@ export default function HomeTopNewsSection({
               Abrir <ArrowRight size={13} />
             </span>
           </Link>
+        </div>
+
+        <div className="mt-4 sm:mt-5 rounded-xl border border-[#e5e7eb] bg-[#fafafa] p-3 sm:p-4">
+          <div className="flex items-center justify-between gap-3 mb-3 sm:mb-4">
+            <h4 className="text-[#111827] text-[1.05rem] sm:text-[1.2rem] font-rajdhani font-bold uppercase tracking-[0.1em]">
+              Explore por Categoria
+            </h4>
+            <span className="text-[10px] sm:text-[11px] text-[#6b7280] font-exo uppercase tracking-[0.16em]">
+              Mais conteudo para voce
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3">
+            {dreamGarageCategoryHighlights.map((item) => (
+              <Link
+                key={item.title}
+                href={item.href}
+                className="group rounded-xl border border-[#e5e7eb] bg-white p-3 sm:p-3.5 hover:border-[#dc2626]/35 transition-colors duration-300"
+              >
+                <span className="inline-flex rounded-md bg-[#dc2626]/10 px-2 py-0.5 text-[10px] font-rajdhani font-bold uppercase tracking-[0.14em] text-[#dc2626] mb-2">
+                  {item.badge}
+                </span>
+                <h5 className="text-[#111827] text-[1.02rem] sm:text-[1.08rem] font-rajdhani font-bold uppercase leading-[1.06] group-hover:text-[#dc2626] transition-colors duration-300">
+                  {item.title}
+                </h5>
+                <p className="mt-1.5 text-[#4b5563] text-[12px] leading-[1.35] font-exo line-clamp-3">
+                  {item.description}
+                </p>
+                <span className="mt-2 inline-flex items-center gap-1 text-[11px] font-rajdhani font-bold uppercase tracking-[0.12em] text-[#6b7280] group-hover:text-[#dc2626] transition-colors duration-300">
+                  Explorar <ArrowRight size={12} />
+                </span>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
