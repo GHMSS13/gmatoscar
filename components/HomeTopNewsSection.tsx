@@ -138,13 +138,52 @@ export default function HomeTopNewsSection({
     });
   }
 
-  const normalizedDreamGaragePosts = [...dreamGaragePosts.slice(0, 7)];
+  const normalizedDreamGaragePosts = [...dreamGaragePosts.slice(0, 10)];
 
   const additionalRecentPosts = heroPosts
     .slice(2, 6)
     .filter((post) => !normalizedSidePosts.some((sidePost) => sidePost.id === post.id));
 
-  while (normalizedDreamGaragePosts.length < 7) {
+  const desktopNewsRowCandidates = [
+    ...normalizedSidePosts.slice(2, 5),
+    ...additionalRecentPosts,
+    ...heroPosts.slice(2, 7),
+  ];
+
+  const desktopNewsRowPosts: Post[] = [];
+
+  for (const post of desktopNewsRowCandidates) {
+    if (!desktopNewsRowPosts.some((rowPost) => rowPost.id === post.id)) {
+      desktopNewsRowPosts.push(post);
+    }
+
+    if (desktopNewsRowPosts.length === 4) {
+      break;
+    }
+  }
+
+  while (desktopNewsRowPosts.length < 4) {
+    desktopNewsRowPosts.push({
+      id: `fallback-desktop-news-${desktopNewsRowPosts.length}`,
+      title: 'Noticias em atualizacao',
+      slug: '',
+      excerpt: 'Novas selecoes e conteudos especiais chegando em breve.',
+      content: '',
+      category: 'Noticias',
+      date: '',
+      read_time: 'Em breve',
+      image_url:
+        heroPosts[desktopNewsRowPosts.length + 1]?.image_url ||
+        heroPosts[0]?.image_url ||
+        placeholderImage,
+      featured: false,
+      hot: false,
+      published: true,
+      external_url: null,
+    });
+  }
+
+  while (normalizedDreamGaragePosts.length < 10) {
     normalizedDreamGaragePosts.push({
       id: `fallback-garage-${normalizedDreamGaragePosts.length}`,
       title: 'Garagem dos Sonhos em atualizacao',
@@ -273,16 +312,16 @@ export default function HomeTopNewsSection({
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4 lg:gap-4 mb-5 sm:mb-6 lg:mb-8 lg:h-[360px]">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4 lg:gap-4 mb-5 sm:mb-6 lg:mb-8 lg:h-[390px]">
         <div className="-mx-4 sm:mx-0 lg:col-span-6 lg:h-full">
           <div className="relative pb-5 sm:pb-6 lg:pb-0">
             <Carousel setApi={setApi} opts={{ loop: true }} className="w-full">
-              <CarouselContent className="ml-0 lg:h-[360px]">
+              <CarouselContent className="ml-0 lg:h-[390px]">
               {heroPosts.map((item) => (
                 <CarouselItem key={item.id} className="pl-0 lg:h-full">
                   <article className="group rounded-none sm:rounded-sm overflow-hidden border-0 sm:border sm:border-[#e5e7eb] bg-white lg:h-full">
                     <Link href={`/noticias/${item.slug}`} className="block">
-                      <div className="relative min-h-[330px] sm:min-h-[320px] lg:min-h-0 lg:h-[360px] overflow-hidden">
+                      <div className="relative min-h-[330px] sm:min-h-[320px] lg:min-h-0 lg:h-[390px] overflow-hidden">
                         <Image
                           src={item.image_url}
                           alt={item.title}
@@ -397,7 +436,7 @@ export default function HomeTopNewsSection({
             </h3>
           </div>
 
-          <div className="flex overflow-x-auto gap-3 pb-1 snap-x snap-mandatory sm:grid sm:grid-cols-2 sm:overflow-visible sm:gap-4 lg:grid-cols-1 lg:grid-rows-2 lg:gap-3 lg:h-full">
+          <div className="flex overflow-x-auto gap-3 pb-1 snap-x snap-mandatory sm:grid sm:grid-cols-2 sm:overflow-visible sm:gap-4 lg:hidden">
           {normalizedSidePosts.slice(0, 5).map((item, idx) => {
             const href = item.slug ? `/noticias/${item.slug}` : '/noticias';
 
@@ -444,6 +483,40 @@ export default function HomeTopNewsSection({
               Noticias <ArrowRight size={13} />
             </span>
           </Link>
+          </div>
+
+          <div className="hidden lg:grid lg:grid-cols-1 lg:grid-rows-2 lg:gap-4 lg:h-full">
+            {normalizedSidePosts.slice(0, 2).map((item, idx) => {
+              const href = item.slug ? `/noticias/${item.slug}` : '/noticias';
+
+              return (
+                <article
+                  key={`${item.id}-${idx}-desktop`}
+                  className="group rounded-xl overflow-hidden border border-[#e5e7eb] bg-white h-full"
+                >
+                  <Link href={href} className="block h-full">
+                    <div className="relative h-full overflow-hidden">
+                      <Image
+                        src={item.image_url || heroPosts[0]?.image_url || placeholderImage}
+                        alt={item.title}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                        sizes="25vw"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                      <div className="absolute bottom-0 left-0 right-0 p-3.5">
+                        <h3 className="text-white font-rajdhani font-bold text-[1.08rem] leading-[1.08] line-clamp-2">
+                          {item.title}
+                        </h3>
+                        <p className="text-white/70 text-[11px] mt-1.5 font-exo inline-flex items-center gap-1">
+                          <Clock size={10} /> {item.read_time}
+                        </p>
+                      </div>
+                    </div>
+                  </Link>
+                </article>
+              );
+            })}
           </div>
 
           {additionalRecentPosts.length > 0 && (
@@ -497,6 +570,60 @@ export default function HomeTopNewsSection({
         </div>
       </div>
 
+      <section className="hidden lg:block mb-8 rounded-xl border border-[#e5e7eb] bg-white px-5 py-5">
+        <div className="flex items-end justify-between gap-3 mb-5">
+          <h3 className="text-[#111827] text-[1.85rem] font-rajdhani font-bold uppercase tracking-[0.05em]">
+            Notícias Recentes
+          </h3>
+          <Link
+            href="/noticias"
+            className="group inline-flex items-center gap-2 rounded-lg bg-[#dc2626] px-4 py-2 text-[12px] text-white hover:bg-[#b91c1c] font-rajdhani font-bold uppercase tracking-[0.14em] transition-colors duration-300 shadow-[0_8px_20px_rgba(220,38,38,0.25)]"
+          >
+            Ver Mais <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 xl:gap-5">
+          {desktopNewsRowPosts.map((post, idx) => {
+            const href = post.slug ? `/noticias/${post.slug}` : '/noticias';
+
+            return (
+              <Link
+                key={`${post.id}-desktop-row-${idx}`}
+                href={href}
+                className="group flex rounded-lg overflow-hidden border border-[#e5e7eb] bg-white hover:border-[#dc2626]/45 transition-colors duration-300"
+              >
+                <div className="relative w-[42%] min-h-[170px] overflow-hidden bg-[#0a0a0a]">
+                  <Image
+                    src={post.image_url || heroPosts[0]?.image_url || placeholderImage}
+                    alt={post.title}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                    style={{ objectPosition: getSmartObjectPosition(post.title, 'highlight') }}
+                    sizes="(max-width: 1280px) 40vw, 22vw"
+                  />
+                </div>
+
+                <div className="w-[58%] p-4 flex flex-col justify-center border-l border-[#e5e7eb]">
+                  <p className="text-[#dc2626] text-[11px] font-rajdhani font-bold uppercase tracking-[0.12em] mb-2">
+                    Noticias
+                  </p>
+                  <p className="text-[#111827] text-[1.28rem] font-rajdhani font-bold leading-[1.05] line-clamp-3 group-hover:text-[#dc2626] transition-colors duration-300">
+                    {post.title}
+                  </p>
+                  <p className="text-[#4b5563] text-[13px] font-exo leading-[1.35] mt-2 line-clamp-2">
+                    {post.excerpt || 'Novos conteudos e atualizacoes chegando em breve.'}
+                  </p>
+                  <p className="mt-2.5 inline-flex items-center gap-1 text-[11px] text-[#6b7280] font-exo">
+                    <Clock size={10} /> {post.read_time || 'Em breve'}
+                  </p>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
       <section className="mt-8 sm:mt-9 lg:mt-11">
         <div className="flex items-end justify-between gap-3 mb-3 sm:mb-4">
           <div>
@@ -509,41 +636,70 @@ export default function HomeTopNewsSection({
           </div>
           <Link
             href="/garagem-dos-sonhos"
-            className="inline-flex items-center gap-2 text-[12px] sm:text-[13px] text-[#8b95a5] hover:text-[#dc2626] font-rajdhani uppercase tracking-[0.2em] transition-colors duration-300"
+            className="group inline-flex items-center gap-2 rounded-lg bg-[#dc2626] px-4 py-2 text-[12px] sm:text-[13px] text-white hover:bg-[#b91c1c] font-rajdhani font-bold uppercase tracking-[0.14em] transition-colors duration-300 shadow-[0_8px_20px_rgba(220,38,38,0.25)]"
           >
-            Ver mais <ArrowRight size={14} />
+            Ver mais <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5" />
           </Link>
         </div>
 
-        <article className="group rounded-xl overflow-hidden border border-[#e5e7eb] bg-white mb-3 sm:mb-4">
-          <Link href={normalizedDreamGaragePosts[0]?.slug ? `/noticias/${normalizedDreamGaragePosts[0].slug}` : '/garagem-dos-sonhos'} className="block h-full">
-            <div className="relative h-[170px] sm:h-[185px] lg:h-[205px] overflow-hidden bg-[#0a0a0a]">
-              <Image
-                src={normalizedDreamGaragePosts[0]?.image_url || heroPosts[0]?.image_url || placeholderImage}
-                alt={normalizedDreamGaragePosts[0]?.title || 'Garagem dos Sonhos'}
-                fill
-                className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                style={{ objectPosition: getSmartObjectPosition(normalizedDreamGaragePosts[0]?.title || '', 'featured') }}
-                sizes="(max-width: 640px) 50vw, 25vw"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 p-3 sm:p-3.5">
-                <p className="inline-flex bg-[#dc2626] text-white text-[9px] font-rajdhani font-bold uppercase tracking-[0.16em] px-2 py-0.5 rounded-sm mb-1.5">
-                  Garagem dos Sonhos
-                </p>
-                <h3 className="text-white text-[1.18rem] sm:text-[1.32rem] font-rajdhani font-bold leading-[1.03] line-clamp-2 uppercase mb-1">
-                  {normalizedDreamGaragePosts[0]?.title || 'Garagem dos Sonhos em atualizacao'}
-                </h3>
-                <p className="text-white/75 text-[11px] sm:text-[12px] leading-[1.3] font-exo line-clamp-2">
-                  {normalizedDreamGaragePosts[0]?.excerpt || 'Novas selecoes e conteudos especiais chegando em breve.'}
-                </p>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4 mb-3 sm:mb-4">
+          <article className="group rounded-xl overflow-hidden border border-[#e5e7eb] bg-white lg:col-span-6">
+            <Link href={normalizedDreamGaragePosts[0]?.slug ? `/noticias/${normalizedDreamGaragePosts[0].slug}` : '/garagem-dos-sonhos'} className="block h-full">
+              <div className="relative h-[170px] sm:h-[185px] lg:h-[205px] overflow-hidden bg-[#0a0a0a]">
+                <Image
+                  src={normalizedDreamGaragePosts[0]?.image_url || heroPosts[0]?.image_url || placeholderImage}
+                  alt={normalizedDreamGaragePosts[0]?.title || 'Garagem dos Sonhos'}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                  style={{ objectPosition: getSmartObjectPosition(normalizedDreamGaragePosts[0]?.title || '', 'featured') }}
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 p-3 sm:p-3.5">
+                  <p className="inline-flex bg-[#dc2626] text-white text-[9px] font-rajdhani font-bold uppercase tracking-[0.16em] px-2 py-0.5 rounded-sm mb-1.5">
+                    Garagem dos Sonhos
+                  </p>
+                  <h3 className="text-white text-[1.18rem] sm:text-[1.32rem] font-rajdhani font-bold leading-[1.03] line-clamp-2 uppercase mb-1">
+                    {normalizedDreamGaragePosts[0]?.title || 'Garagem dos Sonhos em atualizacao'}
+                  </h3>
+                  <p className="text-white/75 text-[11px] sm:text-[12px] leading-[1.3] font-exo line-clamp-2">
+                    {normalizedDreamGaragePosts[0]?.excerpt || 'Novas selecoes e conteudos especiais chegando em breve.'}
+                  </p>
+                </div>
               </div>
-            </div>
-          </Link>
-        </article>
+            </Link>
+          </article>
+
+          <article className="group rounded-xl overflow-hidden border border-[#e5e7eb] bg-white lg:col-span-6">
+            <Link href={normalizedDreamGaragePosts[1]?.slug ? `/noticias/${normalizedDreamGaragePosts[1].slug}` : '/garagem-dos-sonhos'} className="block h-full">
+              <div className="relative h-[170px] sm:h-[185px] lg:h-[205px] overflow-hidden bg-[#0a0a0a]">
+                <Image
+                  src={normalizedDreamGaragePosts[1]?.image_url || heroPosts[1]?.image_url || heroPosts[0]?.image_url || placeholderImage}
+                  alt={normalizedDreamGaragePosts[1]?.title || 'Destaque da Garagem'}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                  style={{ objectPosition: getSmartObjectPosition(normalizedDreamGaragePosts[1]?.title || '', 'highlight') }}
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 p-3 sm:p-3.5">
+                  <p className="inline-flex bg-[#dc2626] text-white text-[9px] font-rajdhani font-bold uppercase tracking-[0.16em] px-2 py-0.5 rounded-sm mb-1.5">
+                    Garagem dos Sonhos
+                  </p>
+                  <h3 className="text-white text-[1.12rem] sm:text-[1.2rem] font-rajdhani font-bold leading-[1.04] line-clamp-2 uppercase mb-1">
+                    {normalizedDreamGaragePosts[1]?.title || 'Garagem dos Sonhos em atualizacao'}
+                  </h3>
+                  <p className="text-white/75 text-[11px] leading-[1.3] font-exo line-clamp-2">
+                    {normalizedDreamGaragePosts[1]?.excerpt || 'Mais uma selecao exclusiva para inspirar sua garagem ideal.'}
+                  </p>
+                </div>
+              </div>
+            </Link>
+          </article>
+        </div>
 
         <div className="flex gap-2.5 overflow-x-auto pb-1 snap-x snap-mandatory sm:grid sm:grid-cols-4 sm:overflow-visible sm:gap-3">
-          {normalizedDreamGaragePosts.slice(1, 7).map((post, idx) => {
+          {normalizedDreamGaragePosts.slice(2, 10).map((post, idx) => {
             const href = post.slug ? `/noticias/${post.slug}` : '/garagem-dos-sonhos';
 
             return (
@@ -574,20 +730,6 @@ export default function HomeTopNewsSection({
             );
           })}
 
-          <Link
-            href="/garagem-dos-sonhos"
-            className="group rounded-xl border border-dashed border-[#d1d5db] bg-[#fafafa] shrink-0 snap-start w-[44%] sm:w-auto p-3 sm:p-3.5 flex flex-col justify-center min-h-[138px] sm:min-h-[148px] lg:min-h-[160px] hover:border-[#dc2626]/35 hover:bg-white transition-colors duration-300"
-          >
-            <p className="text-[#dc2626] text-[10px] font-rajdhani font-bold uppercase tracking-[0.18em] mb-1.5">
-              Continue
-            </p>
-            <p className="text-[#111827] text-[1.02rem] sm:text-[1.15rem] font-rajdhani font-bold uppercase leading-[1.06]">
-              Ver mais
-            </p>
-            <span className="mt-2 inline-flex items-center gap-1 text-[#6b7280] group-hover:text-[#dc2626] text-[12px] font-rajdhani font-bold uppercase tracking-[0.12em] transition-colors duration-300">
-              Abrir <ArrowRight size={13} />
-            </span>
-          </Link>
         </div>
 
         <div className="mt-4 sm:mt-5 rounded-xl border border-[#e5e7eb] bg-[#fafafa] p-3 sm:p-4">
