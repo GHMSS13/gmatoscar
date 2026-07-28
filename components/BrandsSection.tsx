@@ -34,6 +34,9 @@ export default function BrandsSection() {
             <h2 className="text-[1.95rem] sm:text-4xl font-serif font-semibold text-[#111] red-line leading-[1.04]">
               História das Marcas
             </h2>
+            <p className="mt-1.5 text-[#6b7280] text-[11px] sm:text-[12px] font-exo leading-[1.35] max-w-[620px]">
+              Conheca a historia das marcas lendarias, com origem, evolucao, tecnologia e os modelos que marcaram epoca.
+            </p>
           </div>
           <Link
             href="/marcas"
