@@ -530,15 +530,15 @@ export default function HomeTopNewsSection({
                 <Link
                   key={`${item.id}-mobile-recent-list`}
                   href={item.slug ? `/noticias/${item.slug}` : '/noticias'}
-                  className="group flex gap-4 rounded-xl overflow-hidden border border-[#e5e7eb] bg-white p-3.5"
+                  className="group flex gap-4 rounded-xl overflow-hidden border border-[#e5e7eb] bg-white p-3.5 min-h-[118px]"
                 >
-                  <div className="relative w-[132px] h-[96px] flex-shrink-0 rounded-lg overflow-hidden">
+                  <div className="relative w-[146px] h-[106px] flex-shrink-0 rounded-lg overflow-hidden">
                     <Image
                       src={item.image_url || heroPosts[0]?.image_url || placeholderImage}
                       alt={item.title}
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                      sizes="132px"
+                      sizes="146px"
                     />
                   </div>
 
@@ -668,7 +668,7 @@ export default function HomeTopNewsSection({
             <p className="text-[#bc2a1f] text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.26em] font-rajdhani mb-1">
               Categoria
             </p>
-            <h3 className="text-[#111827] text-[1.45rem] sm:text-[2.2rem] font-rajdhani font-bold leading-[1.02] whitespace-nowrap">
+            <h3 className="text-[#111827] text-[1.7rem] font-serif font-semibold leading-none">
               Garagem dos Sonhos
             </h3>
             <p className="mt-1 text-[#6b7280] text-[11px] sm:text-[12px] font-exo leading-[1.35] max-w-[700px]">
@@ -860,7 +860,7 @@ export default function HomeTopNewsSection({
             <p className="text-[#dc2626] text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.26em] font-rajdhani mb-1">
               Especial
             </p>
-            <h3 className="text-[#111827] text-[1.45rem] sm:text-[2.2rem] font-rajdhani font-bold leading-[1.02] whitespace-nowrap">
+            <h3 className="text-[#111827] text-[1.7rem] sm:text-[1.85rem] font-rajdhani font-bold uppercase tracking-[0.05em] leading-none">
               Ranking
             </h3>
             <p className="mt-1 text-[#6b7280] text-[11px] sm:text-[12px] font-exo leading-[1.35] max-w-[700px]">
