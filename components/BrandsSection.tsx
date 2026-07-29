@@ -24,18 +24,18 @@ export default function BrandsSection() {
   const items = brands.filter((brand) => featuredBrands.includes(brand.id));
 
   return (
-    <section className="pt-2 pb-12 sm:py-16 bg-[#f9fafb] border-y border-[#e5e7eb]">
+    <section className="pt-2 pb-6 sm:py-16 bg-[#f9fafb] border-y border-[#e5e7eb]">
       <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-2.5 mb-6 sm:mb-9">
           <div>
             <p className="text-[#dc2626] text-[11px] font-bold uppercase tracking-[0.28em] font-rajdhani mb-1.5">
-              Pagina Marcas
+              Página Marcas
             </p>
             <h2 className="text-[1.95rem] sm:text-4xl font-serif font-semibold text-[#111] red-line leading-[1.04]">
               História das Marcas
             </h2>
             <p className="mt-1.5 text-[#6b7280] text-[11px] sm:text-[12px] font-exo leading-[1.35] max-w-[620px]">
-              Conheca a historia das marcas lendarias, com origem, evolucao, tecnologia e os modelos que marcaram epoca.
+              Conheça a história das marcas lendárias, com origem, evolução, tecnologia e os modelos que marcaram época.
             </p>
           </div>
           <Link
@@ -92,6 +92,15 @@ export default function BrandsSection() {
           <CarouselPrevious className="-left-3 sm:-left-4 bg-white border-[#e5e7eb] hover:bg-white" />
           <CarouselNext className="-right-3 sm:-right-4 bg-white border-[#e5e7eb] hover:bg-white" />
         </Carousel>
+
+        <div className="sm:hidden mt-4">
+          <Link
+            href="/marcas"
+            className="flex w-full items-center justify-center rounded-xl border border-[#e5e7eb] bg-white px-4 py-3 text-[11px] font-rajdhani font-bold uppercase tracking-[0.18em] text-[#4b5563] hover:text-[#dc2626] hover:border-[#dc2626]/35 transition-colors duration-300"
+          >
+            Ver Todas as Marcas <ArrowRight size={13} className="ml-1" />
+          </Link>
+        </div>
       </div>
     </section>
   );

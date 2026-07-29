@@ -71,7 +71,7 @@ export default function HeroBanner() {
             href="/pesquisa"
             className="inline-flex w-full sm:w-auto items-center justify-center gap-2 border border-white/20 hover:border-[#dc2626]/60 text-white/80 hover:text-white font-rajdhani font-bold uppercase tracking-widest px-6 py-3.5 rounded-sm transition-all duration-300 text-sm hover:bg-[#dc2626]/10"
           >
-            Ver Noticias
+            Ver Notícias
           </Link>
         </div>
       </div>

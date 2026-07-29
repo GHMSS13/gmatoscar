@@ -77,21 +77,21 @@ export default function HomeTopNewsSection({
 
   const fallbackInfoCards: InfoCard[] = [
     {
-      title: 'Conteudo Diario',
+      title: 'Conteúdo Diário',
       value: 'Atualizado todos os dias',
-      description: 'Novidades de supercarros, marcas e tendencias automotivas.',
+      description: 'Novidades de supercarros, marcas e tendências automotivas.',
       href: '/noticias',
     },
     {
       title: 'Mercado',
       value: 'Cenarios e comparativos',
-      description: 'Acompanhe variacoes de preco, desempenho e exclusividade.',
+      description: 'Acompanhe variações de preço, desempenho e exclusividade.',
       href: '/ranking',
     },
     {
       title: 'Garagem',
-      value: 'Selecoes inspiradoras',
-      description: 'Modelos iconicos e sugestoes para montar sua garagem dos sonhos.',
+      value: 'Seleções inspiradoras',
+      description: 'Modelos icônicos e sugestões para montar sua garagem dos sonhos.',
       href: '/garagem-dos-sonhos',
     },
   ];
@@ -106,12 +106,12 @@ export default function HomeTopNewsSection({
 
   const sideFallbackCards = [
     {
-      title: 'Noticias em atualizacao',
+      title: 'Notícias em atualização',
       read_time: 'Em breve',
       image_url: heroPosts[0]?.image_url || placeholderImage,
     },
     {
-      title: 'Novas noticias chegando',
+      title: 'Novas notícias chegando',
       read_time: 'Em breve',
       image_url: heroPosts[1]?.image_url || heroPosts[0]?.image_url || placeholderImage,
     },
@@ -166,9 +166,9 @@ export default function HomeTopNewsSection({
   while (desktopNewsRowPosts.length < 4) {
     desktopNewsRowPosts.push({
       id: `fallback-desktop-news-${desktopNewsRowPosts.length}`,
-      title: 'Noticias em atualizacao',
+      title: 'Notícias em atualização',
       slug: '',
-      excerpt: 'Novas selecoes e conteudos especiais chegando em breve.',
+      excerpt: 'Novas seleções e conteúdos especiais chegando em breve.',
       content: '',
       category: 'Noticias',
       date: '',
@@ -187,9 +187,9 @@ export default function HomeTopNewsSection({
   while (normalizedDreamGaragePosts.length < 10) {
     normalizedDreamGaragePosts.push({
       id: `fallback-garage-${normalizedDreamGaragePosts.length}`,
-      title: 'Garagem dos Sonhos em atualizacao',
+      title: 'Garagem dos Sonhos em atualização',
       slug: '',
-      excerpt: 'Novas selecoes e conteudos especiais chegando em breve.',
+      excerpt: 'Novas seleções e conteúdos especiais chegando em breve.',
       content: '',
       category: 'Garagem dos Sonhos',
       date: '',
@@ -214,7 +214,7 @@ export default function HomeTopNewsSection({
     },
     {
       title: 'Carros Esportivos',
-      description: 'Selecoes para quem busca dirigibilidade, desempenho e design agressivo.',
+      description: 'Seleções para quem busca dirigibilidade, desempenho e design agressivo.',
       href: '/pesquisa?q=carros%20esportivos',
       badge: 'Esportivos',
     },
@@ -222,7 +222,7 @@ export default function HomeTopNewsSection({
       title: 'Modelos Mais Caros',
       description: 'Veja os supercarros mais valiosos e desejados do mercado global.',
       href: '/pesquisa?q=modelos%20mais%20caros',
-      badge: 'Top Preco',
+      badge: 'Top Preço',
     },
   ];
 
@@ -239,23 +239,23 @@ export default function HomeTopNewsSection({
   const normalizedRankingPosts = [...rankingPosts.slice(0, 8)];
 
   const rankingFallbackTitles = [
-    'Os 20 carros mais rapidos do mundo',
+    'Os 20 carros mais rápidos do mundo',
     'Os 10 modelos mais caros do planeta',
     'Os 10 carros mais odiados da Ferrari',
     'As 12 lendas japonesas mais desejadas',
     'Top 15 V8 com o ronco mais marcante',
     'Os 8 hipercarros com melhor relacao peso-potencia',
     '10 supercarros subestimados que valem cada centavo',
-    'Top 12 classicos que ainda impressionam em 2026',
+    'Top 12 clássicos que ainda impressionam em 2026',
   ];
 
   while (normalizedRankingPosts.length < 8) {
     const fallbackIdx = normalizedRankingPosts.length;
     normalizedRankingPosts.push({
       id: `fallback-ranking-${fallbackIdx}`,
-      title: rankingFallbackTitles[fallbackIdx] || 'Ranking em atualizacao',
+      title: rankingFallbackTitles[fallbackIdx] || 'Ranking em atualização',
       slug: '',
-      excerpt: 'Estamos preparando novas listas e comparativos para esta secao.',
+      excerpt: 'Estamos preparando novas listas e comparativos para esta seção.',
       content: '',
       category: 'Rankings',
       date: '',
@@ -353,7 +353,7 @@ export default function HomeTopNewsSection({
       <div className="hidden sm:flex sm:flex-row items-start sm:items-end justify-between gap-2 sm:gap-4 mb-4 sm:mb-5 lg:mb-3">
         <div>
           <p className="text-[#dc2626] text-[11px] font-bold uppercase tracking-[0.28em] font-rajdhani mb-1.5">
-            Ultimas Noticias
+            Últimas Notícias
           </p>
           <h2 className="text-[1.95rem] sm:text-4xl lg:text-[2.25rem] font-serif font-semibold text-[#111] red-line leading-[1.04]">
             Em Destaque
@@ -387,7 +387,7 @@ export default function HomeTopNewsSection({
                         <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a]/80 via-[#0f172a]/20 to-transparent" />
                         <div className="absolute bottom-0 left-0 right-0 p-3.5 sm:p-4 lg:p-4">
                           <p className="inline-flex bg-[#dc2626] text-white text-[10px] font-rajdhani font-bold uppercase tracking-[0.2em] px-2.5 py-1 rounded-sm mb-2.5 sm:mb-3">
-                            Lancamentos
+                            Lançamentos
                           </p>
                           <h3 className="text-[1.6rem] sm:text-[1.85rem] lg:text-[1.95rem] leading-[1.03] text-white font-serif font-semibold mb-1.5 sm:mb-2 line-clamp-2">
                             {item.title}
@@ -458,7 +458,7 @@ export default function HomeTopNewsSection({
                 <div className="relative h-[190px] sm:h-[170px] lg:h-full overflow-hidden">
                   <Image
                     src={heroPosts[0]?.image_url || placeholderImage}
-                    alt="Noticias em breve"
+                    alt="Notícias em breve"
                     fill
                     className="object-cover"
                     sizes="25vw"
@@ -466,7 +466,7 @@ export default function HomeTopNewsSection({
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-3">
                     <h3 className="text-white font-rajdhani font-bold text-[1.05rem] leading-[1.08] line-clamp-3 mb-1.5">
-                      Novas noticias em breve
+                      Novas notícias em breve
                     </h3>
                     <p className="text-white/75 text-[10px] font-exo inline-flex items-center gap-1">
                       <Clock size={10} /> Em breve
@@ -504,10 +504,10 @@ export default function HomeTopNewsSection({
 
                 <div className="p-3.5">
                   <h3 className="text-[#111827] font-rajdhani font-bold text-[1.25rem] leading-[1.06] line-clamp-2">
-                    {mobileRecentPost?.title || 'Noticias em atualizacao'}
+                    {mobileRecentPost?.title || 'Notícias em atualização'}
                   </h3>
                   <p className="mt-1.5 text-[12px] leading-[1.35] text-[#6b7280] font-exo line-clamp-2">
-                    {mobileRecentPost?.excerpt || 'Novos conteudos e atualizacoes chegando em breve.'}
+                    {mobileRecentPost?.excerpt || 'Novos conteúdos e atualizações chegando em breve.'}
                   </p>
                   <p className="mt-2 text-[11px] text-[#6b7280] font-exo inline-flex items-center gap-1">
                     <Clock size={10} /> {mobileRecentPost?.read_time || 'Em breve'}
@@ -538,7 +538,7 @@ export default function HomeTopNewsSection({
                       {item.title}
                     </h3>
                     <p className="mt-1.5 text-[10.5px] leading-[1.35] text-[#6b7280] font-exo line-clamp-2">
-                      {item.excerpt || 'Veja mais detalhes desta noticia.'}
+                      {item.excerpt || 'Veja mais detalhes desta notícia.'}
                     </p>
                     <p className="mt-2 text-[10.5px] text-[#6b7280] font-exo inline-flex items-center gap-1">
                       <Clock size={10} /> {item.read_time}
@@ -588,7 +588,7 @@ export default function HomeTopNewsSection({
               href="/noticias"
               className="flex w-full items-center justify-center rounded-xl border border-[#e5e7eb] bg-white px-4 py-3 text-[11px] font-rajdhani font-bold uppercase tracking-[0.18em] text-[#4b5563] hover:text-[#dc2626] hover:border-[#dc2626]/35 transition-colors duration-300"
             >
-              Ver mais noticias <ArrowRight size={13} />
+              Ver mais notícias <ArrowRight size={13} />
             </Link>
           </div>
         </div>
@@ -638,7 +638,7 @@ export default function HomeTopNewsSection({
                     {post.title}
                   </p>
                   <p className="text-[#4b5563] text-[13px] font-exo leading-[1.35] mt-2 line-clamp-2">
-                    {post.excerpt || 'Novos conteudos e atualizacoes chegando em breve.'}
+                    {post.excerpt || 'Novos conteúdos e atualizações chegando em breve.'}
                   </p>
                   <p className="mt-2.5 inline-flex items-center gap-1 text-[11px] text-[#6b7280] font-exo">
                     <Clock size={10} /> {post.read_time || 'Em breve'}
@@ -660,7 +660,7 @@ export default function HomeTopNewsSection({
               Garagem dos Sonhos
             </h3>
             <p className="mt-1 text-[#6b7280] text-[11px] sm:text-[12px] font-exo leading-[1.35] max-w-[700px]">
-              Conheça os carros mais incriveis do mundo, com detalhes de preco, motor, historia e exclusividade.
+              Conheça os carros mais incríveis do mundo, com detalhes de preço, motor, história e exclusividade.
             </p>
           </div>
         </div>
@@ -681,7 +681,7 @@ export default function HomeTopNewsSection({
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
                   <div className="absolute inset-x-0 bottom-0 p-2.5 sm:p-3">
                     <h4 className="text-white text-[1.05rem] sm:text-[1.15rem] font-rajdhani font-bold leading-[1.04] line-clamp-2 uppercase">
-                      {item.post?.title || 'Garagem dos Sonhos em atualizacao'}
+                      {item.post?.title || 'Garagem dos Sonhos em atualização'}
                     </h4>
                   </div>
                 </div>
@@ -712,7 +712,7 @@ export default function HomeTopNewsSection({
                       <path d="M2 30 L22 24 L37 27 L52 17 L69 20 L82 9 L98 11" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                     <p className="absolute left-2 bottom-1.5 text-white text-[10px] font-rajdhani font-bold uppercase tracking-[0.08em]">
-                      Dados Tecnicos
+                      Dados Técnicos
                     </p>
                   </div>
                 </Link>
@@ -768,7 +768,7 @@ export default function HomeTopNewsSection({
         </div>
 
         <div className="flex gap-2.5 overflow-x-auto pb-1 snap-x snap-mandatory sm:grid sm:grid-cols-4 sm:overflow-visible sm:gap-3">
-          {normalizedDreamGaragePosts.slice(1, 9).map((post, idx) => {
+          {normalizedDreamGaragePosts.slice(1, 7).map((post, idx) => {
             const href = post.slug ? `/noticias/${post.slug}` : '/garagem-dos-sonhos';
 
             return (
@@ -792,12 +792,27 @@ export default function HomeTopNewsSection({
                     {post.title}
                   </p>
                   <p className="text-[#1f2937] text-[12px] sm:text-[12.5px] leading-[1.32] font-exo line-clamp-3">
-                    {post.excerpt || 'Conteudo especial em breve.'}
+                    {post.excerpt || 'Conteúdo especial em breve.'}
                   </p>
                 </div>
               </Link>
             );
           })}
+
+          <Link
+            href="/garagem-dos-sonhos"
+            className="group rounded-xl border border-dashed border-[#d1d5db] bg-[#fafafa] shrink-0 snap-start w-[44%] sm:w-auto p-3 sm:p-3.5 flex flex-col justify-center min-h-[138px] sm:min-h-[148px] lg:min-h-[160px] hover:border-[#dc2626]/35 hover:bg-white transition-colors duration-300"
+          >
+            <p className="text-[#dc2626] text-[10px] font-rajdhani font-bold uppercase tracking-[0.18em] mb-1.5">
+              Continue
+            </p>
+            <p className="text-[#111827] text-[1.02rem] sm:text-[1.15rem] font-rajdhani font-bold uppercase leading-[1.06]">
+              Ver mais
+            </p>
+            <span className="mt-2 inline-flex items-center gap-1 text-[#6b7280] group-hover:text-[#dc2626] text-[12px] font-rajdhani font-bold uppercase tracking-[0.12em] transition-colors duration-300">
+              Abrir <ArrowRight size={13} />
+            </span>
+          </Link>
 
         </div>
 
@@ -807,7 +822,7 @@ export default function HomeTopNewsSection({
               Explore por Categoria
             </h4>
             <span className="text-[10px] sm:text-[11px] text-[#6b7280] font-exo uppercase tracking-[0.16em]">
-              Mais conteudo para voce
+              Mais conteúdo para você
             </span>
           </div>
 
@@ -855,7 +870,7 @@ export default function HomeTopNewsSection({
               Ranking
             </h3>
             <p className="mt-1 text-[#6b7280] text-[11px] sm:text-[12px] font-exo leading-[1.35] max-w-[700px]">
-              Rankings atualizados com comparativos de desempenho, velocidade, preco e exclusividade dos modelos mais extremos.
+              Rankings atualizados com comparativos de desempenho, velocidade, preço e exclusividade dos modelos mais extremos.
             </p>
           </div>
         </div>
@@ -878,7 +893,7 @@ export default function HomeTopNewsSection({
                 </span>
                 <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4">
                   <h3 className="text-white text-[1.22rem] sm:text-[1.48rem] font-rajdhani font-bold leading-[1.02] line-clamp-2 uppercase mb-1.5">
-                    {normalizedRankingPosts[0]?.title || 'Ranking em atualizacao'}
+                    {normalizedRankingPosts[0]?.title || 'Ranking em atualização'}
                   </h3>
                   <p className="text-white/80 text-[11px] sm:text-[12px] leading-[1.35] font-exo line-clamp-2 mb-2">
                     {normalizedRankingPosts[0]?.excerpt || 'Novos comparativos e listas especiais chegando em breve.'}
@@ -960,7 +975,7 @@ export default function HomeTopNewsSection({
                         {post.title}
                       </h5>
                       <p className="text-[#4b5563] text-[12px] leading-[1.35] font-exo mt-1.5 line-clamp-2">
-                        {post.excerpt || 'Conteudo de ranking em atualizacao.'}
+                        {post.excerpt || 'Conteúdo de ranking em atualização.'}
                       </p>
                       <p className="mt-2 text-[#6b7280] text-[11px] font-exo inline-flex items-center gap-1">
                         <Clock size={10} /> {post.read_time || 'Em breve'}

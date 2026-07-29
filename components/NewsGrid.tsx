@@ -27,14 +27,14 @@ export default function NewsGrid({ posts, theme = 'dark' }: NewsGridProps) {
     {
       title: 'Ranking',
       value: 'Novo ranking em breve',
-      description: 'Estamos preparando um novo comparativo para atualizar esta secao.',
+      description: 'Estamos preparando um novo comparativo para atualizar esta seção.',
       imageUrl: heroPosts[0]?.image_url,
       href: '/ranking',
     },
     {
       title: 'Ranking',
       value: 'Mais dados e listas chegando',
-      description: 'Em breve, novas listas com desempenho, preco e exclusividade.',
+      description: 'Em breve, novas listas com desempenho, preço e exclusividade.',
       imageUrl: heroPosts[1]?.image_url || heroPosts[0]?.image_url,
       href: '/ranking',
     },
@@ -43,15 +43,15 @@ export default function NewsGrid({ posts, theme = 'dark' }: NewsGridProps) {
   const dreamGarageFallbackCards = [
     {
       title: 'Garagem dos Sonhos',
-      value: 'Selecao especial em producao',
-      description: 'Novas sugestoes de garagem serao publicadas em breve.',
+      value: 'Seleção especial em produção',
+      description: 'Novas sugestões de garagem serão publicadas em breve.',
       imageUrl: heroPosts[2]?.image_url || heroPosts[0]?.image_url,
       href: '/garagem-dos-sonhos',
     },
     {
       title: 'Garagem dos Sonhos',
-      value: 'Modelos iconicos em breve',
-      description: 'Estamos preparando uma nova curadoria para esta secao.',
+      value: 'Modelos icônicos em breve',
+      description: 'Estamos preparando uma nova curadoria para esta seção.',
       imageUrl: heroPosts[3]?.image_url || heroPosts[0]?.image_url,
       href: '/garagem-dos-sonhos',
     },
@@ -101,7 +101,7 @@ export default function NewsGrid({ posts, theme = 'dark' }: NewsGridProps) {
           <div className="flex items-center gap-3 mb-4 sm:mb-5">
             <span className="w-1 h-5 bg-[#dc2626] rounded-full" />
             <h3 className="font-rajdhani font-bold uppercase tracking-[0.2em] text-xs sm:text-sm text-[#111827]">
-              Mais Conteudos
+              Mais Conteúdos
             </h3>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">

@@ -8,17 +8,17 @@ import { brands, modelPages } from '@/lib/data';
 import { getPosts, type Post } from '@/lib/posts';
 
 export const metadata: Metadata = {
-  title: 'Ferrari: historia completa, modelos e noticias | GMATOSCAR',
+  title: 'Ferrari: história completa, modelos e notícias | GMATOSCAR',
   description:
-    'Enciclopedia da Ferrari com historia completa, fundacao, pais de origem, logotipo, linha do tempo detalhada, curiosidades, modelos, artigos relacionados e ultimas noticias.',
+    'Enciclopédia da Ferrari com história completa, fundação, país de origem, logotipo, linha do tempo detalhada, curiosidades, modelos, artigos relacionados e últimas notícias.',
   keywords: [
     'ferrari',
-    'historia da ferrari',
-    'ferrari fundacao',
-    'ferrari pais de origem',
+    'história da ferrari',
+    'ferrari fundação',
+    'ferrari país de origem',
     'logotipo ferrari',
     'modelos ferrari',
-    'ferrari noticias',
+    'ferrari notícias',
     'ferrari curiosidades',
     'ferrari linha do tempo',
     'supercarros ferrari',
@@ -27,18 +27,18 @@ export const metadata: Metadata = {
     canonical: '/marcas/ferrari',
   },
   openGraph: {
-    title: 'Ferrari: historia completa, modelos e noticias | GMATOSCAR',
+    title: 'Ferrari: história completa, modelos e notícias | GMATOSCAR',
     description:
-      'Pagina enciclopedica da Ferrari com contexto historico, tecnico e cultural para quem quer entender a marca em profundidade.',
+      'Página enciclopédica da Ferrari com contexto histórico, técnico e cultural para quem quer entender a marca em profundidade.',
     url: 'https://gmatoscar.com.br/marcas/ferrari',
     siteName: 'GMATOSCAR',
     type: 'article',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Ferrari: historia completa, modelos e noticias | GMATOSCAR',
+    title: 'Ferrari: história completa, modelos e notícias | GMATOSCAR',
     description:
-      'Tudo sobre a Ferrari em uma pagina completa: origem, evolucao, modelos iconicos e noticias recentes.',
+      'Tudo sobre a Ferrari em uma página completa: origem, evolução, modelos icônicos e notícias recentes.',
   },
 };
 
@@ -60,24 +60,24 @@ function getFerrariPosts(posts: Post[]) {
 
 const historyChapters = [
   {
-    title: 'Origem e visao de Enzo Ferrari',
+    title: 'Origem e visão de Enzo Ferrari',
     paragraphs: [
-      'A historia da Ferrari comeca antes do primeiro carro de rua. Enzo Ferrari construiu sua reputacao no automobilismo ao trabalhar com equipes de competicao e ao criar uma mentalidade focada em performance, disciplina tecnica e evolucao continua.',
-      'Essa base de competicao definiu um principio que permanece ate hoje: os carros de rua devem carregar o mesmo espirito das pistas, com resposta dinamica, precisao de engenharia e identidade visual inconfundivel.',
+      'A história da Ferrari começa antes do primeiro carro de rua. Enzo Ferrari construiu sua reputação no automobilismo ao trabalhar com equipes de competição e ao criar uma mentalidade focada em performance, disciplina técnica e evolução contínua.',
+      'Essa base de competição definiu um princípio que permanece até hoje: os carros de rua devem carregar o mesmo espírito das pistas, com resposta dinâmica, precisão de engenharia e identidade visual inconfundível.',
     ],
   },
   {
     title: 'Nascimento da fabricante',
     paragraphs: [
-      'A Ferrari foi fundada em 1939 e iniciou sua trajetoria de fabricante com o 125 S em 1947. A partir desse momento, a marca italiana passou a combinar tradicao mecanica, design autoral e inovacao tecnologica.',
-      'Nos anos seguintes, a empresa consolidou sua presenca em corridas e em modelos de producao limitada, criando um posicionamento premium baseado em exclusividade, resultado esportivo e desejo global.',
+      'A Ferrari foi fundada em 1939 e iniciou sua trajetória de fabricante com o 125 S em 1947. A partir desse momento, a marca italiana passou a combinar tradição mecânica, design autoral e inovação tecnológica.',
+      'Nos anos seguintes, a empresa consolidou sua presença em corridas e em modelos de produção limitada, criando um posicionamento premium baseado em exclusividade, resultado esportivo e desejo global.',
     ],
   },
   {
-    title: 'Consolidacao global',
+    title: 'Consolidação global',
     paragraphs: [
-      'Ao longo das decadas, a Ferrari evoluiu de uma estrutura artesanal para uma marca global de alto desempenho, mantendo o foco em motores de alta rotacao, acerto de chassis refinado e aerodinamica cada vez mais eficiente.',
-      'Modelos como 250 GTO, F40, Enzo, LaFerrari, SF90 e F80 representam diferentes fases dessa evolucao, sempre com o mesmo objetivo: entregar emocao e desempenho no mais alto nivel do setor automotivo.',
+      'Ao longo das décadas, a Ferrari evoluiu de uma estrutura artesanal para uma marca global de alto desempenho, mantendo o foco em motores de alta rotação, acerto de chassis refinado e aerodinâmica cada vez mais eficiente.',
+      'Modelos como 250 GTO, F40, Enzo, LaFerrari, SF90 e F80 representam diferentes fases dessa evolução, sempre com o mesmo objetivo: entregar emoção e desempenho no mais alto nível do setor automotivo.',
     ],
   },
 ];
@@ -85,13 +85,13 @@ const historyChapters = [
 const encyclopediaTimeline = [
   {
     year: '1929',
-    title: 'Fundacao da Scuderia Ferrari',
-    description: 'Enzo Ferrari cria a Scuderia Ferrari como estrutura voltada para corridas e preparacao esportiva.',
+    title: 'Fundação da Scuderia Ferrari',
+    description: 'Enzo Ferrari cria a Scuderia Ferrari como estrutura voltada para corridas e preparação esportiva.',
   },
   {
     year: '1939',
     title: 'Nascimento da Auto Avio Costruzioni',
-    description: 'Marco empresarial que antecede a criacao da Ferrari como fabricante de automoveis.',
+    description: 'Marco empresarial que antecede a criação da Ferrari como fabricante de automóveis.',
   },
   {
     year: '1947',
@@ -101,85 +101,85 @@ const encyclopediaTimeline = [
   {
     year: '1950',
     title: 'Entrada na Formula 1 moderna',
-    description: 'A Ferrari participa da temporada inaugural da Formula 1 e passa a construir seu legado na categoria.',
+    description: 'A Ferrari participa da temporada inaugural da Fórmula 1 e passa a construir seu legado na categoria.',
   },
   {
     year: '1962',
     title: 'Era 250 GTO',
-    description: 'A Ferrari 250 GTO se torna simbolo de corrida, exclusividade e valor historico no mercado automotivo.',
+    description: 'A Ferrari 250 GTO se torna símbolo de corrida, exclusividade e valor histórico no mercado automotivo.',
   },
   {
     year: '1969',
     title: 'Parceria industrial com a Fiat',
-    description: 'Acordo importante para expansao produtiva, mantendo o DNA esportivo da marca.',
+    description: 'Acordo importante para expansão produtiva, mantendo o DNA esportivo da marca.',
   },
   {
     year: '1987',
-    title: 'Lancamento da F40',
+    title: 'Lançamento da F40',
     description: 'A F40 consolida a imagem da Ferrari como referencia de supercarro extremo e visceral.',
   },
   {
     year: '2002',
     title: 'Ferrari Enzo',
-    description: 'A marca aplica tecnologia inspirada na Formula 1 para criar um dos carros mais icones do seculo.',
+    description: 'A marca aplica tecnologia inspirada na Fórmula 1 para criar um dos carros mais icônicos do século.',
   },
   {
     year: '2013',
-    title: 'LaFerrari e a fase hibrida',
-    description: 'A Ferrari inicia uma nova etapa com eletrificacao orientada a performance.',
+    title: 'LaFerrari e a fase híbrida',
+    description: 'A Ferrari inicia uma nova etapa com eletrificação orientada à performance.',
   },
   {
     year: '2019',
     title: 'SF90 Stradale',
-    description: 'Primeiro plug-in hybrid de producao em serie da marca, com foco em potencia e eficiencia dinamica.',
+    description: 'Primeiro plug-in hybrid de produção em série da marca, com foco em potência e eficiência dinâmica.',
   },
   {
     year: '2022',
     title: 'Chegada da Purosangue',
-    description: 'A Ferrari amplia o portifolio com um modelo de quatro portas sem abandonar a identidade esportiva.',
+    description: 'A Ferrari amplia o portfólio com um modelo de quatro portas sem abandonar a identidade esportiva.',
   },
   {
     year: '2024',
-    title: 'Nova geracao com a F80',
-    description: 'A F80 representa o topo da evolucao recente da marca em engenharia, aerodinamica e desempenho.',
+    title: 'Nova geração com a F80',
+    description: 'A F80 representa o topo da evolução recente da marca em engenharia, aerodinâmica e desempenho.',
   },
 ];
 
 const logoDetails = [
   {
     title: 'Cavallino Rampante',
-    text: 'O cavalo empinado simboliza forca, velocidade e espirito competitivo. Ele se tornou o elemento central da identidade visual da Ferrari e um dos emblemas mais reconhecidos do mundo.',
+    text: 'O cavalo empinado simboliza força, velocidade e espírito competitivo. Ele se tornou o elemento central da identidade visual da Ferrari e um dos emblemas mais reconhecidos do mundo.',
   },
   {
     title: 'Fundo amarelo',
-    text: 'O amarelo remete a Modena, cidade historicamente ligada a Enzo Ferrari. Esse detalhe reforca a origem italiana da marca e sua conexao cultural.',
+    text: 'O amarelo remete a Modena, cidade historicamente ligada a Enzo Ferrari. Esse detalhe reforça a origem italiana da marca e sua conexão cultural.',
   },
   {
     title: 'Faixas tricolores',
-    text: 'A presenca das cores da bandeira italiana no topo do escudo reforca o orgulho nacional e a heranca esportiva da fabricante.',
+    text: 'A presença das cores da bandeira italiana no topo do escudo reforça o orgulho nacional e a herança esportiva da fabricante.',
   },
   {
     title: 'Tipografia Ferrari',
-    text: 'A escrita Ferrari no emblema ajuda a consolidar a assinatura visual da marca, com leitura imediata e forte memorizacao global.',
+    text: 'A escrita Ferrari no emblema ajuda a consolidar a assinatura visual da marca, com leitura imediata e forte memorização global.',
   },
 ];
 
 const curiosities = [
-  'A Ferrari manteve por decadas a estrategia de producao limitada para preservar exclusividade e valor de marca.',
-  'A relacao entre corridas e carros de rua sempre foi um dos pilares tecnicos da fabricante.',
+  'A Ferrari manteve por décadas a estratégia de produção limitada para preservar exclusividade e valor de marca.',
+  'A relação entre corridas e carros de rua sempre foi um dos pilares técnicos da fabricante.',
   'Modelos de serie especial costumam introduzir tecnologias que depois influenciam toda a linha da marca.',
   'A Ferrari e frequentemente usada como referencia de design automotivo em escolas de engenharia e estilo automotivo.',
-  'A 250 GTO e constantemente citada entre os carros classicos mais valiosos ja negociados no mundo.',
+  'A 250 GTO é constantemente citada entre os carros clássicos mais valiosos já negociados no mundo.',
   'A F40 marcou uma geracao por seu comportamento analogico e foco total em desempenho bruto.',
-  'A marca evoluiu de motores aspirados iconicos para uma fase de hibridizacao sem perder foco em performance.',
-  'A Ferrari trabalha fortemente com aerodinamica ativa para ganho de estabilidade e eficiencia em alta velocidade.',
-  'A experiencia de dirigir um Ferrari combina desempenho, ergonomia esportiva e feedback mecanico preciso.',
-  'No mercado de colecionadores, historico de manutencao e originalidade influenciam fortemente o valor de cada unidade.',
+  'A marca evoluiu de motores aspirados icônicos para uma fase de hibridização sem perder foco em performance.',
+  'A Ferrari trabalha fortemente com aerodinâmica ativa para ganho de estabilidade e eficiência em alta velocidade.',
+  'A experiência de dirigir um Ferrari combina desempenho, ergonomia esportiva e feedback mecânico preciso.',
+  'No mercado de colecionadores, histórico de manutenção e originalidade influenciam fortemente o valor de cada unidade.',
 ];
 
 const modelGenerations = [
   {
-    era: 'Classicos de corrida e colecionismo',
+    era: 'Clássicos de corrida e colecionismo',
     models: ['125 S', '166 MM', '250 Testa Rossa', '250 GTO', '275 GTB'],
   },
   {
@@ -187,7 +187,7 @@ const modelGenerations = [
     models: ['288 GTO', 'F40', 'F50', 'Enzo Ferrari'],
   },
   {
-    era: 'Nova era de eletrificacao e alta tecnologia',
+    era: 'Nova era de eletrificação e alta tecnologia',
     models: ['LaFerrari', 'SF90 Stradale', '296 GTB', 'Purosangue', 'F80'],
   },
 ];
@@ -198,16 +198,16 @@ const faqItems = [
     answer: 'A Ferrari foi fundada em 1939 e iniciou a fase de fabricante com o 125 S em 1947.',
   },
   {
-    question: 'Qual e o pais de origem da Ferrari?',
-    answer: 'A Ferrari e uma fabricante italiana, com origem ligada a Modena e forte tradicao no automobilismo.',
+    question: 'Qual é o país de origem da Ferrari?',
+    answer: 'A Ferrari é uma fabricante italiana, com origem ligada a Modena e forte tradição no automobilismo.',
   },
   {
-    question: 'Por que o logotipo da Ferrari e tao famoso?',
-    answer: 'Porque combina simbolismo historico, identidade nacional italiana e associacao direta com desempenho e exclusividade.',
+    question: 'Por que o logotipo da Ferrari é tão famoso?',
+    answer: 'Porque combina simbolismo histórico, identidade nacional italiana e associação direta com desempenho e exclusividade.',
   },
   {
-    question: 'Quais modelos sao referencias historicas da Ferrari?',
-    answer: '250 GTO, F40, Enzo, LaFerrari, SF90 Stradale e F80 sao alguns dos modelos mais representativos da marca.',
+    question: 'Quais modelos são referências históricas da Ferrari?',
+    answer: '250 GTO, F40, Enzo, LaFerrari, SF90 Stradale e F80 são alguns dos modelos mais representativos da marca.',
   },
 ];
 
@@ -226,7 +226,7 @@ export default async function FerrariBrandPage() {
     name: ferrari.name,
     description: ferrari.description,
     foundingDate: String(ferrari.founded),
-    slogan: 'Paixao por supercarros de alto desempenho',
+    slogan: 'Paixão por supercarros de alto desempenho',
     logo: ferrari.logo,
     url: 'https://gmatoscar.com.br/marcas/ferrari',
     sameAs: [
@@ -279,7 +279,7 @@ export default async function FerrariBrandPage() {
             Conheça a história da Ferrari, seus modelos mais famosos, curiosidades, notícias e tudo sobre a fabricante italiana.
           </p>
 
-          <nav className="mt-8 flex flex-wrap gap-2.5" aria-label="Navegacao por secoes da Ferrari">
+          <nav className="mt-8 flex flex-wrap gap-2.5" aria-label="Navegação por seções da Ferrari">
             {[
               'historia',
               'fundacao',
@@ -306,7 +306,7 @@ export default async function FerrariBrandPage() {
       <section className="px-4 sm:px-6 lg:px-8 py-10">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
           <article id="historia" className="lg:col-span-8 rounded-2xl border border-[#e5e7eb] bg-white p-6 sm:p-8">
-            <h2 className="text-2xl sm:text-3xl text-[#111827] font-rajdhani font-bold mb-5">Historia</h2>
+            <h2 className="text-2xl sm:text-3xl text-[#111827] font-rajdhani font-bold mb-5">História</h2>
             <div className="space-y-7">
               {historyChapters.map((chapter) => (
                 <div key={chapter.title} className="border-l-2 border-[#dc2626]/30 pl-5">
@@ -325,11 +325,11 @@ export default async function FerrariBrandPage() {
             <h2 className="text-xl text-[#111827] font-rajdhani font-bold mb-4">Resumo da marca</h2>
             <div className="space-y-3">
               <div className="rounded-xl border border-[#e5e7eb] bg-white p-4">
-                <p className="text-[#6b7280] text-xs uppercase tracking-[0.25em] font-rajdhani mb-2">Fundacao</p>
+                <p className="text-[#6b7280] text-xs uppercase tracking-[0.25em] font-rajdhani mb-2">Fundação</p>
                 <p className="text-[#111827] text-2xl font-rajdhani font-bold">{ferrari.founded}</p>
               </div>
               <div className="rounded-xl border border-[#e5e7eb] bg-white p-4">
-                <p className="text-[#6b7280] text-xs uppercase tracking-[0.25em] font-rajdhani mb-2">Pais de origem</p>
+                <p className="text-[#6b7280] text-xs uppercase tracking-[0.25em] font-rajdhani mb-2">País de origem</p>
                 <p className="text-[#111827] text-2xl font-rajdhani font-bold">{ferrari.country}</p>
               </div>
               <div className="rounded-xl border border-[#e5e7eb] bg-white p-4">
@@ -337,7 +337,7 @@ export default async function FerrariBrandPage() {
                 <p className="text-[#dc2626] text-2xl font-rajdhani font-bold">{ferrari.topModel}</p>
               </div>
               <div className="rounded-xl border border-[#e5e7eb] bg-white p-4">
-                <p className="text-[#6b7280] text-xs uppercase tracking-[0.25em] font-rajdhani mb-2">Velocidade de referencia</p>
+                <p className="text-[#6b7280] text-xs uppercase tracking-[0.25em] font-rajdhani mb-2">Velocidade de referência</p>
                 <p className="text-[#111827] text-2xl font-rajdhani font-bold">{ferrari.maxSpeed}</p>
               </div>
             </div>
@@ -348,28 +348,28 @@ export default async function FerrariBrandPage() {
       <section className="px-4 sm:px-6 lg:px-8 pb-10">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6">
           <article id="fundacao" className="rounded-2xl border border-[#e5e7eb] bg-white p-6 sm:p-8">
-            <h2 className="text-2xl text-[#111827] font-rajdhani font-bold mb-4">Fundacao</h2>
+            <h2 className="text-2xl text-[#111827] font-rajdhani font-bold mb-4">Fundação</h2>
             <p className="text-[#1f2937] text-sm sm:text-base leading-relaxed font-exo mb-4">
-              A fundacao da Ferrari aconteceu em {ferrari.founded}. A empresa nasceu com mentalidade esportiva e foco
-              em excelencia mecanica, em um contexto de forte transformacao da industria automotiva europeia.
+              A fundação da Ferrari aconteceu em {ferrari.founded}. A empresa nasceu com mentalidade esportiva e foco
+              em excelência mecânica, em um contexto de forte transformação da indústria automotiva europeia.
             </p>
             <p className="text-[#1f2937] text-sm sm:text-base leading-relaxed font-exo">
-              Desde o inicio, a Ferrari adotou uma estrategia de posicionamento premium baseada em baixa escala,
-              tecnologia aplicada e valor de marca. Esse modelo ajudou a construir uma identidade forte e sustentavel
-              ao longo das decadas.
+              Desde o início, a Ferrari adotou uma estratégia de posicionamento premium baseada em baixa escala,
+              tecnologia aplicada e valor de marca. Esse modelo ajudou a construir uma identidade forte e sustentável
+              ao longo das décadas.
             </p>
           </article>
 
           <article id="pais-de-origem" className="rounded-2xl border border-[#e5e7eb] bg-white p-6 sm:p-8">
-            <h2 className="text-2xl text-[#111827] font-rajdhani font-bold mb-4">Pais de origem</h2>
+            <h2 className="text-2xl text-[#111827] font-rajdhani font-bold mb-4">País de origem</h2>
             <p className="text-[#1f2937] text-sm sm:text-base leading-relaxed font-exo mb-4">
-              A Ferrari tem origem na {ferrari.country}, pais com papel historico central no design automotivo,
-              motorsport e engenharia de alto desempenho. Esse ambiente cultural ajudou a moldar a assinatura tecnica e
-              estetica da marca.
+              A Ferrari tem origem na {ferrari.country}, país com papel histórico central no design automotivo,
+              motorsport e engenharia de alto desempenho. Esse ambiente cultural ajudou a moldar a assinatura técnica e
+              estética da marca.
             </p>
             <p className="text-[#1f2937] text-sm sm:text-base leading-relaxed font-exo">
-              A conexao com a tradicao italiana pode ser percebida em proporcoes de carroceria, acabamento interno,
-              cuidado artesanal e em uma linguagem visual que combina agressividade e elegancia.
+              A conexão com a tradição italiana pode ser percebida em proporções de carroceria, acabamento interno,
+              cuidado artesanal e em uma linguagem visual que combina agressividade e elegância.
             </p>
           </article>
         </div>
@@ -442,7 +442,7 @@ export default async function FerrariBrandPage() {
             ))}
           </div>
 
-          <h3 className="text-xl text-[#111827] font-rajdhani font-bold mb-4">Modelos com pagina dedicada no GMATOSCAR</h3>
+          <h3 className="text-xl text-[#111827] font-rajdhani font-bold mb-4">Modelos com página dedicada no GMATOSCAR</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {ferrariModels.map((model) => (
               <Link
@@ -477,7 +477,7 @@ export default async function FerrariBrandPage() {
               ))}
             </div>
           ) : (
-            <p className="text-[#4b5563] text-sm font-exo">Ainda nao ha artigos relacionados da Ferrari.</p>
+            <p className="text-[#4b5563] text-sm font-exo">Ainda não há artigos relacionados da Ferrari.</p>
           )}
         </div>
       </section>
@@ -498,7 +498,7 @@ export default async function FerrariBrandPage() {
 
       <section className="px-4 sm:px-6 lg:px-8 pb-20">
         <div id="ultimas-noticias" className="max-w-7xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl text-[#111827] font-rajdhani font-bold mb-6">Ultimas noticias</h2>
+          <h2 className="text-2xl sm:text-3xl text-[#111827] font-rajdhani font-bold mb-6">Últimas notícias</h2>
           {ferrariNews.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {ferrariNews.map((post) => (
@@ -507,7 +507,7 @@ export default async function FerrariBrandPage() {
             </div>
           ) : (
             <div className="rounded-xl border border-[#e5e7eb] bg-white p-5 text-[#4b5563] font-exo text-sm">
-              Ainda nao temos noticias publicadas da Ferrari.
+              Ainda não temos notícias publicadas da Ferrari.
             </div>
           )}
         </div>

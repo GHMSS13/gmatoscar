@@ -35,7 +35,7 @@ export default async function HomePage() {
 
       <BrandsSection />
 
-      <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto py-8 sm:py-10 lg:py-12">
+      <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto pt-3 pb-8 sm:py-10 lg:py-12">
         <div className="rounded-2xl border border-[#e5e7eb] bg-white p-4 sm:p-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6">
             <div className="lg:col-span-7">
@@ -120,11 +120,11 @@ export default async function HomePage() {
               Continue explorando
             </p>
             <h4 className="text-[1.25rem] sm:text-[1.45rem] font-rajdhani font-bold leading-[1.05] uppercase mb-3">
-              Descubra mais rankings, historias e novidades
+              Descubra mais rankings, histórias e novidades
             </h4>
             <div className="flex flex-wrap gap-2.5">
               <Link href="/noticias" className="inline-flex items-center gap-1 rounded-lg bg-white text-[#111827] px-3.5 py-2 text-[12px] font-rajdhani font-bold uppercase tracking-[0.14em] hover:text-[#dc2626] transition-colors duration-300">
-                Noticias <ArrowRight size={13} />
+                Notícias <ArrowRight size={13} />
               </Link>
               <Link href="/ranking" className="inline-flex items-center gap-1 rounded-lg border border-white/30 text-white px-3.5 py-2 text-[12px] font-rajdhani font-bold uppercase tracking-[0.14em] hover:border-white hover:text-white transition-colors duration-300">
                 Rankings <ArrowRight size={13} />
