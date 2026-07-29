@@ -387,7 +387,7 @@ export default function HomeTopNewsSection({
                         <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a]/80 via-[#0f172a]/20 to-transparent" />
                         <div className="absolute bottom-0 left-0 right-0 p-3.5 sm:p-4 lg:p-4">
                           <p className="inline-flex bg-[#dc2626] text-white text-[10px] font-rajdhani font-bold uppercase tracking-[0.2em] px-2.5 py-1 rounded-sm mb-2.5 sm:mb-3">
-                            {item.category}
+                            Lancamentos
                           </p>
                           <h3 className="text-[1.6rem] sm:text-[1.85rem] lg:text-[1.95rem] leading-[1.03] text-white font-serif font-semibold mb-1.5 sm:mb-2 line-clamp-2">
                             {item.title}
@@ -442,9 +442,6 @@ export default function HomeTopNewsSection({
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-3">
-                    <p className="inline-flex bg-[#dc2626] text-white text-[9px] font-rajdhani font-bold uppercase tracking-[0.16em] px-2 py-0.5 rounded-sm mb-1.5">
-                      {middlePost.category}
-                    </p>
                     <h3 className="text-white font-rajdhani font-bold text-[1.05rem] leading-[1.08] line-clamp-4 mb-1.5">
                       {middlePost.title}
                     </h3>
@@ -468,9 +465,6 @@ export default function HomeTopNewsSection({
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-3">
-                    <p className="inline-flex bg-[#dc2626] text-white text-[9px] font-rajdhani font-bold uppercase tracking-[0.16em] px-2 py-0.5 rounded-sm mb-1.5">
-                      Noticias
-                    </p>
                     <h3 className="text-white font-rajdhani font-bold text-[1.05rem] leading-[1.08] line-clamp-3 mb-1.5">
                       Novas noticias em breve
                     </h3>
@@ -509,9 +503,6 @@ export default function HomeTopNewsSection({
                 </div>
 
                 <div className="p-3.5">
-                  <p className="text-[#dc2626] text-[10px] font-rajdhani font-bold uppercase tracking-[0.14em] mb-1.5">
-                    Noticias
-                  </p>
                   <h3 className="text-[#111827] font-rajdhani font-bold text-[1.25rem] leading-[1.06] line-clamp-2">
                     {mobileRecentPost?.title || 'Noticias em atualizacao'}
                   </h3>
@@ -530,15 +521,15 @@ export default function HomeTopNewsSection({
                 <Link
                   key={`${item.id}-mobile-recent-list`}
                   href={item.slug ? `/noticias/${item.slug}` : '/noticias'}
-                  className="group flex gap-4 rounded-xl overflow-hidden border border-[#e5e7eb] bg-white p-3.5 min-h-[118px]"
+                  className="group flex gap-4 rounded-xl overflow-hidden border border-[#e5e7eb] bg-white p-4 min-h-[128px]"
                 >
-                  <div className="relative w-[146px] h-[106px] flex-shrink-0 rounded-lg overflow-hidden">
+                  <div className="relative w-[156px] h-[114px] flex-shrink-0 rounded-lg overflow-hidden">
                     <Image
                       src={item.image_url || heroPosts[0]?.image_url || placeholderImage}
                       alt={item.title}
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                      sizes="146px"
+                      sizes="156px"
                     />
                   </div>
 
@@ -643,9 +634,6 @@ export default function HomeTopNewsSection({
                 </div>
 
                 <div className="w-[58%] p-4 flex flex-col justify-center border-l border-[#e5e7eb]">
-                  <p className="text-[#dc2626] text-[11px] font-rajdhani font-bold uppercase tracking-[0.12em] mb-2">
-                    Noticias
-                  </p>
                   <p className="text-[#111827] text-[1.28rem] font-rajdhani font-bold leading-[1.05] line-clamp-3 group-hover:text-[#dc2626] transition-colors duration-300">
                     {post.title}
                   </p>
@@ -675,12 +663,6 @@ export default function HomeTopNewsSection({
               Conheça os carros mais incriveis do mundo, com detalhes de preco, motor, historia e exclusividade.
             </p>
           </div>
-          <Link
-            href="/garagem-dos-sonhos"
-            className="group inline-flex items-center gap-2 rounded-lg bg-[#dc2626] px-4 py-2 text-[12px] sm:text-[13px] text-white hover:bg-[#b91c1c] font-rajdhani font-bold uppercase tracking-[0.14em] transition-colors duration-300 shadow-[0_8px_20px_rgba(220,38,38,0.25)]"
-          >
-            Ver mais <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5" />
-          </Link>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4 mb-3 sm:mb-4">
@@ -852,6 +834,15 @@ export default function HomeTopNewsSection({
             ))}
           </div>
         </div>
+
+        <div className="mt-4 sm:mt-5">
+          <Link
+            href="/garagem-dos-sonhos"
+            className="flex w-full items-center justify-center rounded-xl border border-[#e5e7eb] bg-white px-4 py-3 text-[11px] font-rajdhani font-bold uppercase tracking-[0.18em] text-[#4b5563] hover:text-[#dc2626] hover:border-[#dc2626]/35 transition-colors duration-300"
+          >
+            Ver mais carros <ArrowRight size={13} className="ml-1" />
+          </Link>
+        </div>
       </section>
 
       <section className="mt-8 sm:mt-9 lg:mt-11 rounded-2xl border border-[#e5e7eb] bg-white p-3 sm:p-5">
@@ -867,12 +858,6 @@ export default function HomeTopNewsSection({
               Rankings atualizados com comparativos de desempenho, velocidade, preco e exclusividade dos modelos mais extremos.
             </p>
           </div>
-          <Link
-            href="/ranking"
-            className="inline-flex items-center gap-2 text-[12px] sm:text-[13px] text-[#8b95a5] hover:text-[#dc2626] font-rajdhani uppercase tracking-[0.2em] transition-colors duration-300"
-          >
-            Ver mais <ArrowRight size={14} />
-          </Link>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-4">
