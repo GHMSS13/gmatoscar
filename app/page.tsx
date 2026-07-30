@@ -71,7 +71,7 @@ export default async function HomePage() {
                       <p className="text-[#111827] text-[1rem] sm:text-[1.1rem] font-rajdhani font-bold uppercase leading-[1.05] line-clamp-2 group-hover:text-[#dc2626] transition-colors duration-300">
                         {post.title}
                       </p>
-                      <p className="mt-1 text-[11px] lg:text-[13px] text-[#6b7280] font-exo inline-flex items-center gap-1">
+                      <p className="mt-1 text-[12px] lg:text-[13px] text-[#6b7280] font-exo inline-flex items-center gap-1">
                         <Clock size={10} /> {post.read_time}
                       </p>
                     </div>
@@ -90,7 +90,7 @@ export default async function HomePage() {
                     <h4 className="text-[#111827] text-[1.15rem] sm:text-[1.25rem] font-rajdhani font-bold leading-[1.05] uppercase line-clamp-3">
                       {curiosityPost.title}
                     </h4>
-                    <p className="mt-2 text-[12px] sm:text-[13px] lg:text-[15px] text-[#4b5563] leading-[1.4] lg:leading-[1.5] font-exo line-clamp-5">
+                    <p className="mt-2 text-[13px] sm:text-[14px] lg:text-[15px] text-[#4b5563] leading-[1.45] lg:leading-[1.5] font-exo line-clamp-5">
                       {curiosityPost.excerpt}
                     </p>
                     <Link
@@ -122,7 +122,7 @@ export default async function HomePage() {
                     <h4 className="text-[#111827] text-[1.15rem] sm:text-[1.25rem] font-rajdhani font-bold leading-[1.05] uppercase">
                       Novidades em breve
                     </h4>
-                    <p className="mt-2 text-[12px] sm:text-[13px] lg:text-[15px] text-[#4b5563] leading-[1.4] lg:leading-[1.5] font-exo">
+                    <p className="mt-2 text-[13px] sm:text-[14px] lg:text-[15px] text-[#4b5563] leading-[1.45] lg:leading-[1.5] font-exo">
                       Estamos preparando novos fatos e curiosidades para deixar sua leitura ainda mais completa.
                     </p>
                   </>
@@ -132,7 +132,7 @@ export default async function HomePage() {
           </div>
 
           <div className="mt-5 sm:mt-6 rounded-xl border border-[#e5e7eb] bg-[#0f172a] p-4 sm:p-5 text-white">
-            <p className="text-white/70 text-[11px] font-rajdhani uppercase tracking-[0.2em] mb-2">
+            <p className="text-white/70 text-[12px] font-rajdhani uppercase tracking-[0.2em] mb-2">
               Continue explorando
             </p>
             <h4 className="text-[1.25rem] sm:text-[1.45rem] font-rajdhani font-bold leading-[1.05] uppercase mb-3">
