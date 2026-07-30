@@ -34,7 +34,7 @@ export default function BrandsSection() {
             <h2 className="text-[1.95rem] sm:text-4xl font-serif font-semibold text-[#111] red-line leading-[1.04]">
               História das Marcas
             </h2>
-            <p className="mt-1.5 text-[#374151] text-[13px] sm:text-[14px] lg:text-[14px] font-exo leading-[1.45] lg:leading-[1.45] max-w-[620px]">
+            <p className="mt-1.5 text-[#374151] text-[14px] sm:text-[15px] lg:text-[15px] font-exo leading-[1.5] lg:leading-[1.5] max-w-[620px]">
               Conheça a história das marcas lendárias, com origem, evolução, tecnologia e os modelos que marcaram época.
             </p>
           </div>
@@ -77,7 +77,7 @@ export default function BrandsSection() {
                     <h3 className="text-white font-rajdhani font-bold text-[2rem] sm:text-[2.2rem] leading-none mb-2 group-hover:text-[#dc2626] transition-colors line-clamp-1">
                       {brand.name}
                     </h3>
-                    <p className="text-white/75 text-[13px] sm:text-sm leading-relaxed font-exo line-clamp-2 mb-3.5">
+                    <p className="text-white/75 text-[14px] sm:text-[15px] lg:text-[15px] leading-[1.5] font-exo line-clamp-2 mb-3.5">
                       {brand.description}
                     </p>
                     <div className="inline-flex items-center gap-1 text-xs font-rajdhani font-bold uppercase tracking-[0.2em] text-white group-hover:text-[#dc2626] transition-colors duration-300">
