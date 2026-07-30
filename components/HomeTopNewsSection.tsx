@@ -374,7 +374,7 @@ export default function HomeTopNewsSection({
               <CarouselContent className="ml-0 lg:h-[390px]">
               {heroPosts.map((item) => (
                 <CarouselItem key={item.id} className="pl-0 lg:h-full">
-                  <article className="group rounded-none sm:rounded-sm overflow-hidden border-0 sm:border sm:border-[#e5e7eb] bg-white lg:h-full">
+                  <article className="group rounded-none sm:rounded-sm lg:rounded-xl overflow-hidden border-0 sm:border sm:border-[#e5e7eb] bg-white lg:h-full">
                     <Link href={`/noticias/${item.slug}`} className="block">
                       <div className="relative min-h-[330px] sm:min-h-[320px] lg:min-h-0 lg:h-[390px] overflow-hidden">
                         <Image
@@ -597,10 +597,10 @@ export default function HomeTopNewsSection({
       <section className="hidden lg:block mb-8 rounded-xl border border-[#e5e7eb] bg-white px-5 py-5">
         <div className="flex items-end justify-between gap-3 mb-5">
           <div>
-            <h3 className="text-[#111827] text-[1.85rem] font-rajdhani font-bold uppercase tracking-[0.05em]">
+            <h3 className="text-[#111827] text-[2.1rem] lg:text-[2.25rem] font-serif font-semibold leading-[1.04]">
               Notícias Recentes
             </h3>
-            <p className="mt-1 text-[#6b7280] text-[12px] font-exo leading-[1.35]">
+            <p className="mt-1 text-[#6b7280] text-[14px] lg:text-[15px] font-exo leading-[1.4]">
               Notícias recentes sobre supercarros, hypercarros e carros de alto desempenho.
             </p>
           </div>
@@ -637,10 +637,10 @@ export default function HomeTopNewsSection({
                   <p className="text-[#111827] text-[1.28rem] font-rajdhani font-bold leading-[1.05] line-clamp-3 group-hover:text-[#dc2626] transition-colors duration-300">
                     {post.title}
                   </p>
-                  <p className="text-[#4b5563] text-[13px] font-exo leading-[1.35] mt-2 line-clamp-2">
+                  <p className="text-[#4b5563] text-[14px] lg:text-[15px] font-exo leading-[1.4] mt-2 line-clamp-2">
                     {post.excerpt || 'Novos conteúdos e atualizações chegando em breve.'}
                   </p>
-                  <p className="mt-2.5 inline-flex items-center gap-1 text-[11px] text-[#6b7280] font-exo">
+                  <p className="mt-2.5 inline-flex items-center gap-1 text-[12px] lg:text-[13px] text-[#6b7280] font-exo">
                     <Clock size={10} /> {post.read_time || 'Em breve'}
                   </p>
                 </div>
@@ -659,7 +659,7 @@ export default function HomeTopNewsSection({
             <h3 className="text-[#111827] text-[1.7rem] font-serif font-semibold leading-none">
               Garagem dos Sonhos
             </h3>
-            <p className="mt-1 text-[#6b7280] text-[11px] sm:text-[12px] font-exo leading-[1.35] max-w-[700px]">
+            <p className="mt-1 text-[#6b7280] text-[11px] sm:text-[12px] lg:text-[14px] font-exo leading-[1.35] lg:leading-[1.45] max-w-[700px]">
               Conheça os carros mais incríveis do mundo, com detalhes de preço, motor, história e exclusividade.
             </p>
           </div>
@@ -680,14 +680,20 @@ export default function HomeTopNewsSection({
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
                   <div className="absolute inset-x-0 bottom-0 p-2.5 sm:p-3">
+                    <p className="hidden lg:inline-flex bg-[#dc2626] text-white text-[9px] font-rajdhani font-bold uppercase tracking-[0.16em] px-2 py-0.5 rounded-sm mb-1.5">
+                      Garagem dos Sonhos
+                    </p>
                     <h4 className="text-white text-[1.05rem] sm:text-[1.15rem] font-rajdhani font-bold leading-[1.04] line-clamp-2 uppercase">
                       {item.post?.title || 'Garagem dos Sonhos em atualização'}
                     </h4>
+                    <p className="hidden lg:block mt-1 text-white/75 text-[14px] leading-[1.4] font-exo line-clamp-2">
+                      {item.post?.excerpt || 'Novas seleções e conteúdos especiais chegando em breve.'}
+                    </p>
                   </div>
                 </div>
               </Link>
 
-              <div className="mt-2.5 grid grid-cols-3 gap-2">
+              <div className="mt-2.5 grid grid-cols-3 gap-2 lg:hidden">
                 <Link href={item.href} className="group block rounded-md overflow-hidden">
                   <div className="relative h-[84px] sm:h-[90px] overflow-hidden bg-[#0f172a]">
                     <Image
@@ -839,7 +845,7 @@ export default function HomeTopNewsSection({
                 <h5 className="text-[#111827] text-[1.02rem] sm:text-[1.08rem] font-rajdhani font-bold uppercase leading-[1.06] group-hover:text-[#dc2626] transition-colors duration-300">
                   {item.title}
                 </h5>
-                <p className="mt-1.5 text-[#4b5563] text-[12px] leading-[1.35] font-exo line-clamp-3">
+                <p className="mt-1.5 text-[#4b5563] text-[12px] lg:text-[14px] leading-[1.35] lg:leading-[1.45] font-exo line-clamp-3">
                   {item.description}
                 </p>
                 <span className="mt-2 inline-flex items-center gap-1 text-[11px] font-rajdhani font-bold uppercase tracking-[0.12em] text-[#6b7280] group-hover:text-[#dc2626] transition-colors duration-300">
@@ -869,7 +875,7 @@ export default function HomeTopNewsSection({
             <h3 className="text-[#111827] text-[1.7rem] sm:text-[1.85rem] font-rajdhani font-bold uppercase tracking-[0.05em] leading-none">
               Ranking
             </h3>
-            <p className="mt-1 text-[#6b7280] text-[11px] sm:text-[12px] font-exo leading-[1.35] max-w-[700px]">
+            <p className="mt-1 text-[#6b7280] text-[11px] sm:text-[12px] lg:text-[14px] font-exo leading-[1.35] lg:leading-[1.45] max-w-[700px]">
               Rankings atualizados com comparativos de desempenho, velocidade, preço e exclusividade dos modelos mais extremos.
             </p>
           </div>
@@ -895,10 +901,10 @@ export default function HomeTopNewsSection({
                   <h3 className="text-white text-[1.22rem] sm:text-[1.48rem] font-rajdhani font-bold leading-[1.02] line-clamp-2 uppercase mb-1.5">
                     {normalizedRankingPosts[0]?.title || 'Ranking em atualização'}
                   </h3>
-                  <p className="text-white/80 text-[11px] sm:text-[12px] leading-[1.35] font-exo line-clamp-2 mb-2">
+                  <p className="text-white/80 text-[11px] sm:text-[12px] lg:text-[14px] leading-[1.35] lg:leading-[1.45] font-exo line-clamp-2 mb-2">
                     {normalizedRankingPosts[0]?.excerpt || 'Novos comparativos e listas especiais chegando em breve.'}
                   </p>
-                  <p className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] text-white/75 font-exo">
+                  <p className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] lg:text-[13px] text-white/75 font-exo">
                     <Clock size={10} /> {normalizedRankingPosts[0]?.read_time || 'Em breve'}
                   </p>
                 </div>
@@ -924,7 +930,7 @@ export default function HomeTopNewsSection({
                     <p className="text-[#111827] text-[1rem] sm:text-[1.05rem] font-rajdhani font-bold leading-[1.04] line-clamp-2 uppercase group-hover:text-[#dc2626] transition-colors duration-300">
                       {post.title}
                     </p>
-                    <p className="text-[#6b7280] text-[11px] font-exo mt-1 line-clamp-1">
+                    <p className="text-[#6b7280] text-[11px] lg:text-[13px] font-exo mt-1 line-clamp-1">
                       {post.excerpt || 'Novo ranking em breve.'}
                     </p>
                   </div>
@@ -953,7 +959,7 @@ export default function HomeTopNewsSection({
               return (
                 <article
                   key={`${post.id}-ranking-extended-${idx}`}
-                  className="group rounded-xl overflow-hidden border border-[#e5e7eb] bg-white"
+                  className={`group rounded-xl overflow-hidden border border-[#e5e7eb] bg-white ${idx === 2 ? 'hidden sm:block' : ''}`}
                 >
                   <Link href={href} className="block">
                     <div className="relative h-[155px] sm:h-[165px] overflow-hidden">
@@ -974,10 +980,10 @@ export default function HomeTopNewsSection({
                       <h5 className="text-[#111827] text-[1.05rem] sm:text-[1.15rem] font-rajdhani font-bold leading-[1.05] line-clamp-2 uppercase group-hover:text-[#dc2626] transition-colors duration-300">
                         {post.title}
                       </h5>
-                      <p className="text-[#4b5563] text-[12px] leading-[1.35] font-exo mt-1.5 line-clamp-2">
+                      <p className="text-[#4b5563] text-[12px] lg:text-[14px] leading-[1.35] lg:leading-[1.45] font-exo mt-1.5 line-clamp-2">
                         {post.excerpt || 'Conteúdo de ranking em atualização.'}
                       </p>
-                      <p className="mt-2 text-[#6b7280] text-[11px] font-exo inline-flex items-center gap-1">
+                      <p className="mt-2 text-[#6b7280] text-[11px] lg:text-[13px] font-exo inline-flex items-center gap-1">
                         <Clock size={10} /> {post.read_time || 'Em breve'}
                       </p>
                     </div>
@@ -996,7 +1002,7 @@ export default function HomeTopNewsSection({
               <h5 className="text-[#111827] text-[1.12rem] sm:text-[1.22rem] font-rajdhani font-bold uppercase leading-[1.05]">
                 Ver o Ranking Completo
               </h5>
-              <p className="text-[#6b7280] text-[12px] font-exo mt-2 leading-[1.35]">
+              <p className="text-[#6b7280] text-[12px] lg:text-[14px] font-exo mt-2 leading-[1.35] lg:leading-[1.45]">
                 Explore mais comparativos e listas exclusivas para descobrir os supercarros mais extremos.
               </p>
               <span className="mt-3 inline-flex items-center gap-1 text-[#111827] group-hover:text-[#dc2626] text-[12px] font-rajdhani font-bold uppercase tracking-[0.12em] transition-colors duration-300">

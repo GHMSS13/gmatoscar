@@ -70,7 +70,7 @@ export default async function HomePage() {
                       <p className="text-[#111827] text-[1rem] sm:text-[1.1rem] font-rajdhani font-bold uppercase leading-[1.05] line-clamp-2 group-hover:text-[#dc2626] transition-colors duration-300">
                         {post.title}
                       </p>
-                      <p className="mt-1 text-[11px] text-[#6b7280] font-exo inline-flex items-center gap-1">
+                      <p className="mt-1 text-[11px] lg:text-[13px] text-[#6b7280] font-exo inline-flex items-center gap-1">
                         <Clock size={10} /> {post.read_time}
                       </p>
                     </div>
@@ -89,7 +89,7 @@ export default async function HomePage() {
                     <h4 className="text-[#111827] text-[1.15rem] sm:text-[1.25rem] font-rajdhani font-bold leading-[1.05] uppercase line-clamp-3">
                       {curiosityPost.title}
                     </h4>
-                    <p className="mt-2 text-[12px] sm:text-[13px] text-[#4b5563] leading-[1.4] font-exo line-clamp-5">
+                    <p className="mt-2 text-[12px] sm:text-[13px] lg:text-[15px] text-[#4b5563] leading-[1.4] lg:leading-[1.5] font-exo line-clamp-5">
                       {curiosityPost.excerpt}
                     </p>
                     <div className="mt-auto pt-4">
@@ -106,7 +106,7 @@ export default async function HomePage() {
                     <h4 className="text-[#111827] text-[1.15rem] sm:text-[1.25rem] font-rajdhani font-bold leading-[1.05] uppercase">
                       Novidades em breve
                     </h4>
-                    <p className="mt-2 text-[12px] sm:text-[13px] text-[#4b5563] leading-[1.4] font-exo">
+                    <p className="mt-2 text-[12px] sm:text-[13px] lg:text-[15px] text-[#4b5563] leading-[1.4] lg:leading-[1.5] font-exo">
                       Estamos preparando novos fatos e curiosidades para deixar sua leitura ainda mais completa.
                     </p>
                   </>
