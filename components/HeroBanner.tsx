@@ -26,11 +26,11 @@ export default function HeroBanner() {
           <span className="text-[#dc2626]">CAR</span>
         </h1>
 
-        <p className="text-sm sm:text-lg md:text-2xl font-rajdhani font-semibold uppercase tracking-[0.22em] sm:tracking-[0.3em] text-white/50 mb-3 sm:mb-4 animate-fade-in-up">
+        <p className="text-[15px] sm:text-lg md:text-2xl font-rajdhani font-semibold uppercase tracking-[0.22em] sm:tracking-[0.3em] text-white/50 mb-3 sm:mb-4 animate-fade-in-up">
           Supercarros
         </p>
 
-        <p className="text-[15px] sm:text-base md:text-lg lg:text-[1.25rem] text-white/75 max-w-xl sm:max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed lg:leading-[1.55] font-exo animate-fade-in-up">
+        <p className="text-[16px] sm:text-[17px] md:text-lg lg:text-[1.25rem] text-white/75 max-w-xl sm:max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed lg:leading-[1.55] font-exo animate-fade-in-up">
           O maior canal brasileiro sobre supercarros, hypercars e carros de luxo.
           Notícias, rankings e conteúdo exclusivo sobre os carros mais incríveis do mundo.
         </p>
