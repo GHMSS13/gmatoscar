@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight, Clock } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import NewsGrid from '@/components/NewsGrid';
@@ -92,6 +93,21 @@ export default async function HomePage() {
                     <p className="mt-2 text-[12px] sm:text-[13px] lg:text-[15px] text-[#4b5563] leading-[1.4] lg:leading-[1.5] font-exo line-clamp-5">
                       {curiosityPost.excerpt}
                     </p>
+                    <Link
+                      href={`/noticias/${curiosityPost.slug}`}
+                      className="hidden lg:block mt-4 flex-1 min-h-[180px] rounded-xl overflow-hidden border border-[#e5e7eb]"
+                    >
+                      <div className="relative w-full h-full min-h-[180px]">
+                        <Image
+                          src={curiosityPost.image_url}
+                          alt={curiosityPost.title}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 1280px) 42vw, 34vw"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/10 to-transparent" />
+                      </div>
+                    </Link>
                     <div className="mt-auto pt-4">
                       <Link
                         href={`/noticias/${curiosityPost.slug}`}

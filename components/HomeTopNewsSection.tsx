@@ -483,7 +483,7 @@ export default function HomeTopNewsSection({
             <h3 className="text-[#111827] text-[1.7rem] font-serif font-semibold leading-none whitespace-nowrap">
               Notícias Recentes
             </h3>
-            <p className="mt-1.5 text-[#6b7280] text-[11px] leading-[1.35] font-exo">
+            <p className="mt-1.5 text-[#374151] text-[12px] sm:text-[13px] lg:text-[14px] leading-[1.4] font-exo">
               Notícias recentes sobre supercarros, hypercarros e carros de alto desempenho.
             </p>
           </div>
@@ -659,7 +659,7 @@ export default function HomeTopNewsSection({
             <h3 className="text-[#111827] text-[1.7rem] font-serif font-semibold leading-none">
               Garagem dos Sonhos
             </h3>
-            <p className="mt-1 text-[#6b7280] text-[11px] sm:text-[12px] lg:text-[14px] font-exo leading-[1.35] lg:leading-[1.45] max-w-[700px]">
+            <p className="mt-1 text-[#374151] text-[12px] sm:text-[13px] lg:text-[14px] font-exo leading-[1.4] lg:leading-[1.45] max-w-[700px]">
               Conheça os carros mais incríveis do mundo, com detalhes de preço, motor, história e exclusividade.
             </p>
           </div>
@@ -875,7 +875,7 @@ export default function HomeTopNewsSection({
             <h3 className="text-[#111827] text-[1.7rem] sm:text-[1.85rem] font-rajdhani font-bold uppercase tracking-[0.05em] leading-none">
               Ranking
             </h3>
-            <p className="mt-1 text-[#6b7280] text-[11px] sm:text-[12px] lg:text-[14px] font-exo leading-[1.35] lg:leading-[1.45] max-w-[700px]">
+            <p className="mt-1 text-[#374151] text-[12px] sm:text-[13px] lg:text-[14px] font-exo leading-[1.4] lg:leading-[1.45] max-w-[700px]">
               Rankings atualizados com comparativos de desempenho, velocidade, preço e exclusividade dos modelos mais extremos.
             </p>
           </div>

@@ -30,7 +30,7 @@ export default function HeroBanner() {
           Supercarros
         </p>
 
-        <p className="text-sm sm:text-base md:text-lg lg:text-[1.25rem] text-white/60 max-w-xl sm:max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed lg:leading-[1.55] font-exo animate-fade-in-up">
+        <p className="text-sm sm:text-base md:text-lg lg:text-[1.25rem] text-white/75 max-w-xl sm:max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed lg:leading-[1.55] font-exo animate-fade-in-up">
           O maior canal brasileiro sobre supercarros, hypercars e carros de luxo.
           Notícias, rankings e conteúdo exclusivo sobre os carros mais incríveis do mundo.
         </p>
