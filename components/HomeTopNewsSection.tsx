@@ -361,9 +361,15 @@ export default function HomeTopNewsSection({
         </div>
         <Link
           href="/pesquisa"
-          className="inline-flex items-center gap-2 text-xs sm:text-sm text-[#4b5563] hover:text-[#dc2626] font-rajdhani uppercase tracking-[0.14em] sm:tracking-wider transition-colors duration-300 group"
+          className="hidden sm:inline-flex lg:hidden items-center gap-2 text-xs sm:text-sm text-[#4b5563] hover:text-[#dc2626] font-rajdhani uppercase tracking-[0.14em] sm:tracking-wider transition-colors duration-300 group"
         >
           Ver Tudo <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+        </Link>
+        <Link
+          href="/pesquisa"
+          className="hidden lg:inline-flex items-center gap-2 rounded-lg bg-[#dc2626] px-4 py-2 text-[12px] text-white hover:bg-[#b91c1c] font-rajdhani font-bold uppercase tracking-[0.14em] transition-colors duration-300 shadow-[0_8px_20px_rgba(220,38,38,0.25)] group"
+        >
+          Ver Tudo <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5" />
         </Link>
       </div>
 
@@ -663,6 +669,12 @@ export default function HomeTopNewsSection({
               Conheça os carros mais incríveis do mundo, com detalhes de preço, motor, história e exclusividade.
             </p>
           </div>
+          <Link
+            href="/garagem-dos-sonhos"
+            className="hidden lg:inline-flex items-center gap-2 rounded-lg bg-[#dc2626] px-4 py-2 text-[12px] text-white hover:bg-[#b91c1c] font-rajdhani font-bold uppercase tracking-[0.14em] transition-colors duration-300 shadow-[0_8px_20px_rgba(220,38,38,0.25)] group"
+          >
+            Ver mais <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5" />
+          </Link>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4 mb-3 sm:mb-4">
@@ -773,7 +785,7 @@ export default function HomeTopNewsSection({
           </div>
         </div>
 
-        <div className="flex gap-2.5 overflow-x-auto pb-1 snap-x snap-mandatory sm:grid sm:grid-cols-4 sm:overflow-visible sm:gap-3">
+        <div className="flex gap-2.5 overflow-x-auto pb-1 snap-x snap-mandatory sm:hidden">
           {normalizedDreamGaragePosts.slice(1, 7).map((post, idx) => {
             const href = post.slug ? `/noticias/${post.slug}` : '/garagem-dos-sonhos';
 
@@ -781,7 +793,7 @@ export default function HomeTopNewsSection({
               <Link
                 key={`${post.id}-${idx}`}
                 href={href}
-                className="group rounded-xl overflow-hidden border border-[#dfe4ea] bg-white shrink-0 snap-start w-[44%] sm:w-auto"
+                className="group rounded-xl overflow-hidden border border-[#dfe4ea] bg-white shrink-0 snap-start w-[44%]"
               >
                 <div className="relative h-[138px] sm:h-[148px] lg:h-[160px] overflow-hidden bg-[#0a0a0a]">
                   <Image
@@ -807,7 +819,7 @@ export default function HomeTopNewsSection({
 
           <Link
             href="/garagem-dos-sonhos"
-            className="group rounded-xl border border-dashed border-[#d1d5db] bg-[#fafafa] shrink-0 snap-start w-[44%] sm:w-auto p-3 sm:p-3.5 flex flex-col justify-center min-h-[138px] sm:min-h-[148px] lg:min-h-[160px] hover:border-[#dc2626]/35 hover:bg-white transition-colors duration-300"
+            className="group rounded-xl border border-dashed border-[#d1d5db] bg-[#fafafa] shrink-0 snap-start w-[44%] p-3 sm:p-3.5 flex flex-col justify-center min-h-[138px] sm:min-h-[148px] lg:min-h-[160px] hover:border-[#dc2626]/35 hover:bg-white transition-colors duration-300"
           >
             <p className="text-[#dc2626] text-[10px] font-rajdhani font-bold uppercase tracking-[0.18em] mb-1.5">
               Continue
@@ -820,6 +832,39 @@ export default function HomeTopNewsSection({
             </span>
           </Link>
 
+        </div>
+
+        <div className="hidden sm:grid sm:grid-cols-4 sm:gap-3">
+          {normalizedDreamGaragePosts.slice(1, 9).map((post, idx) => {
+            const href = post.slug ? `/noticias/${post.slug}` : '/garagem-dos-sonhos';
+
+            return (
+              <Link
+                key={`${post.id}-${idx}-desktop-grid`}
+                href={href}
+                className="group rounded-xl overflow-hidden border border-[#dfe4ea] bg-white"
+              >
+                <div className="relative h-[148px] lg:h-[160px] overflow-hidden bg-[#0a0a0a]">
+                  <Image
+                    src={post.image_url || heroPosts[0]?.image_url || placeholderImage}
+                    alt={post.title}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                    style={{ objectPosition: getSmartObjectPosition(post.title, 'default') }}
+                    sizes="25vw"
+                  />
+                </div>
+                <div className="p-3">
+                  <p className="text-[#111827] text-[1.2rem] font-rajdhani font-bold leading-[1.04] line-clamp-2 mb-1.5 uppercase">
+                    {post.title}
+                  </p>
+                  <p className="text-[#1f2937] text-[14px] sm:text-[15px] lg:text-[15px] leading-[1.5] font-exo line-clamp-3">
+                    {post.excerpt || 'Conteúdo especial em breve.'}
+                  </p>
+                </div>
+              </Link>
+            );
+          })}
         </div>
 
         <div className="mt-4 sm:mt-5 rounded-xl border border-[#e5e7eb] bg-[#fafafa] p-3 sm:p-4">
