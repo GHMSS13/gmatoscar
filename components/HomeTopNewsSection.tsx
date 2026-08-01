@@ -236,7 +236,7 @@ export default function HomeTopNewsSection({
     { label: 'Pagani', href: '/marcas/pagani' },
   ];
 
-  const normalizedRankingPosts = [...rankingPosts.slice(0, 8)];
+  const normalizedRankingPosts = [...rankingPosts.slice(0, 9)];
 
   const rankingFallbackTitles = [
     'Os 20 carros mais rápidos do mundo',
@@ -247,9 +247,10 @@ export default function HomeTopNewsSection({
     'Os 8 hipercarros com melhor relacao peso-potencia',
     '10 supercarros subestimados que valem cada centavo',
     'Top 12 clássicos que ainda impressionam em 2026',
+    'Top 10 superesportivos com melhor custo-benefício',
   ];
 
-  while (normalizedRankingPosts.length < 8) {
+  while (normalizedRankingPosts.length < 9) {
     const fallbackIdx = normalizedRankingPosts.length;
     normalizedRankingPosts.push({
       id: `fallback-ranking-${fallbackIdx}`,
@@ -1051,15 +1052,15 @@ export default function HomeTopNewsSection({
             </span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-            {normalizedRankingPosts.slice(5, 8).map((post, idx) => {
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 lg:hidden">
+            {normalizedRankingPosts.slice(5, 7).map((post, idx) => {
               const href = post.slug ? `/noticias/${post.slug}` : '/ranking';
               const rank = String(idx + 6).padStart(2, '0');
 
               return (
                 <article
-                  key={`${post.id}-ranking-extended-${idx}`}
-                  className={`group rounded-xl overflow-hidden border border-[#e5e7eb] bg-white ${idx === 2 ? 'hidden sm:block' : ''}`}
+                  key={`${post.id}-ranking-extended-mobile-${idx}`}
+                  className="group rounded-xl overflow-hidden border border-[#e5e7eb] bg-white"
                 >
                   <Link href={href} className="block">
                     <div className="relative h-[155px] sm:h-[165px] overflow-hidden">
@@ -1109,6 +1110,71 @@ export default function HomeTopNewsSection({
                 Abrir ranking <ArrowRight size={13} />
               </span>
             </Link>
+          </div>
+
+          <div className="hidden lg:grid lg:grid-cols-12 lg:gap-4">
+            {(() => {
+              const mainPost = normalizedRankingPosts[5];
+              const sidePosts = normalizedRankingPosts.slice(6, 8);
+              const mainHref = mainPost?.slug ? `/noticias/${mainPost.slug}` : '/ranking';
+
+              return (
+                <>
+                  <article className="group lg:col-span-6 rounded-xl overflow-hidden border border-[#e5e7eb] bg-white">
+                    <Link href={mainHref} className="block h-full">
+                      <div className="relative h-[310px] overflow-hidden">
+                        <Image
+                          src={mainPost?.image_url || heroPosts[0]?.image_url || placeholderImage}
+                          alt={mainPost?.title || 'Ranking em atualização'}
+                          fill
+                          className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                          style={{ objectPosition: getSmartObjectPosition(mainPost?.title || '', 'featured') }}
+                          sizes="(max-width: 1280px) 50vw, 42vw"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
+                        <div className="absolute inset-x-0 bottom-0 p-4">
+                          <h5 className="text-white text-[2rem] leading-[1.02] font-rajdhani font-bold uppercase line-clamp-2 mb-2">
+                            {mainPost?.title || 'Ranking em atualização'}
+                          </h5>
+                          <p className="text-white/85 text-[15px] leading-[1.5] font-exo line-clamp-2">
+                            {mainPost?.excerpt || 'Novos comparativos e listas especiais chegando em breve.'}
+                          </p>
+                        </div>
+                      </div>
+                    </Link>
+                  </article>
+
+                  {sidePosts.map((post, idx) => {
+                    const href = post.slug ? `/noticias/${post.slug}` : '/ranking';
+
+                    return (
+                      <article key={`${post.id}-ranking-desktop-side-${idx}`} className="group lg:col-span-3 rounded-xl overflow-hidden border border-[#e5e7eb] bg-white">
+                        <Link href={href} className="block h-full">
+                          <div className="relative h-[200px] overflow-hidden">
+                            <Image
+                              src={post.image_url || heroPosts[0]?.image_url || placeholderImage}
+                              alt={post.title}
+                              fill
+                              className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                              style={{ objectPosition: getSmartObjectPosition(post.title, 'default') }}
+                              sizes="25vw"
+                            />
+                          </div>
+                          <div className="p-3.5 border-t border-[#e5e7eb]">
+                            <h5 className="text-[#111827] text-[1.25rem] leading-[1.05] font-rajdhani font-bold uppercase line-clamp-2 group-hover:text-[#dc2626] transition-colors duration-300">
+                              {post.title}
+                            </h5>
+                            <p className="mt-1.5 text-[#4b5563] text-[15px] leading-[1.5] font-exo line-clamp-2">
+                              {post.excerpt || 'Conteúdo de ranking em atualização.'}
+                            </p>
+                          </div>
+                        </Link>
+                      </article>
+                    );
+                  })}
+                </>
+              );
+            })()}
           </div>
         </div>
       </section>
