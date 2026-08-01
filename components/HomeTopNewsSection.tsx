@@ -348,6 +348,12 @@ export default function HomeTopNewsSection({
     visuals: getDreamGarageVisualSet(post, idx + 1),
   }));
 
+  const featuredGarageDesktopCards = normalizedDreamGaragePosts.slice(0, 2).map((post, idx) => ({
+    post,
+    href: post?.slug ? `/noticias/${post.slug}` : '/garagem-dos-sonhos',
+    visuals: getDreamGarageVisualSet(post, idx + 1),
+  }));
+
   return (
     <section className="pt-0 sm:pt-9 lg:pt-14 pb-7 sm:pb-10 lg:pb-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <div className="hidden sm:flex sm:flex-row items-start sm:items-end justify-between gap-2 sm:gap-4 mb-4 sm:mb-5 lg:mb-3">
@@ -438,21 +444,22 @@ export default function HomeTopNewsSection({
           {middlePost ? (
             <article className="group rounded-xl overflow-hidden border border-[#e5e7eb] bg-white h-full">
               <Link href={`/noticias/${middlePost.slug}`} className="block h-full">
-                <div className="relative h-full overflow-hidden">
-                  <Image
-                    src={middlePost.image_url}
-                    alt={middlePost.title}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                    sizes="25vw"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-3">
-                    <h3 className="text-white font-rajdhani font-bold text-[1.05rem] leading-[1.08] line-clamp-4 mb-1.5">
+                <div className="h-full flex flex-col">
+                  <div className="relative h-2/3 overflow-hidden bg-[#0a0a0a]">
+                    <Image
+                      src={middlePost.image_url}
+                      alt={middlePost.title}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                      sizes="25vw"
+                    />
+                  </div>
+                  <div className="h-1/3 p-3.5 border-t border-[#e5e7eb] flex flex-col justify-center">
+                    <h3 className="text-[#111827] font-rajdhani font-bold text-[1.12rem] leading-[1.08] line-clamp-2 mb-1.5 group-hover:text-[#dc2626] transition-colors duration-300">
                       {middlePost.title}
                     </h3>
-                    <p className="text-white/75 text-[10px] font-exo inline-flex items-center gap-1">
-                      <Clock size={10} /> {middlePost.read_time}
+                    <p className="text-[#4b5563] text-[14px] leading-[1.45] font-exo line-clamp-2">
+                      {middlePost.excerpt || 'Novos conteúdos e atualizações chegando em breve.'}
                     </p>
                   </div>
                 </div>
@@ -461,21 +468,22 @@ export default function HomeTopNewsSection({
           ) : (
             <article className="rounded-xl overflow-hidden border border-[#e5e7eb] bg-white h-full">
               <Link href="/noticias" className="block h-full">
-                <div className="relative h-[190px] sm:h-[170px] lg:h-full overflow-hidden">
-                  <Image
-                    src={heroPosts[0]?.image_url || placeholderImage}
-                    alt="Notícias em breve"
-                    fill
-                    className="object-cover"
-                    sizes="25vw"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-3">
-                    <h3 className="text-white font-rajdhani font-bold text-[1.05rem] leading-[1.08] line-clamp-3 mb-1.5">
+                <div className="h-full flex flex-col">
+                  <div className="relative h-2/3 overflow-hidden bg-[#0a0a0a]">
+                    <Image
+                      src={heroPosts[0]?.image_url || placeholderImage}
+                      alt="Notícias em breve"
+                      fill
+                      className="object-cover"
+                      sizes="25vw"
+                    />
+                  </div>
+                  <div className="h-1/3 p-3.5 border-t border-[#e5e7eb] flex flex-col justify-center">
+                    <h3 className="text-[#111827] font-rajdhani font-bold text-[1.12rem] leading-[1.08] line-clamp-2 mb-1.5">
                       Novas notícias em breve
                     </h3>
-                    <p className="text-white/75 text-[10px] font-exo inline-flex items-center gap-1">
-                      <Clock size={10} /> Em breve
+                    <p className="text-[#4b5563] text-[14px] leading-[1.45] font-exo line-clamp-2">
+                      Novos conteúdos e atualizações chegando em breve.
                     </p>
                   </div>
                 </div>
@@ -679,7 +687,7 @@ export default function HomeTopNewsSection({
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4 mb-3 sm:mb-4">
           {featuredGarageCards.map((item, idx) => (
-            <article key={`${item.post?.id || 'featured-garage'}-${idx}`} className="rounded-xl border border-[#e5e7eb] bg-white p-2.5 sm:p-3 lg:col-span-12">
+            <article key={`${item.post?.id || 'featured-garage'}-${idx}`} className="rounded-xl border border-[#e5e7eb] bg-white p-2.5 sm:p-3 lg:hidden">
               <Link href={item.href} className="group block rounded-lg overflow-hidden">
                 <div className="relative h-[170px] sm:h-[185px] lg:h-[210px] overflow-hidden bg-[#0a0a0a]">
                   <Image
@@ -753,6 +761,35 @@ export default function HomeTopNewsSection({
               </div>
             </article>
           ))}
+
+          {featuredGarageDesktopCards.map((item, idx) => (
+            <article key={`${item.post?.id || 'featured-garage-desktop'}-${idx}`} className="hidden lg:block lg:col-span-6 rounded-xl border border-[#e5e7eb] bg-white p-3">
+              <Link href={item.href} className="group block rounded-lg overflow-hidden">
+                <div className="relative h-[240px] xl:h-[255px] overflow-hidden bg-[#0a0a0a]">
+                  <Image
+                    src={item.visuals.coverImage}
+                    alt={item.post?.title || 'Garagem dos Sonhos'}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                    style={{ objectPosition: getSmartObjectPosition(item.post?.title || '', 'featured') }}
+                    sizes="50vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 p-3.5">
+                    <p className="inline-flex bg-[#dc2626] text-white text-[9px] font-rajdhani font-bold uppercase tracking-[0.16em] px-2 py-0.5 rounded-sm mb-1.5">
+                      Garagem dos Sonhos
+                    </p>
+                    <h4 className="text-white text-[1.2rem] xl:text-[1.28rem] font-rajdhani font-bold leading-[1.04] line-clamp-2 uppercase">
+                      {item.post?.title || 'Garagem dos Sonhos em atualização'}
+                    </h4>
+                    <p className="mt-1 text-white/75 text-[15px] leading-[1.5] font-exo line-clamp-2">
+                      {item.post?.excerpt || 'Novas seleções e conteúdos especiais chegando em breve.'}
+                    </p>
+                  </div>
+                </div>
+              </Link>
+            </article>
+          ))}
         </div>
 
         <div className="mb-4 rounded-xl border border-[#e5e7eb] bg-white p-3 sm:p-4">
@@ -760,12 +797,12 @@ export default function HomeTopNewsSection({
             <h4 className="text-[#111827] text-[1.02rem] sm:text-[1.14rem] font-rajdhani font-bold uppercase tracking-[0.1em]">
               Explore por Marcas
             </h4>
-            <span className="text-[10px] sm:text-[11px] text-[#6b7280] font-exo uppercase tracking-[0.16em]">
+            <span className="hidden lg:inline text-[10px] sm:text-[11px] text-[#6b7280] font-exo uppercase tracking-[0.16em]">
               Navegue pelas lendas
             </span>
           </div>
 
-          <div className="relative px-8 sm:px-10">
+          <div className="relative px-8 sm:px-10 lg:hidden">
             <Carousel opts={{ align: 'start', loop: false }} className="w-full">
               <CarouselContent className="-ml-2">
                 {dreamGarageBrandLinks.map((brand) => (
@@ -782,6 +819,18 @@ export default function HomeTopNewsSection({
               <CarouselPrevious className="-left-1 h-8 w-8 border-[#e5e7eb] bg-white hover:bg-white" />
               <CarouselNext className="-right-1 h-8 w-8 border-[#e5e7eb] bg-white hover:bg-white" />
             </Carousel>
+          </div>
+
+          <div className="hidden lg:flex lg:flex-wrap lg:items-center lg:justify-center lg:gap-3 lg:px-4 lg:pt-1">
+            {dreamGarageBrandLinks.map((brand) => (
+              <Link
+                key={`${brand.label}-desktop-center`}
+                href={brand.href}
+                className="inline-flex whitespace-nowrap rounded-full border border-[#e5e7eb] bg-[#fafafa] px-4 py-2 text-[12px] font-rajdhani font-bold uppercase tracking-[0.14em] text-[#111827] hover:border-[#dc2626]/35 hover:text-[#dc2626] hover:bg-white transition-colors duration-300"
+              >
+                {brand.label}
+              </Link>
+            ))}
           </div>
         </div>
 
@@ -835,7 +884,7 @@ export default function HomeTopNewsSection({
         </div>
 
         <div className="hidden sm:grid sm:grid-cols-4 sm:gap-3">
-          {normalizedDreamGaragePosts.slice(1, 9).map((post, idx) => {
+          {normalizedDreamGaragePosts.slice(2, 6).map((post, idx) => {
             const href = post.slug ? `/noticias/${post.slug}` : '/garagem-dos-sonhos';
 
             return (
@@ -924,6 +973,12 @@ export default function HomeTopNewsSection({
               Rankings atualizados com comparativos de desempenho, velocidade, preço e exclusividade dos modelos mais extremos.
             </p>
           </div>
+          <Link
+            href="/ranking"
+            className="hidden lg:inline-flex items-center gap-2 rounded-lg bg-[#dc2626] px-4 py-2 text-[12px] text-white hover:bg-[#b91c1c] font-rajdhani font-bold uppercase tracking-[0.14em] transition-colors duration-300 shadow-[0_8px_20px_rgba(220,38,38,0.25)] group"
+          >
+            Ver mais <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5" />
+          </Link>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-4">
