@@ -24,7 +24,7 @@ export default function BrandsSection() {
   const items = brands.filter((brand) => featuredBrands.includes(brand.id));
 
   return (
-    <section className="pt-2 pb-6 sm:py-16 bg-[#f9fafb] border-y border-[#e5e7eb]">
+    <section className="pt-1 pb-6 sm:pt-12 sm:pb-16 bg-[#f9fafb] border-y border-[#e5e7eb]">
       <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-2.5 mb-6 sm:mb-9">
           <div>
@@ -40,13 +40,7 @@ export default function BrandsSection() {
           </div>
           <Link
             href="/marcas"
-            className="hidden sm:inline-flex lg:hidden items-center gap-2 text-sm text-[#6b7280] hover:text-[#dc2626] font-rajdhani uppercase tracking-wider transition-colors duration-300 group"
-          >
-            Ver Todas <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-          </Link>
-          <Link
-            href="/marcas"
-            className="hidden lg:inline-flex items-center gap-2 rounded-lg bg-[#dc2626] px-4 py-2 text-[12px] text-white hover:bg-[#b91c1c] font-rajdhani font-bold uppercase tracking-[0.14em] transition-colors duration-300 shadow-[0_8px_20px_rgba(220,38,38,0.25)] group"
+            className="hidden sm:inline-flex shrink-0 whitespace-nowrap items-center justify-center gap-2 rounded-lg bg-[#dc2626] px-5 py-2 text-[12px] text-white hover:bg-[#b91c1c] font-rajdhani font-bold uppercase tracking-[0.14em] transition-colors duration-300 shadow-[0_8px_20px_rgba(220,38,38,0.25)] group"
           >
             Ver Todas <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5" />
           </Link>

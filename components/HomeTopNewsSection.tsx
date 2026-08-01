@@ -368,13 +368,7 @@ export default function HomeTopNewsSection({
         </div>
         <Link
           href="/pesquisa"
-          className="hidden sm:inline-flex lg:hidden items-center gap-2 text-xs sm:text-sm text-[#4b5563] hover:text-[#dc2626] font-rajdhani uppercase tracking-[0.14em] sm:tracking-wider transition-colors duration-300 group"
-        >
-          Ver Tudo <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-        </Link>
-        <Link
-          href="/pesquisa"
-          className="hidden lg:inline-flex items-center gap-2 rounded-lg bg-[#dc2626] px-4 py-2 text-[12px] text-white hover:bg-[#b91c1c] font-rajdhani font-bold uppercase tracking-[0.14em] transition-colors duration-300 shadow-[0_8px_20px_rgba(220,38,38,0.25)] group"
+          className="hidden sm:inline-flex shrink-0 whitespace-nowrap items-center justify-center gap-2 rounded-lg bg-[#dc2626] px-5 py-2 text-[12px] text-white hover:bg-[#b91c1c] font-rajdhani font-bold uppercase tracking-[0.14em] transition-colors duration-300 shadow-[0_8px_20px_rgba(220,38,38,0.25)] group"
         >
           Ver Tudo <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5" />
         </Link>
@@ -609,6 +603,60 @@ export default function HomeTopNewsSection({
         </div>
       </div>
 
+      <section className="hidden md:block lg:hidden mb-8 rounded-xl border border-[#e5e7eb] bg-white px-5 py-5">
+        <div className="flex items-end justify-between gap-3 mb-5">
+          <div>
+            <h3 className="text-[#111827] text-[2rem] font-serif font-semibold leading-[1.04]">
+              Notícias Recentes
+            </h3>
+            <p className="mt-1 text-[#6b7280] text-[14px] sm:text-[15px] font-exo leading-[1.5]">
+              Notícias recentes sobre supercarros, hypercarros e carros de alto desempenho.
+            </p>
+          </div>
+          <Link
+            href="/noticias"
+            className="group inline-flex shrink-0 whitespace-nowrap items-center gap-2 rounded-lg bg-[#dc2626] px-5 py-2 text-[12px] text-white hover:bg-[#b91c1c] font-rajdhani font-bold uppercase tracking-[0.14em] transition-colors duration-300 shadow-[0_8px_20px_rgba(220,38,38,0.25)]"
+          >
+            Ver Mais <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {desktopNewsRowPosts.map((post, idx) => {
+            const href = post.slug ? `/noticias/${post.slug}` : '/noticias';
+
+            return (
+              <article
+                key={`${post.id}-tablet-row-${idx}`}
+                className="group rounded-xl overflow-hidden border border-[#e5e7eb] bg-white"
+              >
+                <Link href={href} className="block">
+                  <div className="relative h-[175px] overflow-hidden bg-[#0a0a0a]">
+                    <Image
+                      src={post.image_url || heroPosts[0]?.image_url || placeholderImage}
+                      alt={post.title}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                      style={{ objectPosition: getSmartObjectPosition(post.title, 'highlight') }}
+                      sizes="50vw"
+                    />
+                  </div>
+
+                  <div className="p-3.5 border-t border-[#e5e7eb]">
+                    <p className="text-[#111827] text-[1.18rem] font-rajdhani font-bold leading-[1.05] line-clamp-2 uppercase group-hover:text-[#dc2626] transition-colors duration-300">
+                      {post.title}
+                    </p>
+                    <p className="mt-1.5 text-[#4b5563] text-[14px] sm:text-[15px] font-exo leading-[1.5] line-clamp-2">
+                      {post.excerpt || 'Novos conteúdos e atualizações chegando em breve.'}
+                    </p>
+                  </div>
+                </Link>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+
       <section className="hidden lg:block mb-8 rounded-xl border border-[#e5e7eb] bg-white px-5 py-5">
         <div className="flex items-end justify-between gap-3 mb-5">
           <div>
@@ -680,7 +728,7 @@ export default function HomeTopNewsSection({
           </div>
           <Link
             href="/garagem-dos-sonhos"
-            className="hidden lg:inline-flex items-center gap-2 rounded-lg bg-[#dc2626] px-4 py-2 text-[12px] text-white hover:bg-[#b91c1c] font-rajdhani font-bold uppercase tracking-[0.14em] transition-colors duration-300 shadow-[0_8px_20px_rgba(220,38,38,0.25)] group"
+            className="hidden sm:inline-flex shrink-0 whitespace-nowrap items-center justify-center gap-2 rounded-lg bg-[#dc2626] px-5 py-2 text-[12px] text-white hover:bg-[#b91c1c] font-rajdhani font-bold uppercase tracking-[0.14em] transition-colors duration-300 shadow-[0_8px_20px_rgba(220,38,38,0.25)] group"
           >
             Ver mais <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5" />
           </Link>
@@ -976,7 +1024,7 @@ export default function HomeTopNewsSection({
           </div>
           <Link
             href="/ranking"
-            className="hidden lg:inline-flex items-center gap-2 rounded-lg bg-[#dc2626] px-4 py-2 text-[12px] text-white hover:bg-[#b91c1c] font-rajdhani font-bold uppercase tracking-[0.14em] transition-colors duration-300 shadow-[0_8px_20px_rgba(220,38,38,0.25)] group"
+            className="hidden sm:inline-flex shrink-0 whitespace-nowrap items-center justify-center gap-2 rounded-lg bg-[#dc2626] px-5 py-2 text-[12px] text-white hover:bg-[#b91c1c] font-rajdhani font-bold uppercase tracking-[0.14em] transition-colors duration-300 shadow-[0_8px_20px_rgba(220,38,38,0.25)] group"
           >
             Ver mais <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5" />
           </Link>
@@ -1095,7 +1143,7 @@ export default function HomeTopNewsSection({
 
             <Link
               href="/ranking"
-              className="group rounded-xl border border-dashed border-[#d1d5db] bg-[#fafafa] p-4 sm:p-5 flex flex-col justify-center min-h-[140px] sm:min-h-[165px] hover:border-[#dc2626]/40 hover:bg-white transition-colors duration-300"
+              className="group rounded-xl border border-dashed border-[#d1d5db] bg-[#fafafa] p-4 sm:p-5 flex flex-col justify-center min-h-[140px] sm:min-h-[165px] hover:border-[#dc2626]/40 hover:bg-white transition-colors duration-300 md:hidden"
             >
               <p className="text-[#dc2626] text-[10px] sm:text-[11px] font-rajdhani font-bold uppercase tracking-[0.2em] mb-1.5">
                 Continue navegando
