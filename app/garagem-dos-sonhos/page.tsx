@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import DesktopPageSearchBar from '@/components/DesktopPageSearchBar';
 import NewsCard from '@/components/NewsCard';
 import { getPostSection, getPosts } from '@/lib/posts';
 
@@ -11,34 +12,55 @@ export const metadata: Metadata = {
 
 export const dynamic = 'force-dynamic';
 
-export default async function GaragemDosSonhosPage() {
+interface GaragemDosSonhosPageProps {
+  searchParams?: {
+    q?: string;
+  };
+}
+
+function normalizeText(value: string) {
+  return value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+}
+
+export default async function GaragemDosSonhosPage({ searchParams }: GaragemDosSonhosPageProps) {
   const allPosts = await getPosts();
-  const posts = allPosts.filter((post) => getPostSection(post) === 'Garagem dos Sonhos');
+  const garagePosts = allPosts.filter((post) => getPostSection(post) === 'Garagem dos Sonhos');
+  const query = (searchParams?.q ?? '').trim();
+  const normalizedQuery = normalizeText(query);
+
+  const posts = garagePosts.filter((post) => {
+    if (!normalizedQuery) {
+      return true;
+    }
+
+    const searchable = normalizeText(
+      [post.title, post.excerpt, post.content, post.category, post.slug].join(' ')
+    );
+
+    return searchable.includes(normalizedQuery);
+  });
 
   return (
     <main className="min-h-screen bg-white">
       <Navbar />
 
-      <section className="pt-28 sm:pt-36 pb-16 sm:pb-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-5xl mx-auto">
-          <p className="text-[#dc2626] text-xs font-bold uppercase tracking-[0.3em] font-rajdhani mb-4">
-            Garagem dos Sonhos
-          </p>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-semibold text-[#111827] leading-tight mb-6">
-            Uma seleção para quem sonha alto
-          </h1>
-          <p className="text-[#1f2937] text-sm sm:text-base leading-relaxed font-exo max-w-3xl">
-            Nesta página você encontra seleções temáticas com modelos icônicos, raros e desejados,
-            reunindo inspirações para montar a garagem perfeita de qualquer entusiasta.
-          </p>
-        </div>
-      </section>
+      <DesktopPageSearchBar
+        action="/garagem-dos-sonhos"
+        placeholder="Pesquise seleções, modelos ou temas da garagem..."
+        defaultQuery={query}
+        label="Garagem dos Sonhos"
+        title="Uma seleção para quem sonha alto"
+        subtitle="Descubra curadorias com modelos icônicos, raros e desejados para inspirar sua garagem ideal no universo dos supercarros."
+      />
 
       <section className="px-4 sm:px-6 lg:px-8 pb-16 sm:pb-20">
         <div className="max-w-7xl mx-auto">
           {posts.length === 0 ? (
             <div className="rounded-xl border border-[#e5e7eb] bg-[#f9fafb] p-6 text-sm font-exo text-[#4b5563]">
-              Ainda nao ha artigos publicados em Garagem dos Sonhos.
+              Nenhum resultado encontrado para o termo pesquisado.
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">

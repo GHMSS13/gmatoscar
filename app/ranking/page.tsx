@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import DesktopPageSearchBar from '@/components/DesktopPageSearchBar';
 import NewsCard from '@/components/NewsCard';
 import { getPostSection, getPosts } from '@/lib/posts';
 
@@ -11,34 +12,55 @@ export const metadata: Metadata = {
 
 export const dynamic = 'force-dynamic';
 
-export default async function RankingPage() {
+interface RankingPageProps {
+  searchParams?: {
+    q?: string;
+  };
+}
+
+function normalizeText(value: string) {
+  return value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+}
+
+export default async function RankingPage({ searchParams }: RankingPageProps) {
   const allPosts = await getPosts();
-  const posts = allPosts.filter((post) => getPostSection(post) === 'Rankings');
+  const rankingPosts = allPosts.filter((post) => getPostSection(post) === 'Rankings');
+  const query = (searchParams?.q ?? '').trim();
+  const normalizedQuery = normalizeText(query);
+
+  const posts = rankingPosts.filter((post) => {
+    if (!normalizedQuery) {
+      return true;
+    }
+
+    const searchable = normalizeText(
+      [post.title, post.excerpt, post.content, post.category, post.slug].join(' ')
+    );
+
+    return searchable.includes(normalizedQuery);
+  });
 
   return (
     <main className="min-h-screen bg-white">
       <Navbar />
 
-      <section className="pt-28 sm:pt-36 pb-16 sm:pb-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-5xl mx-auto">
-          <p className="text-[#dc2626] text-xs font-bold uppercase tracking-[0.3em] font-rajdhani mb-4">
-            Rankings
-          </p>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-semibold text-[#111827] leading-tight mb-6">
-            Comparativos e listas dos gigantes
-          </h1>
-          <p className="text-[#1f2937] text-sm sm:text-base leading-relaxed font-exo max-w-3xl">
-            Veja os carros mais rápidos, mais caros e mais exclusivos do planeta em rankings
-            organizados para quem gosta de desempenho, engenharia e história automotiva.
-          </p>
-        </div>
-      </section>
+      <DesktopPageSearchBar
+        action="/ranking"
+        placeholder="Pesquise rankings, comparativos ou modelos..."
+        defaultQuery={query}
+        label="Rankings"
+        title="Comparativos e listas dos gigantes"
+        subtitle="Confira rankings de velocidade, preço, exclusividade e desempenho para descobrir quais modelos lideram cada categoria."
+      />
 
       <section className="px-4 sm:px-6 lg:px-8 pb-16 sm:pb-20">
         <div className="max-w-7xl mx-auto">
           {posts.length === 0 ? (
             <div className="rounded-xl border border-[#e5e7eb] bg-[#f9fafb] p-6 text-sm font-exo text-[#4b5563]">
-              Ainda nao ha artigos publicados em Rankings.
+              Nenhum resultado encontrado para o termo pesquisado.
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
