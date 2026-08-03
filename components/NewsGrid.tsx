@@ -13,7 +13,10 @@ export default function NewsGrid({ posts, theme = 'dark' }: NewsGridProps) {
   const isDreamGaragePost = (post: Post) => getPostSection(post) === 'Garagem dos Sonhos';
 
   const sourcePosts = posts.length > 0 ? posts : [];
-  const heroPosts = sourcePosts.slice(0, 8);
+  const heroEligiblePosts = sourcePosts.filter(
+    (post) => isNewsPost(post) || isRankingPost(post) || isDreamGaragePost(post)
+  );
+  const heroPosts = heroEligiblePosts.slice(0, 3);
   const heroIds = new Set(heroPosts.map((post) => post.id));
 
   const newsOnlyPosts = sourcePosts.filter((post) => isNewsPost(post) && !heroIds.has(post.id));

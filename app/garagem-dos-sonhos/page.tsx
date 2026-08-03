@@ -52,7 +52,7 @@ export default async function GaragemDosSonhosPage({ searchParams }: GaragemDosS
         placeholder="Pesquise seleções, modelos ou temas da garagem..."
         defaultQuery={query}
         label="Garagem dos Sonhos"
-        title="Uma seleção para quem sonha alto"
+        title="ÍCONES IMORTAIS: Desbravando as Lendas da Garagem dos Sonhos"
         subtitle="Descubra curadorias com modelos icônicos, raros e desejados para inspirar sua garagem ideal no universo dos supercarros."
       />
 
