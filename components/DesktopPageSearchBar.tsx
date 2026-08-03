@@ -7,6 +7,9 @@ interface DesktopPageSearchBarProps {
   label?: string;
   title: string;
   subtitle: string;
+  labelClassName?: string;
+  titleClassName?: string;
+  subtitleClassName?: string;
 }
 
 export default function DesktopPageSearchBar({
@@ -16,17 +19,20 @@ export default function DesktopPageSearchBar({
   label = 'Pesquisar',
   title,
   subtitle,
+  labelClassName,
+  titleClassName,
+  subtitleClassName,
 }: DesktopPageSearchBarProps) {
   return (
     <section className="pt-20 sm:pt-24 border-b border-[#e5e7eb] bg-[radial-gradient(ellipse_at_top,rgba(15,23,42,0.05)_0%,rgba(255,255,255,1)_70%)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-5 sm:pb-6">
-        <p className="text-[#bc2a1f] text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.34em] font-rajdhani">
+        <p className={`text-[#bc2a1f] text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.34em] font-rajdhani ${labelClassName ?? ''}`}>
           {label}
         </p>
-        <h1 className="mt-2 text-[2rem] sm:text-[2.1rem] lg:text-[2.3rem] font-serif font-semibold text-[#111827] leading-[1.08]">
+        <h1 className={`mt-2 text-[2rem] sm:text-[2.1rem] lg:text-[2.3rem] font-serif font-semibold text-[#111827] leading-[1.08] ${titleClassName ?? ''}`}>
           {title}
         </h1>
-        <p className="mt-2 text-[14px] sm:text-[15px] lg:text-[16px] font-exo leading-[1.55] text-[#374151] max-w-[980px]">
+        <p className={`mt-2 text-[14px] sm:text-[15px] lg:text-[16px] font-exo leading-[1.55] text-[#374151] max-w-[980px] ${subtitleClassName ?? ''}`}>
           {subtitle}
         </p>
       </div>

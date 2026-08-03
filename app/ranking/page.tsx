@@ -52,7 +52,7 @@ export default async function RankingPage({ searchParams }: RankingPageProps) {
         placeholder="Pesquise rankings, comparativos ou modelos..."
         defaultQuery={query}
         label="Rankings"
-        title="Comparativos e listas dos gigantes"
+        title="Comparativos e Listas dos Gigantes"
         subtitle="Confira rankings de velocidade, preço, exclusividade e desempenho para descobrir quais modelos lideram cada categoria."
       />
 
