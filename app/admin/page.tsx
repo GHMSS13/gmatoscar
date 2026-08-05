@@ -187,6 +187,7 @@ export default function AdminPage() {
   const [selectedImageId, setSelectedImageId] = useState<string | null>(null);
   const [imageSearchQuery, setImageSearchQuery] = useState('');
   const [postSearchQuery, setPostSearchQuery] = useState('');
+  const [publishAsDraft, setPublishAsDraft] = useState(false);
   
   // Novos estados para o editor profissional e inserção de imagem
   const [editorTab, setEditorTab] = useState<'write' | 'preview'>('write');
@@ -505,6 +506,7 @@ export default function AdminPage() {
         published: data.published,
       });
       setSelectedImageId(extractImageIdFromUrl(data.image_url));
+      setPublishAsDraft(false);
       setEditingId(postId);
       setMessage(null);
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -725,12 +727,7 @@ export default function AdminPage() {
     setMessage(null);
 
     try {
-      const nativeEvent = event.nativeEvent;
-      const submitter = nativeEvent instanceof SubmitEvent
-        ? (nativeEvent.submitter as HTMLButtonElement | null)
-        : null;
-      const isDraftAction = submitter?.getAttribute('data-publish-mode') === 'draft';
-      const publishedValue = isDraftAction ? false : form.published;
+      const publishedValue = publishAsDraft ? false : form.published;
 
       const payload = {
         title: form.title.trim(),
@@ -773,6 +770,7 @@ export default function AdminPage() {
         setMessage(publishedValue ? 'Post criado e publicado com sucesso!' : 'Post salvo como rascunho com sucesso!');
       }
       setForm(initialFormState);
+      setPublishAsDraft(false);
       setEditingId(null);
       setSelectedImageId(null);
       await fetchPublishedPosts();
@@ -786,6 +784,7 @@ export default function AdminPage() {
 
   const handleCancelEdit = () => {
     setForm(initialFormState);
+    setPublishAsDraft(false);
     setEditingId(null);
     setSelectedImageId(null);
   };
@@ -1415,7 +1414,7 @@ export default function AdminPage() {
                   </p>
                 </div>
 
-                <div className="grid gap-4 sm:grid-cols-2">
+                <div className="grid gap-4 sm:grid-cols-3">
                   <label className="inline-flex items-center gap-3 rounded-xl border border-[#d1d5db] bg-white px-4 py-3 cursor-pointer select-none">
                     <input
                       type="checkbox"
@@ -1429,10 +1428,31 @@ export default function AdminPage() {
                     <input
                       type="checkbox"
                       checked={form.published}
-                      onChange={(event) => handleInput('published', event.target.checked)}
+                      onChange={(event) => {
+                        const isChecked = event.target.checked;
+                        handleInput('published', isChecked);
+                        if (isChecked) {
+                          setPublishAsDraft(false);
+                        }
+                      }}
                       className="h-4 w-4 rounded border-[#444] bg-[#111] text-[#dc2626] focus:ring-[#dc2626]"
                     />
                     <span className="text-[#374151] text-sm font-exo">Publicar Imediatamente</span>
+                  </label>
+                  <label className="inline-flex items-center gap-3 rounded-xl border border-[#d1d5db] bg-white px-4 py-3 cursor-pointer select-none">
+                    <input
+                      type="checkbox"
+                      checked={publishAsDraft}
+                      onChange={(event) => {
+                        const isChecked = event.target.checked;
+                        setPublishAsDraft(isChecked);
+                        if (isChecked) {
+                          handleInput('published', false);
+                        }
+                      }}
+                      className="h-4 w-4 rounded border-[#444] bg-[#111] text-[#dc2626] focus:ring-[#dc2626]"
+                    />
+                    <span className="text-[#374151] text-sm font-exo">Publicar como Rascunho</span>
                   </label>
                 </div>
 
@@ -1444,14 +1464,6 @@ export default function AdminPage() {
                   >
                     <PlusCircle size={18} />
                     {saving ? 'Salvando...' : editingId ? 'Atualizar post' : 'Criar post'}
-                  </button>
-                  <button
-                    disabled={saving || !isAdmin}
-                    type="submit"
-                    data-publish-mode="draft"
-                    className="inline-flex items-center justify-center gap-2 rounded-full border border-[#d1d5db] bg-white px-6 py-3 text-sm font-bold uppercase tracking-widest text-[#374151] transition-all hover:bg-[#f9fafb] hover:shadow-sm disabled:cursor-not-allowed disabled:opacity-50"
-                  >
-                    {saving ? 'Salvando...' : editingId ? 'Atualizar rascunho' : 'Publicar como Rascunho'}
                   </button>
                   {editingId && (
                     <button
