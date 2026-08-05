@@ -725,6 +725,13 @@ export default function AdminPage() {
     setMessage(null);
 
     try {
+      const nativeEvent = event.nativeEvent;
+      const submitter = nativeEvent instanceof SubmitEvent
+        ? (nativeEvent.submitter as HTMLButtonElement | null)
+        : null;
+      const isDraftAction = submitter?.getAttribute('data-publish-mode') === 'draft';
+      const publishedValue = isDraftAction ? false : form.published;
+
       const payload = {
         title: form.title.trim(),
         slug: form.slug.trim().toLowerCase(),
@@ -737,7 +744,7 @@ export default function AdminPage() {
         external_url: form.external_url.trim() || null,
         featured: false,
         hot: form.hot,
-        published: form.published,
+        published: publishedValue,
       };
 
       const method = form.id ? 'PUT' : 'POST';
@@ -760,7 +767,11 @@ export default function AdminPage() {
         return;
       }
 
-      setMessage(form.id ? 'Post atualizado com sucesso!' : 'Post criado com sucesso!');
+      if (form.id) {
+        setMessage(publishedValue ? 'Post atualizado e publicado com sucesso!' : 'Rascunho atualizado com sucesso!');
+      } else {
+        setMessage(publishedValue ? 'Post criado e publicado com sucesso!' : 'Post salvo como rascunho com sucesso!');
+      }
       setForm(initialFormState);
       setEditingId(null);
       setSelectedImageId(null);
@@ -1433,6 +1444,14 @@ export default function AdminPage() {
                   >
                     <PlusCircle size={18} />
                     {saving ? 'Salvando...' : editingId ? 'Atualizar post' : 'Criar post'}
+                  </button>
+                  <button
+                    disabled={saving || !isAdmin}
+                    type="submit"
+                    data-publish-mode="draft"
+                    className="inline-flex items-center justify-center gap-2 rounded-full border border-[#d1d5db] bg-white px-6 py-3 text-sm font-bold uppercase tracking-widest text-[#374151] transition-all hover:bg-[#f9fafb] hover:shadow-sm disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {saving ? 'Salvando...' : editingId ? 'Atualizar rascunho' : 'Publicar como Rascunho'}
                   </button>
                   {editingId && (
                     <button
