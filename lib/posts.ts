@@ -1,4 +1,5 @@
 import { supabase } from './supabase';
+import { getEffectivePublicationCategory, PUBLICATION_OPTIONS, type PublicationCategory } from './postCategories';
 
 const fallbackPosts: Post[] = [
   {
@@ -49,8 +50,8 @@ export interface Post {
   published: boolean;
 }
 
-export const POST_SECTION_VALUES = ['Noticias', 'Rankings', 'Garagem dos Sonhos'] as const;
-export type PostSection = (typeof POST_SECTION_VALUES)[number];
+export const POST_SECTION_VALUES = PUBLICATION_OPTIONS;
+export type PostSection = PublicationCategory;
 
 interface GetPostsOptions {
   includePrivateModelPosts?: boolean;
@@ -63,32 +64,8 @@ function normalize(value: string) {
     .replace(/[\u0300-\u036f]/g, '');
 }
 
-function resolvePostSection(value: string): PostSection | null {
-  const normalizedValue = normalize(value);
-
-  if (normalizedValue.includes('ranking')) {
-    return 'Rankings';
-  }
-
-  if (normalizedValue.includes('garagem dos sonhos') || (normalizedValue.includes('garagem') && normalizedValue.includes('sonho'))) {
-    return 'Garagem dos Sonhos';
-  }
-
-  if (normalizedValue.includes('noticia')) {
-    return 'Noticias';
-  }
-
-  return null;
-}
-
 export function getPostSection(post: Pick<Post, 'category' | 'title' | 'excerpt' | 'slug'>): PostSection {
-  const sectionFromCategory = resolvePostSection(post.category);
-  if (sectionFromCategory) {
-    return sectionFromCategory;
-  }
-
-  const sectionFromContent = resolvePostSection([post.title, post.excerpt, post.slug].join(' '));
-  return sectionFromContent ?? 'Noticias';
+  return getEffectivePublicationCategory(post);
 }
 
 export function isPostInSection(post: Pick<Post, 'category' | 'title' | 'excerpt' | 'slug'>, section: PostSection) {

@@ -1,5 +1,11 @@
 import { NextResponse } from 'next/server';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import {
+  getEffectivePublicationCategory,
+  resolvePublicationCategory,
+  shouldPromoteLegacyPostToDreamGarage,
+  type AdminPostFilterCategory,
+} from '@/lib/postCategories';
 
 interface PostPayload {
   title: string;
@@ -15,26 +21,6 @@ interface PostPayload {
   hot: boolean;
   published: boolean;
 }
-
-const normalizeCategoryValue = (value: string) =>
-  value
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '');
-
-const resolvePublicationCategory = (value: string): 'Noticias' | 'Rankings' | 'Garagem dos Sonhos' => {
-  const normalized = normalizeCategoryValue(value);
-
-  if (normalized.includes('ranking')) {
-    return 'Rankings';
-  }
-
-  if (normalized.includes('garagem dos sonhos') || (normalized.includes('garagem') && normalized.includes('sonho'))) {
-    return 'Garagem dos Sonhos';
-  }
-
-  return 'Noticias';
-};
 
 const sanitizePostPayload = (post: PostPayload): PostPayload => ({
   ...post,
@@ -159,6 +145,7 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const postId = searchParams.get('postId');
     const query = searchParams.get('q')?.trim() ?? '';
+    const categoryFilter = (searchParams.get('category')?.trim() ?? 'Todos') as AdminPostFilterCategory;
     const authorizationHeader = request.headers.get('authorization');
     const accessToken = authorizationHeader?.startsWith('Bearer ')
       ? authorizationHeader.slice('Bearer '.length)
@@ -188,14 +175,23 @@ export async function GET(request: Request) {
         return NextResponse.json({ error: error.message }, { status: 400 });
       }
 
+      const normalizedData = (data ?? []).map((post) => ({
+        ...post,
+        category: getEffectivePublicationCategory(post),
+      }));
+
       const normalizedQuery = query.toLowerCase();
-      const filteredData = normalizedQuery
-        ? (data ?? []).filter((post) =>
+      const filteredByQuery = normalizedQuery
+        ? normalizedData.filter((post) =>
             [post.title, post.slug, post.category].some((value) =>
               String(value).toLowerCase().includes(normalizedQuery)
             )
           )
-        : data;
+        : normalizedData;
+
+      const filteredData = categoryFilter !== 'Todos'
+        ? filteredByQuery.filter((post) => post.category === categoryFilter)
+        : filteredByQuery;
 
       return NextResponse.json(filteredData);
     }
@@ -210,7 +206,10 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
-    return NextResponse.json(data);
+    return NextResponse.json({
+      ...data,
+      category: getEffectivePublicationCategory(data),
+    });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Erro inesperado ao carregar post.';
     return NextResponse.json({ error: message }, { status: 500 });
@@ -327,6 +326,61 @@ export async function PUT(request: Request) {
     return NextResponse.json({ success: true });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Erro inesperado ao atualizar post.';
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
+}
+
+export async function PATCH(request: Request) {
+  try {
+    const body = await request.json();
+    const accessToken = body?.accessToken as string | undefined;
+    const beforeDate = body?.beforeDate as string | undefined;
+
+    if (!accessToken) {
+      return NextResponse.json({ error: 'Sessao expirada. Faca login novamente.' }, { status: 401 });
+    }
+
+    if (!beforeDate) {
+      return NextResponse.json({ error: 'Data limite ausente.' }, { status: 400 });
+    }
+
+    const auth = await verifyAdminToken(accessToken);
+    if ('error' in auth) {
+      return NextResponse.json({ error: auth.error }, { status: 403 });
+    }
+
+    const client = createDbClient(accessToken);
+    if (!client.ok) {
+      return NextResponse.json({ error: client.error }, { status: 500 });
+    }
+
+    const { data, error } = await client.supabase
+      .from('posts')
+      .select('id, title, slug, excerpt, category, date')
+      .lte('date', beforeDate);
+
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+
+    const postsToUpdate = (data ?? []).filter((post) => shouldPromoteLegacyPostToDreamGarage(post));
+
+    if (postsToUpdate.length === 0) {
+      return NextResponse.json({ success: true, updatedCount: 0 });
+    }
+
+    const { error: updateError } = await client.supabase
+      .from('posts')
+      .update({ category: 'Garagem dos Sonhos' })
+      .in('id', postsToUpdate.map((post) => post.id));
+
+    if (updateError) {
+      return NextResponse.json({ error: updateError.message }, { status: 400 });
+    }
+
+    return NextResponse.json({ success: true, updatedCount: postsToUpdate.length });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Erro inesperado ao recategorizar posts.';
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }

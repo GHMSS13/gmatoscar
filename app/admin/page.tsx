@@ -6,6 +6,13 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { Loader2, LogIn, LogOut, PlusCircle, Edit, Trash2, ImagePlus, Search, X } from 'lucide-react';
 import MarkdownContent from '@/lib/articleContent';
+import {
+  ADMIN_POST_FILTER_OPTIONS,
+  LEGACY_DREAM_GARAGE_CUTOFF,
+  PUBLICATION_OPTIONS,
+  resolvePublicationCategory,
+  type AdminPostFilterCategory,
+} from '@/lib/postCategories';
 
 interface PostFormState {
   id?: string;
@@ -22,29 +29,6 @@ interface PostFormState {
   hot: boolean;
   published: boolean;
 }
-
-const PUBLICATION_OPTIONS = ['Noticias', 'Rankings', 'Garagem dos Sonhos'] as const;
-type PublicationCategory = (typeof PUBLICATION_OPTIONS)[number];
-
-const normalizeCategoryValue = (value: string) =>
-  value
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '');
-
-const resolvePublicationCategory = (value: string): PublicationCategory => {
-  const normalized = normalizeCategoryValue(value);
-
-  if (normalized.includes('ranking')) {
-    return 'Rankings';
-  }
-
-  if (normalized.includes('garagem dos sonhos') || (normalized.includes('garagem') && normalized.includes('sonho'))) {
-    return 'Garagem dos Sonhos';
-  }
-
-  return 'Noticias';
-};
 
 interface PublishedPost {
   id: string;
@@ -187,6 +171,8 @@ export default function AdminPage() {
   const [selectedImageId, setSelectedImageId] = useState<string | null>(null);
   const [imageSearchQuery, setImageSearchQuery] = useState('');
   const [postSearchQuery, setPostSearchQuery] = useState('');
+  const [activePostCategory, setActivePostCategory] = useState<AdminPostFilterCategory>('Todos');
+  const [migratingLegacyPosts, setMigratingLegacyPosts] = useState(false);
   const [publishAsDraft, setPublishAsDraft] = useState(false);
   
   // Novos estados para o editor profissional e inserção de imagem
@@ -224,7 +210,12 @@ export default function AdminPage() {
     setLoadingPosts(true);
 
     try {
-      const response = await fetch(`/api/admin/posts?q=${encodeURIComponent(searchQuery.trim())}`, {
+      const params = new URLSearchParams({
+        q: searchQuery.trim(),
+        category: activePostCategory,
+      });
+
+      const response = await fetch(`/api/admin/posts?${params.toString()}`, {
         headers: {
           Authorization: `Bearer ${session.access_token}`,
         },
@@ -550,6 +541,48 @@ export default function AdminPage() {
     }
   };
 
+  const handlePromoteLegacyGaragePosts = async () => {
+    if (!session?.access_token) {
+      setMessage('Sessao expirada. Faca login novamente.');
+      return;
+    }
+
+    setMigratingLegacyPosts(true);
+    setMessage(null);
+
+    try {
+      const response = await fetch('/api/admin/posts', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          accessToken: session.access_token,
+          beforeDate: LEGACY_DREAM_GARAGE_CUTOFF,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setMessage(data.error ?? 'Erro ao recategorizar posts antigos.');
+        return;
+      }
+
+      setMessage(
+        data.updatedCount > 0
+          ? `${data.updatedCount} artigo(s) foram movidos para Garagem dos Sonhos.`
+          : 'Nenhum artigo antigo precisou ser recategorizado.'
+      );
+      await fetchPublishedPosts();
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Erro ao recategorizar posts antigos.';
+      setMessage(errorMessage);
+    } finally {
+      setMigratingLegacyPosts(false);
+    }
+  };
+
   useEffect(() => {
     const init = async () => {
       const {
@@ -602,7 +635,7 @@ export default function AdminPage() {
     }, 250);
 
     return () => window.clearTimeout(timeoutId);
-  }, [isAdmin, session?.access_token, postSearchQuery]);
+  }, [activePostCategory, isAdmin, session?.access_token, postSearchQuery]);
 
   useEffect(() => {
     if (!isAdmin || !session?.access_token) {
@@ -1481,39 +1514,85 @@ export default function AdminPage() {
 
           {session?.user && isAdmin && (
             <div className="mt-8">
-              <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-                <h2 className="text-3xl font-rajdhani font-bold text-[#111827] flex items-center gap-2">
-                  <span>Posts publicados</span>
-                  {loadingPosts && <Loader2 size={20} className="animate-spin" />}
-                </h2>
+              <div className="mb-6 rounded-2xl border border-[#e5e7eb] bg-[#f9fafb] p-4 sm:p-5">
+                <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+                  <div className="space-y-3">
+                    <h2 className="text-3xl font-rajdhani font-bold text-[#111827] flex items-center gap-2">
+                      <span>Posts publicados</span>
+                      {loadingPosts && <Loader2 size={20} className="animate-spin" />}
+                    </h2>
+                    <div className="flex flex-wrap gap-2">
+                      {ADMIN_POST_FILTER_OPTIONS.map((category) => {
+                        const isActive = activePostCategory === category;
 
-                <form onSubmit={handlePostSearchSubmit} className="w-full sm:max-w-md">
-                  <div className="relative">
-                    <Search
-                      size={16}
-                      className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9ca3af] pointer-events-none"
-                    />
-                    <input
-                      type="text"
-                      value={postSearchQuery}
-                      onChange={(event) => setPostSearchQuery(event.target.value)}
-                      placeholder="Pesquisar posts por título ou slug..."
-                      className="w-full rounded-xl border border-[#d1d5db] bg-white py-3 pl-10 pr-10 text-sm font-exo text-[#111827] outline-none transition-colors placeholder:text-[#9ca3af] focus:border-[#dc2626]/50"
-                    />
-                    {postSearchQuery && (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setPostSearchQuery('');
-                        }}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#9ca3af] hover:text-[#4b5563] transition-colors"
-                        aria-label="Limpar busca de posts"
-                      >
-                        <X size={15} />
-                      </button>
-                    )}
+                        return (
+                          <button
+                            key={category}
+                            type="button"
+                            onClick={() => setActivePostCategory(category)}
+                            className={`rounded-full border px-4 py-2 text-xs font-bold uppercase tracking-[0.24em] transition-colors ${
+                              isActive
+                                ? 'border-[#111827] bg-[#111827] text-white'
+                                : 'border-[#d1d5db] bg-white text-[#4b5563] hover:border-[#111827] hover:text-[#111827]'
+                            }`}
+                          >
+                            {category}
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
-                </form>
+
+                  <div className="w-full lg:max-w-md">
+                    <form onSubmit={handlePostSearchSubmit}>
+                      <div className="relative">
+                        <Search
+                          size={16}
+                          className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9ca3af] pointer-events-none"
+                        />
+                        <input
+                          type="text"
+                          value={postSearchQuery}
+                          onChange={(event) => setPostSearchQuery(event.target.value)}
+                          placeholder="Pesquisar posts por título, slug ou categoria..."
+                          className="w-full rounded-xl border border-[#d1d5db] bg-white py-3 pl-10 pr-10 text-sm font-exo text-[#111827] outline-none transition-colors placeholder:text-[#9ca3af] focus:border-[#dc2626]/50"
+                        />
+                        {postSearchQuery && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setPostSearchQuery('');
+                            }}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#9ca3af] hover:text-[#4b5563] transition-colors"
+                            aria-label="Limpar busca de posts"
+                          >
+                            <X size={15} />
+                          </button>
+                        )}
+                      </div>
+                    </form>
+                  </div>
+                </div>
+
+                <p className="mt-4 text-sm text-[#6b7280]">
+                  {activePostCategory === 'Todos'
+                    ? `${publishedPosts.length} artigo(s) encontrado(s).`
+                    : `${publishedPosts.length} artigo(s) em ${activePostCategory}.`}
+                </p>
+
+                <div className="mt-4 flex flex-wrap items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={handlePromoteLegacyGaragePosts}
+                    disabled={migratingLegacyPosts || !isAdmin}
+                    className="inline-flex items-center justify-center rounded-full border border-[#dc2626] bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.24em] text-[#dc2626] transition-colors hover:bg-[#dc2626] hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {migratingLegacyPosts ? 'Atualizando...' : 'Aplicar Garagem até 2026-07-10'}
+                  </button>
+                  <span className="text-xs text-[#9ca3af]">
+                    Move artigos antigos para Garagem dos Sonhos e salva a categoria no banco.
+                  </span>
+                </div>
               </div>
 
               {publishedPosts.length === 0 ? (
@@ -1521,7 +1600,9 @@ export default function AdminPage() {
                   <p>
                     {postSearchQuery.trim()
                       ? 'Nenhum post encontrado para essa busca.'
-                      : 'Nenhum post publicado ainda. Crie seu primeiro post acima!'}
+                      : activePostCategory !== 'Todos'
+                        ? `Nenhum post encontrado em ${activePostCategory}.`
+                        : 'Nenhum post publicado ainda. Crie seu primeiro post acima!'}
                   </p>
                 </div>
               ) : (
@@ -1535,6 +1616,9 @@ export default function AdminPage() {
                         <div className="flex-1">
                           <div className="flex items-center gap-3 mb-2">
                             <span className="text-[#9ca3af] text-xs">{post.date}</span>
+                            <span className="rounded-full bg-[#111827] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-white">
+                              {post.category}
+                            </span>
                           </div>
                           <h3 className="text-[#111827] font-rajdhani font-bold text-lg mb-1">
                             {post.title}
