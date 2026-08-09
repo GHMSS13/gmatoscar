@@ -1,9 +1,9 @@
 export const PUBLICATION_OPTIONS = ['Noticias', 'Rankings', 'Garagem dos Sonhos'] as const;
-export const ADMIN_POST_FILTER_OPTIONS = ['Todos', ...PUBLICATION_OPTIONS] as const;
+export const ADMIN_POST_FILTER_OPTIONS = ['Todos', ...PUBLICATION_OPTIONS, 'Rascunho'] as const;
 export const LEGACY_DREAM_GARAGE_CUTOFF = '2026-07-10';
 
 export type PublicationCategory = (typeof PUBLICATION_OPTIONS)[number];
-export type AdminPostFilterCategory = (typeof ADMIN_POST_FILTER_OPTIONS)[number];
+export type AdminPostFilterOption = (typeof ADMIN_POST_FILTER_OPTIONS)[number];
 
 interface PublicationCategorySource {
   category?: string | null;

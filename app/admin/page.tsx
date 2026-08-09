@@ -11,7 +11,7 @@ import {
   LEGACY_DREAM_GARAGE_CUTOFF,
   PUBLICATION_OPTIONS,
   resolvePublicationCategory,
-  type AdminPostFilterCategory,
+  type AdminPostFilterOption,
 } from '@/lib/postCategories';
 
 interface PostFormState {
@@ -171,7 +171,7 @@ export default function AdminPage() {
   const [selectedImageId, setSelectedImageId] = useState<string | null>(null);
   const [imageSearchQuery, setImageSearchQuery] = useState('');
   const [postSearchQuery, setPostSearchQuery] = useState('');
-  const [activePostCategory, setActivePostCategory] = useState<AdminPostFilterCategory>('Todos');
+  const [activePostCategory, setActivePostCategory] = useState<AdminPostFilterOption>('Todos');
   const [migratingLegacyPosts, setMigratingLegacyPosts] = useState(false);
   const [publishAsDraft, setPublishAsDraft] = useState(false);
   
@@ -1577,7 +1577,9 @@ export default function AdminPage() {
                 <p className="mt-4 text-sm text-[#6b7280]">
                   {activePostCategory === 'Todos'
                     ? `${publishedPosts.length} artigo(s) encontrado(s).`
-                    : `${publishedPosts.length} artigo(s) em ${activePostCategory}.`}
+                    : activePostCategory === 'Rascunho'
+                      ? `${publishedPosts.length} rascunho(s) encontrado(s).`
+                      : `${publishedPosts.length} artigo(s) em ${activePostCategory}.`}
                 </p>
 
                 <div className="mt-4 flex flex-wrap items-center gap-3">
@@ -1600,7 +1602,9 @@ export default function AdminPage() {
                   <p>
                     {postSearchQuery.trim()
                       ? 'Nenhum post encontrado para essa busca.'
-                      : activePostCategory !== 'Todos'
+                      : activePostCategory === 'Rascunho'
+                        ? 'Nenhum rascunho encontrado.'
+                        : activePostCategory !== 'Todos'
                         ? `Nenhum post encontrado em ${activePostCategory}.`
                         : 'Nenhum post publicado ainda. Crie seu primeiro post acima!'}
                   </p>
@@ -1618,6 +1622,15 @@ export default function AdminPage() {
                             <span className="text-[#9ca3af] text-xs">{post.date}</span>
                             <span className="rounded-full bg-[#111827] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-white">
                               {post.category}
+                            </span>
+                            <span
+                              className={`rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] ${
+                                post.published
+                                  ? 'bg-[#dcfce7] text-[#166534]'
+                                  : 'bg-[#fef3c7] text-[#92400e]'
+                              }`}
+                            >
+                              {post.published ? 'Publicado' : 'Rascunho'}
                             </span>
                           </div>
                           <h3 className="text-[#111827] font-rajdhani font-bold text-lg mb-1">

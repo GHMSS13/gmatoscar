@@ -4,7 +4,7 @@ import {
   getEffectivePublicationCategory,
   resolvePublicationCategory,
   shouldPromoteLegacyPostToDreamGarage,
-  type AdminPostFilterCategory,
+  type AdminPostFilterOption,
 } from '@/lib/postCategories';
 
 interface PostPayload {
@@ -145,7 +145,7 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const postId = searchParams.get('postId');
     const query = searchParams.get('q')?.trim() ?? '';
-    const categoryFilter = (searchParams.get('category')?.trim() ?? 'Todos') as AdminPostFilterCategory;
+    const categoryFilter = (searchParams.get('category')?.trim() ?? 'Todos') as AdminPostFilterOption;
     const authorizationHeader = request.headers.get('authorization');
     const accessToken = authorizationHeader?.startsWith('Bearer ')
       ? authorizationHeader.slice('Bearer '.length)
@@ -189,9 +189,11 @@ export async function GET(request: Request) {
           )
         : normalizedData;
 
-      const filteredData = categoryFilter !== 'Todos'
-        ? filteredByQuery.filter((post) => post.category === categoryFilter)
-        : filteredByQuery;
+      const filteredData = categoryFilter === 'Todos'
+        ? filteredByQuery
+        : categoryFilter === 'Rascunho'
+          ? filteredByQuery.filter((post) => !post.published)
+          : filteredByQuery.filter((post) => post.category === categoryFilter);
 
       return NextResponse.json(filteredData);
     }
