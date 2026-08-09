@@ -383,12 +383,12 @@ export default function HomeTopNewsSection({
                 <CarouselItem key={item.id} className="pl-0 lg:h-full">
                   <article className="group rounded-none sm:rounded-sm lg:rounded-xl overflow-hidden border-0 sm:border sm:border-[#e5e7eb] bg-white lg:h-full">
                     <Link href={`/noticias/${item.slug}`} className="block">
-                      <div className="relative min-h-[330px] sm:min-h-[320px] lg:min-h-0 lg:h-[390px] overflow-hidden">
+                      <div className="relative min-h-[420px] bg-[#0a0a0a] sm:min-h-[320px] lg:min-h-0 lg:h-[390px] overflow-hidden">
                         <Image
                           src={item.image_url}
                           alt={item.title}
                           fill
-                          className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                          className="object-cover object-[center_34%] sm:object-[center_42%] transition-transform duration-500 group-hover:scale-[1.03]"
                           sizes="(max-width: 1024px) 100vw, 50vw"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a]/80 via-[#0f172a]/20 to-transparent" />
