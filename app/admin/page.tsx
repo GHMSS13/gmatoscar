@@ -8,7 +8,6 @@ import { Loader2, LogIn, LogOut, PlusCircle, Edit, Trash2, ImagePlus, Search, X 
 import MarkdownContent from '@/lib/articleContent';
 import {
   ADMIN_POST_FILTER_OPTIONS,
-  LEGACY_DREAM_GARAGE_CUTOFF,
   PUBLICATION_OPTIONS,
   resolvePublicationCategory,
   type AdminPostFilterOption,
@@ -172,7 +171,6 @@ export default function AdminPage() {
   const [imageSearchQuery, setImageSearchQuery] = useState('');
   const [postSearchQuery, setPostSearchQuery] = useState('');
   const [activePostCategory, setActivePostCategory] = useState<AdminPostFilterOption>('Todos');
-  const [migratingLegacyPosts, setMigratingLegacyPosts] = useState(false);
   const [publishAsDraft, setPublishAsDraft] = useState(false);
   
   // Novos estados para o editor profissional e inserção de imagem
@@ -538,48 +536,6 @@ export default function AdminPage() {
       setMessage(errorMessage);
     } finally {
       setSaving(false);
-    }
-  };
-
-  const handlePromoteLegacyGaragePosts = async () => {
-    if (!session?.access_token) {
-      setMessage('Sessao expirada. Faca login novamente.');
-      return;
-    }
-
-    setMigratingLegacyPosts(true);
-    setMessage(null);
-
-    try {
-      const response = await fetch('/api/admin/posts', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          accessToken: session.access_token,
-          beforeDate: LEGACY_DREAM_GARAGE_CUTOFF,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        setMessage(data.error ?? 'Erro ao recategorizar posts antigos.');
-        return;
-      }
-
-      setMessage(
-        data.updatedCount > 0
-          ? `${data.updatedCount} artigo(s) foram movidos para Garagem dos Sonhos.`
-          : 'Nenhum artigo antigo precisou ser recategorizado.'
-      );
-      await fetchPublishedPosts();
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Erro ao recategorizar posts antigos.';
-      setMessage(errorMessage);
-    } finally {
-      setMigratingLegacyPosts(false);
     }
   };
 
@@ -1581,20 +1537,6 @@ export default function AdminPage() {
                       ? `${publishedPosts.length} rascunho(s) encontrado(s).`
                       : `${publishedPosts.length} artigo(s) em ${activePostCategory}.`}
                 </p>
-
-                <div className="mt-4 flex flex-wrap items-center gap-3">
-                  <button
-                    type="button"
-                    onClick={handlePromoteLegacyGaragePosts}
-                    disabled={migratingLegacyPosts || !isAdmin}
-                    className="inline-flex items-center justify-center rounded-full border border-[#dc2626] bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.24em] text-[#dc2626] transition-colors hover:bg-[#dc2626] hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
-                  >
-                    {migratingLegacyPosts ? 'Atualizando...' : 'Aplicar Garagem até 2026-07-10'}
-                  </button>
-                  <span className="text-xs text-[#9ca3af]">
-                    Move artigos antigos para Garagem dos Sonhos e salva a categoria no banco.
-                  </span>
-                </div>
               </div>
 
               {publishedPosts.length === 0 ? (

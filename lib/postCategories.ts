@@ -68,13 +68,3 @@ export function getEffectivePublicationCategory(source: PublicationCategorySourc
 
   return categoryMatch ?? inferredMatch ?? 'Noticias';
 }
-
-export function shouldPromoteLegacyPostToDreamGarage(source: PublicationCategorySource) {
-  const storedCategory = resolveMatchedPublicationCategory(source.category ?? '');
-
-  return (
-    isLegacyDreamGarageDate(source.date) &&
-    getEffectivePublicationCategory(source) === 'Garagem dos Sonhos' &&
-    storedCategory !== 'Garagem dos Sonhos'
-  );
-}

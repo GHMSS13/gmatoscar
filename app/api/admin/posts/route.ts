@@ -3,7 +3,6 @@ import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import {
   getEffectivePublicationCategory,
   resolvePublicationCategory,
-  shouldPromoteLegacyPostToDreamGarage,
   type AdminPostFilterOption,
 } from '@/lib/postCategories';
 
@@ -328,61 +327,6 @@ export async function PUT(request: Request) {
     return NextResponse.json({ success: true });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Erro inesperado ao atualizar post.';
-    return NextResponse.json({ error: message }, { status: 500 });
-  }
-}
-
-export async function PATCH(request: Request) {
-  try {
-    const body = await request.json();
-    const accessToken = body?.accessToken as string | undefined;
-    const beforeDate = body?.beforeDate as string | undefined;
-
-    if (!accessToken) {
-      return NextResponse.json({ error: 'Sessao expirada. Faca login novamente.' }, { status: 401 });
-    }
-
-    if (!beforeDate) {
-      return NextResponse.json({ error: 'Data limite ausente.' }, { status: 400 });
-    }
-
-    const auth = await verifyAdminToken(accessToken);
-    if ('error' in auth) {
-      return NextResponse.json({ error: auth.error }, { status: 403 });
-    }
-
-    const client = createDbClient(accessToken);
-    if (!client.ok) {
-      return NextResponse.json({ error: client.error }, { status: 500 });
-    }
-
-    const { data, error } = await client.supabase
-      .from('posts')
-      .select('id, title, slug, excerpt, category, date')
-      .lte('date', beforeDate);
-
-    if (error) {
-      return NextResponse.json({ error: error.message }, { status: 400 });
-    }
-
-    const postsToUpdate = (data ?? []).filter((post) => shouldPromoteLegacyPostToDreamGarage(post));
-
-    if (postsToUpdate.length === 0) {
-      return NextResponse.json({ success: true, updatedCount: 0 });
-    }
-
-    const { error: updateError } = await client.supabase
-      .from('posts')
-      .update({ category: 'Garagem dos Sonhos' })
-      .in('id', postsToUpdate.map((post) => post.id));
-
-    if (updateError) {
-      return NextResponse.json({ error: updateError.message }, { status: 400 });
-    }
-
-    return NextResponse.json({ success: true, updatedCount: postsToUpdate.length });
-  } catch (error) {
-    const message = error instanceof Error ? error.message : 'Erro inesperado ao recategorizar posts.';
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
