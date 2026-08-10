@@ -1,6 +1,6 @@
 'use client';
 
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
@@ -74,6 +74,38 @@ const ADMIN_REDIRECT_STORAGE_KEY = 'gmatoscar-admin-redirect';
 const IMAGE_PAGE_SIZE = 10;
 const IMAGE_URL_PREFIX = '/api/images/';
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+const IMAGE_MARKDOWN_REGEX = /(<img\s+[^>]*src=["'][^"']+["'][^>]*>|!\[[^\]]*\]\([^\)]+\))/gi;
+
+function escapeHtml(value: string) {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function buildHighlightedMarkdown(content: string) {
+  let highlighted = '';
+  let lastIndex = 0;
+
+  IMAGE_MARKDOWN_REGEX.lastIndex = 0;
+
+  let match = IMAGE_MARKDOWN_REGEX.exec(content);
+  while (match) {
+    const imageText = match[0];
+    const matchIndex = match.index ?? 0;
+
+    highlighted += escapeHtml(content.slice(lastIndex, matchIndex));
+    highlighted += `<span class="rounded-md bg-[#dbeafe] px-1.5 py-0.5 font-semibold text-[#1d4ed8]">${escapeHtml(imageText)}</span>`;
+    lastIndex = matchIndex + imageText.length;
+
+    match = IMAGE_MARKDOWN_REGEX.exec(content);
+  }
+
+  highlighted += escapeHtml(content.slice(lastIndex));
+  return highlighted || '&nbsp;';
+}
 
 const quillModules = {
   toolbar: [
@@ -172,6 +204,9 @@ export default function AdminPage() {
   const [postSearchQuery, setPostSearchQuery] = useState('');
   const [activePostCategory, setActivePostCategory] = useState<AdminPostFilterOption>('Todos');
   const [publishAsDraft, setPublishAsDraft] = useState(false);
+  const contentTextareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const contentOverlayRef = useRef<HTMLDivElement | null>(null);
+  const [contentScroll, setContentScroll] = useState({ top: 0, left: 0 });
   
   // Novos estados para o editor profissional e inserção de imagem
   const [editorTab, setEditorTab] = useState<'write' | 'preview'>('write');
@@ -347,17 +382,6 @@ export default function AdminPage() {
         return;
       }
 
-      // Define a primeira imagem enviada como imagem principal do post por padrão
-      if (data.ids && data.ids.length > 0) {
-        const firstImageUrl = `${IMAGE_URL_PREFIX}${data.ids[0]}`;
-        setForm((prev) => ({ ...prev, image_url: firstImageUrl }));
-        setSelectedImageId(data.ids[0]);
-      } else if (data.id) {
-        const imageUrl = `${IMAGE_URL_PREFIX}${data.id}`;
-        setForm((prev) => ({ ...prev, image_url: imageUrl }));
-        setSelectedImageId(data.id);
-      }
-
       setLibraryPage(1);
       await fetchImageLibrary(1);
       setMessage(`${fileList.length} imagem(ns) enviada(s) com sucesso para o banco.`);
@@ -374,6 +398,16 @@ export default function AdminPage() {
     const imageUrl = `${IMAGE_URL_PREFIX}${imageId}`;
     setForm((prev) => ({ ...prev, image_url: imageUrl }));
     setSelectedImageId(imageId);
+  };
+
+  const handleCoverBlockClick = () => {
+    if (form.image_url) {
+      setForm((prev) => ({ ...prev, image_url: '' }));
+      setSelectedImageId(null);
+    }
+
+    const bankContainer = document.getElementById('banco-de-imagens-container');
+    bankContainer?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   const handleDeleteLibraryImage = async (imageId: string) => {
@@ -1104,7 +1138,18 @@ export default function AdminPage() {
                   </label>
                   <div className="block">
                     <span className="text-[#374151] text-sm font-exo">Imagem de Capa (Post)</span>
-                    <div className="mt-2 flex items-center gap-4 rounded-xl border border-[#d1d5db] bg-white px-4 py-2.5 min-h-[50px]">
+                    <div
+                      role="button"
+                      tabIndex={0}
+                      onClick={handleCoverBlockClick}
+                      onKeyDown={(event) => {
+                        if (event.key === 'Enter' || event.key === ' ') {
+                          event.preventDefault();
+                          handleCoverBlockClick();
+                        }
+                      }}
+                      className="mt-2 flex w-full items-center gap-4 rounded-xl border border-[#d1d5db] bg-white px-4 py-2.5 min-h-[50px] text-left transition-colors hover:border-[#dc2626]/60 hover:bg-[#fffafa] cursor-pointer focus:outline-none focus:border-[#dc2626]/60"
+                    >
                       {form.image_url ? (
                         <>
                           <div className="relative h-10 w-14 overflow-hidden rounded bg-[#f3f4f6] flex-shrink-0 border border-[#e5e7eb]">
@@ -1128,6 +1173,7 @@ export default function AdminPage() {
                               setForm((prev) => ({ ...prev, image_url: '' }));
                               setSelectedImageId(null);
                             }}
+                            onMouseDown={(event) => event.stopPropagation()}
                             className="text-xs font-bold text-[#dc2626] hover:text-[#b91c1c] transition-colors uppercase tracking-wider font-rajdhani px-2 py-1 rounded hover:bg-[#dc2626]/5"
                           >
                             Remover
@@ -1366,14 +1412,34 @@ export default function AdminPage() {
                         </button>
                       </div>
 
-                      <textarea
-                        id="post-content-textarea"
-                        value={form.content}
-                        onChange={(event) => handleInput('content', event.target.value)}
-                        className="w-full min-h-[450px] border-0 outline-none text-[#111827] focus:ring-0 resize-y font-mono text-sm p-2"
-                        required
-                        placeholder="Utilize as ferramentas da barra acima ou digite markdown diretamente. Clique em '+ Imagem' para rolar até o banco de imagens."
-                      />
+                      <div className="relative min-h-[450px] rounded-lg border border-transparent bg-white">
+                        <div
+                          ref={contentOverlayRef}
+                          aria-hidden="true"
+                          className="pointer-events-none absolute inset-0 overflow-hidden rounded-lg"
+                        >
+                          <div
+                            className="whitespace-pre-wrap break-words px-2 py-2 font-mono text-sm leading-6 text-[#111827]"
+                            style={{
+                              transform: `translate(${-contentScroll.left}px, ${-contentScroll.top}px)`,
+                              willChange: 'transform',
+                            }}
+                            dangerouslySetInnerHTML={{
+                              __html: buildHighlightedMarkdown(form.content || ''),
+                            }}
+                          />
+                        </div>
+                        <textarea
+                          id="post-content-textarea"
+                          ref={contentTextareaRef}
+                          value={form.content}
+                          onChange={(event) => handleInput('content', event.target.value)}
+                          onScroll={(event) => setContentScroll({ top: event.currentTarget.scrollTop, left: event.currentTarget.scrollLeft })}
+                          className="relative z-10 w-full min-h-[450px] border-0 outline-none bg-transparent text-transparent caret-[#111827] focus:ring-0 resize-y font-mono text-sm leading-6 p-2 selection:bg-[#dc2626]/20 selection:text-transparent"
+                          required
+                          placeholder="Utilize as ferramentas da barra acima ou digite markdown diretamente. Clique em '+ Imagem' para rolar até o banco de imagens."
+                        />
+                      </div>
                     </div>
 
                     {/* Painel do Preview */}
