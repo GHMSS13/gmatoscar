@@ -74,7 +74,7 @@ const ADMIN_REDIRECT_STORAGE_KEY = 'gmatoscar-admin-redirect';
 const IMAGE_PAGE_SIZE = 10;
 const IMAGE_URL_PREFIX = '/api/images/';
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
-const IMAGE_MARKDOWN_REGEX = /(<img\s+[^>]*src=["'][^"']+["'][^>]*>|!\[[^\]]*\]\([^\)]+\))/gi;
+const IMAGE_MARKDOWN_INLINE_REGEX = /(<img\s+[^>]*src=["'][^"']+["'][^>]*>|!\[[^\]]*\]\([^\)]+\)|https?:\/\/\S+\.(?:png|jpe?g|webp|gif|avif)(?:\?\S*)?)/i;
 
 function escapeHtml(value: string) {
   return value
@@ -86,25 +86,20 @@ function escapeHtml(value: string) {
 }
 
 function buildHighlightedMarkdown(content: string) {
-  let highlighted = '';
-  let lastIndex = 0;
+  const normalizedContent = content.replace(/\r\n/g, '\n');
+  const lines = normalizedContent.split('\n');
 
-  IMAGE_MARKDOWN_REGEX.lastIndex = 0;
+  const highlightedLines = lines.map((line) => {
+    const escapedLine = escapeHtml(line);
 
-  let match = IMAGE_MARKDOWN_REGEX.exec(content);
-  while (match) {
-    const imageText = match[0];
-    const matchIndex = match.index ?? 0;
+    if (IMAGE_MARKDOWN_INLINE_REGEX.test(line)) {
+      return `<span class="bg-[#dbeafe]/70 text-[#1d4ed8]">${escapedLine}</span>`;
+    }
 
-    highlighted += escapeHtml(content.slice(lastIndex, matchIndex));
-    highlighted += `<span class="rounded-md bg-[#dbeafe] px-1.5 py-0.5 font-semibold text-[#1d4ed8]">${escapeHtml(imageText)}</span>`;
-    lastIndex = matchIndex + imageText.length;
+    return escapedLine;
+  });
 
-    match = IMAGE_MARKDOWN_REGEX.exec(content);
-  }
-
-  highlighted += escapeHtml(content.slice(lastIndex));
-  return highlighted || '&nbsp;';
+  return highlightedLines.join('\n') || '&nbsp;';
 }
 
 const quillModules = {
@@ -1419,7 +1414,7 @@ export default function AdminPage() {
                           className="pointer-events-none absolute inset-0 overflow-hidden rounded-lg"
                         >
                           <div
-                            className="whitespace-pre-wrap break-words px-2 py-2 font-mono text-sm leading-6 text-[#111827]"
+                            className="whitespace-pre px-2 py-2 font-mono text-sm leading-6 font-normal text-[#111827]"
                             style={{
                               transform: `translate(${-contentScroll.left}px, ${-contentScroll.top}px)`,
                               willChange: 'transform',
@@ -1432,10 +1427,11 @@ export default function AdminPage() {
                         <textarea
                           id="post-content-textarea"
                           ref={contentTextareaRef}
+                          wrap="off"
                           value={form.content}
                           onChange={(event) => handleInput('content', event.target.value)}
                           onScroll={(event) => setContentScroll({ top: event.currentTarget.scrollTop, left: event.currentTarget.scrollLeft })}
-                          className="relative z-10 w-full min-h-[450px] border-0 outline-none bg-transparent text-transparent caret-[#111827] focus:ring-0 resize-y font-mono text-sm leading-6 p-2 selection:bg-[#dc2626]/20 selection:text-transparent"
+                          className="relative z-10 w-full min-h-[450px] border-0 outline-none bg-transparent text-transparent caret-[#111827] focus:ring-0 resize-y whitespace-pre font-mono text-sm leading-6 p-2 selection:bg-[#dc2626]/20 selection:text-transparent"
                           required
                           placeholder="Utilize as ferramentas da barra acima ou digite markdown diretamente. Clique em '+ Imagem' para rolar até o banco de imagens."
                         />
