@@ -74,9 +74,6 @@ const ADMIN_REDIRECT_STORAGE_KEY = 'gmatoscar-admin-redirect';
 const IMAGE_PAGE_SIZE = 10;
 const IMAGE_URL_PREFIX = '/api/images/';
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
-const MARKDOWN_IMAGE_LINE_REGEX = /(<img\s+[^>]*src=["'][^"']+["'][^>]*>|!\[[^\]]*\]\([^\)]+\)|https?:\/\/\S+\.(?:png|jpe?g|webp|gif|avif)(?:\?\S*)?)/i;
-const MARKDOWN_HEADING_LINE_REGEX = /^\s*#{1,6}\s+/;
-const MARKDOWN_RULE_LINE_REGEX = /^\s*([-*_])\1\1+\s*$/;
 
 const quillModules = {
   toolbar: [
@@ -706,76 +703,17 @@ export default function AdminPage() {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
-  const getMarkdownLineWeight = (line: string) => {
-    const trimmed = line.trim();
+  const syncScrollByRatio = (source: HTMLElement, target: HTMLElement) => {
+    const sourceMax = source.scrollHeight - source.clientHeight;
+    const targetMax = target.scrollHeight - target.clientHeight;
 
-    if (!trimmed) {
-      return 0.7;
+    if (sourceMax <= 0 || targetMax <= 0) {
+      target.scrollTop = 0;
+      return;
     }
 
-    if (MARKDOWN_IMAGE_LINE_REGEX.test(trimmed)) {
-      return 12;
-    }
-
-    if (MARKDOWN_HEADING_LINE_REGEX.test(trimmed)) {
-      return 2.4;
-    }
-
-    if (MARKDOWN_RULE_LINE_REGEX.test(trimmed)) {
-      return 1.6;
-    }
-
-    return 1;
-  };
-
-  const buildMarkdownWeights = (content: string) => {
-    const normalized = content.replace(/\r\n/g, '\n');
-    const lines = normalized.split('\n');
-    const weights = lines.map(getMarkdownLineWeight);
-    const totalWeight = weights.reduce((acc, value) => acc + value, 0) || 1;
-
-    return { lines, weights, totalWeight };
-  };
-
-  const getWeightedProgressFromLine = (
-    weights: number[],
-    totalWeight: number,
-    lineIndex: number,
-    lineFraction: number
-  ) => {
-    if (weights.length === 0) {
-      return 0;
-    }
-
-    const clampedIndex = Math.max(0, Math.min(lineIndex, weights.length - 1));
-    const beforeWeight = weights.slice(0, clampedIndex).reduce((acc, value) => acc + value, 0);
-    const currentWeight = weights[clampedIndex] ?? 1;
-    const weightedPos = beforeWeight + currentWeight * Math.max(0, Math.min(lineFraction, 1));
-
-    return Math.max(0, Math.min(weightedPos / totalWeight, 1));
-  };
-
-  const getLineFromWeightedProgress = (weights: number[], totalWeight: number, progress: number) => {
-    if (weights.length === 0) {
-      return 0;
-    }
-
-    const targetWeight = Math.max(0, Math.min(progress, 1)) * totalWeight;
-    let accumulated = 0;
-
-    for (let idx = 0; idx < weights.length; idx += 1) {
-      const lineWeight = weights[idx] ?? 1;
-      const nextAccumulated = accumulated + lineWeight;
-
-      if (targetWeight <= nextAccumulated) {
-        const innerProgress = lineWeight > 0 ? (targetWeight - accumulated) / lineWeight : 0;
-        return idx + Math.max(0, Math.min(innerProgress, 1));
-      }
-
-      accumulated = nextAccumulated;
-    }
-
-    return weights.length - 1;
+    const ratio = source.scrollTop / sourceMax;
+    target.scrollTop = ratio * targetMax;
   };
 
   const handleMarkdownScroll = (event: React.UIEvent<HTMLTextAreaElement>) => {
@@ -789,21 +727,8 @@ export default function AdminPage() {
     }
 
     const textarea = event.currentTarget;
-    const previewMax = preview.scrollHeight - preview.clientHeight;
-    if (previewMax <= 0) {
-      return;
-    }
-
-    const lineHeight = parseFloat(window.getComputedStyle(textarea).lineHeight || '24') || 24;
-    const rawLinePosition = textarea.scrollTop / lineHeight;
-    const lineIndex = Math.floor(rawLinePosition);
-    const lineFraction = rawLinePosition - lineIndex;
-
-    const { weights, totalWeight } = buildMarkdownWeights(textarea.value || '');
-    const weightedProgress = getWeightedProgressFromLine(weights, totalWeight, lineIndex, lineFraction);
-
     isSyncingScrollRef.current = true;
-    preview.scrollTop = weightedProgress * previewMax;
+    syncScrollByRatio(textarea, preview);
     requestAnimationFrame(() => {
       isSyncingScrollRef.current = false;
     });
@@ -819,22 +744,8 @@ export default function AdminPage() {
       return;
     }
 
-    const preview = event.currentTarget;
-    const previewMax = preview.scrollHeight - preview.clientHeight;
-    if (previewMax <= 0) {
-      return;
-    }
-
-    const { weights, totalWeight } = buildMarkdownWeights(textarea.value || '');
-    const weightedProgress = preview.scrollTop / previewMax;
-    const targetLine = getLineFromWeightedProgress(weights, totalWeight, weightedProgress);
-
-    const lineHeight = parseFloat(window.getComputedStyle(textarea).lineHeight || '24') || 24;
-    const textareaMax = textarea.scrollHeight - textarea.clientHeight;
-    const targetScrollTop = Math.max(0, Math.min(targetLine * lineHeight, textareaMax));
-
     isSyncingScrollRef.current = true;
-    textarea.scrollTop = targetScrollTop;
+    syncScrollByRatio(event.currentTarget, textarea);
     requestAnimationFrame(() => {
       isSyncingScrollRef.current = false;
     });
@@ -1530,7 +1441,7 @@ export default function AdminPage() {
                     </div>
 
                     {/* Painel do Preview */}
-                    <div className="border border-[#e5e7eb] rounded-xl bg-[#f9fafb] p-5 flex flex-col shadow-sm">
+                    <div className="border border-[#e5e7eb] rounded-xl bg-[#f9fafb] p-3 flex flex-col shadow-sm">
                       <div className="border-b border-[#e5e7eb] pb-2 mb-4 flex justify-between items-center">
                         <p className="text-xs uppercase font-bold tracking-widest text-[#dc2626] font-rajdhani">
                           Pré-visualização em tempo real
@@ -1542,9 +1453,9 @@ export default function AdminPage() {
                       <div
                         ref={contentPreviewRef}
                         onScroll={handlePreviewScroll}
-                        className="h-[500px] max-h-[500px] overflow-y-auto pr-1"
+                        className="h-[560px] max-h-[560px] overflow-y-auto"
                       >
-                        <div className="prose mx-auto w-full max-w-[560px] prose-headings:text-[#111827] prose-headings:leading-tight prose-p:text-[#1f2937] prose-p:leading-[1.45] prose-p:mb-3">
+                        <div className="w-full max-w-none text-left text-sm pb-6">
                         {form.content.trim().length > 0 ? (
                           <MarkdownContent content={form.content} />
                         ) : (
