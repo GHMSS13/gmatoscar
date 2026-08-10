@@ -1523,18 +1523,14 @@ export default function AdminPage() {
                         value={form.content}
                         onChange={(event) => handleInput('content', event.target.value)}
                         onScroll={handleMarkdownScroll}
-                        className="w-full min-h-[450px] border-0 outline-none text-[#111827] focus:ring-0 resize-y font-mono text-sm p-2"
+                        className="w-full h-[500px] max-h-[500px] border-0 outline-none text-[#111827] focus:ring-0 resize-none overflow-y-auto font-mono text-sm p-2"
                         required
                         placeholder="Utilize as ferramentas da barra acima ou digite markdown diretamente. Clique em '+ Imagem' para rolar até o banco de imagens."
                       />
                     </div>
 
                     {/* Painel do Preview */}
-                    <div
-                      ref={contentPreviewRef}
-                      onScroll={handlePreviewScroll}
-                      className="border border-[#e5e7eb] rounded-xl bg-[#f9fafb] p-5 flex flex-col min-h-[450px] max-h-[600px] overflow-y-auto shadow-sm"
-                    >
+                    <div className="border border-[#e5e7eb] rounded-xl bg-[#f9fafb] p-5 flex flex-col shadow-sm">
                       <div className="border-b border-[#e5e7eb] pb-2 mb-4 flex justify-between items-center">
                         <p className="text-xs uppercase font-bold tracking-widest text-[#dc2626] font-rajdhani">
                           Pré-visualização em tempo real
@@ -1543,7 +1539,12 @@ export default function AdminPage() {
                           Live
                         </span>
                       </div>
-                      <div className="prose mx-auto w-full max-w-[560px] prose-headings:text-[#111827] prose-headings:leading-tight prose-p:text-[#1f2937] prose-p:leading-[1.45] prose-p:mb-3">
+                      <div
+                        ref={contentPreviewRef}
+                        onScroll={handlePreviewScroll}
+                        className="h-[500px] max-h-[500px] overflow-y-auto pr-1"
+                      >
+                        <div className="prose mx-auto w-full max-w-[560px] prose-headings:text-[#111827] prose-headings:leading-tight prose-p:text-[#1f2937] prose-p:leading-[1.45] prose-p:mb-3">
                         {form.content.trim().length > 0 ? (
                           <MarkdownContent content={form.content} />
                         ) : (
@@ -1551,6 +1552,7 @@ export default function AdminPage() {
                             O conteúdo formatado aparecerá aqui em tempo real conforme você escreve.
                           </p>
                         )}
+                        </div>
                       </div>
                     </div>
 
