@@ -74,6 +74,9 @@ const ADMIN_REDIRECT_STORAGE_KEY = 'gmatoscar-admin-redirect';
 const IMAGE_PAGE_SIZE = 10;
 const IMAGE_URL_PREFIX = '/api/images/';
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+const MARKDOWN_IMAGE_LINE_REGEX = /(<img\s+[^>]*src=["'][^"']+["'][^>]*>|!\[[^\]]*\]\([^\)]+\)|https?:\/\/\S+\.(?:png|jpe?g|webp|gif|avif)(?:\?\S*)?)/i;
+const MARKDOWN_HEADING_LINE_REGEX = /^\s*#{1,6}\s+/;
+const MARKDOWN_RULE_LINE_REGEX = /^\s*([-*_])\1\1+\s*$/;
 
 const quillModules = {
   toolbar: [
@@ -703,16 +706,76 @@ export default function AdminPage() {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
-  const syncScrollByRatio = (source: HTMLElement, target: HTMLElement) => {
-    const sourceMax = source.scrollHeight - source.clientHeight;
-    const targetMax = target.scrollHeight - target.clientHeight;
+  const getMarkdownLineWeight = (line: string) => {
+    const trimmed = line.trim();
 
-    if (sourceMax <= 0 || targetMax <= 0) {
-      target.scrollTop = 0;
-      return;
+    if (!trimmed) {
+      return 0.7;
     }
 
-    target.scrollTop = (source.scrollTop / sourceMax) * targetMax;
+    if (MARKDOWN_IMAGE_LINE_REGEX.test(trimmed)) {
+      return 12;
+    }
+
+    if (MARKDOWN_HEADING_LINE_REGEX.test(trimmed)) {
+      return 2.4;
+    }
+
+    if (MARKDOWN_RULE_LINE_REGEX.test(trimmed)) {
+      return 1.6;
+    }
+
+    return 1;
+  };
+
+  const buildMarkdownWeights = (content: string) => {
+    const normalized = content.replace(/\r\n/g, '\n');
+    const lines = normalized.split('\n');
+    const weights = lines.map(getMarkdownLineWeight);
+    const totalWeight = weights.reduce((acc, value) => acc + value, 0) || 1;
+
+    return { lines, weights, totalWeight };
+  };
+
+  const getWeightedProgressFromLine = (
+    weights: number[],
+    totalWeight: number,
+    lineIndex: number,
+    lineFraction: number
+  ) => {
+    if (weights.length === 0) {
+      return 0;
+    }
+
+    const clampedIndex = Math.max(0, Math.min(lineIndex, weights.length - 1));
+    const beforeWeight = weights.slice(0, clampedIndex).reduce((acc, value) => acc + value, 0);
+    const currentWeight = weights[clampedIndex] ?? 1;
+    const weightedPos = beforeWeight + currentWeight * Math.max(0, Math.min(lineFraction, 1));
+
+    return Math.max(0, Math.min(weightedPos / totalWeight, 1));
+  };
+
+  const getLineFromWeightedProgress = (weights: number[], totalWeight: number, progress: number) => {
+    if (weights.length === 0) {
+      return 0;
+    }
+
+    const targetWeight = Math.max(0, Math.min(progress, 1)) * totalWeight;
+    let accumulated = 0;
+
+    for (let idx = 0; idx < weights.length; idx += 1) {
+      const lineWeight = weights[idx] ?? 1;
+      const nextAccumulated = accumulated + lineWeight;
+
+      if (targetWeight <= nextAccumulated) {
+        const innerProgress = lineWeight > 0 ? (targetWeight - accumulated) / lineWeight : 0;
+        return idx + Math.max(0, Math.min(innerProgress, 1));
+      }
+
+      accumulated = nextAccumulated;
+    }
+
+    return weights.length - 1;
   };
 
   const handleMarkdownScroll = (event: React.UIEvent<HTMLTextAreaElement>) => {
@@ -725,8 +788,22 @@ export default function AdminPage() {
       return;
     }
 
+    const textarea = event.currentTarget;
+    const previewMax = preview.scrollHeight - preview.clientHeight;
+    if (previewMax <= 0) {
+      return;
+    }
+
+    const lineHeight = parseFloat(window.getComputedStyle(textarea).lineHeight || '24') || 24;
+    const rawLinePosition = textarea.scrollTop / lineHeight;
+    const lineIndex = Math.floor(rawLinePosition);
+    const lineFraction = rawLinePosition - lineIndex;
+
+    const { weights, totalWeight } = buildMarkdownWeights(textarea.value || '');
+    const weightedProgress = getWeightedProgressFromLine(weights, totalWeight, lineIndex, lineFraction);
+
     isSyncingScrollRef.current = true;
-    syncScrollByRatio(event.currentTarget, preview);
+    preview.scrollTop = weightedProgress * previewMax;
     requestAnimationFrame(() => {
       isSyncingScrollRef.current = false;
     });
@@ -742,8 +819,22 @@ export default function AdminPage() {
       return;
     }
 
+    const preview = event.currentTarget;
+    const previewMax = preview.scrollHeight - preview.clientHeight;
+    if (previewMax <= 0) {
+      return;
+    }
+
+    const { weights, totalWeight } = buildMarkdownWeights(textarea.value || '');
+    const weightedProgress = preview.scrollTop / previewMax;
+    const targetLine = getLineFromWeightedProgress(weights, totalWeight, weightedProgress);
+
+    const lineHeight = parseFloat(window.getComputedStyle(textarea).lineHeight || '24') || 24;
+    const textareaMax = textarea.scrollHeight - textarea.clientHeight;
+    const targetScrollTop = Math.max(0, Math.min(targetLine * lineHeight, textareaMax));
+
     isSyncingScrollRef.current = true;
-    syncScrollByRatio(event.currentTarget, textarea);
+    textarea.scrollTop = targetScrollTop;
     requestAnimationFrame(() => {
       isSyncingScrollRef.current = false;
     });
