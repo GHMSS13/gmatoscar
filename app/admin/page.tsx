@@ -206,6 +206,8 @@ export default function AdminPage() {
   const [publishAsDraft, setPublishAsDraft] = useState(false);
   const contentTextareaRef = useRef<HTMLTextAreaElement | null>(null);
   const contentOverlayRef = useRef<HTMLDivElement | null>(null);
+  const contentPreviewRef = useRef<HTMLDivElement | null>(null);
+  const isSyncingScrollRef = useRef(false);
   const [contentScroll, setContentScroll] = useState({ top: 0, left: 0 });
   
   // Novos estados para o editor profissional e inserção de imagem
@@ -733,6 +735,58 @@ export default function AdminPage() {
 
   const handleInput = (field: keyof PostFormState, value: string | boolean) => {
     setForm((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const syncScrollByRatio = (source: HTMLElement, target: HTMLElement) => {
+    const sourceMax = source.scrollHeight - source.clientHeight;
+    const targetMax = target.scrollHeight - target.clientHeight;
+
+    if (sourceMax <= 0 || targetMax <= 0) {
+      target.scrollTop = 0;
+      return;
+    }
+
+    const ratio = source.scrollTop / sourceMax;
+    target.scrollTop = ratio * targetMax;
+  };
+
+  const handleMarkdownScroll = (event: React.UIEvent<HTMLTextAreaElement>) => {
+    const textarea = event.currentTarget;
+    setContentScroll({ top: textarea.scrollTop, left: textarea.scrollLeft });
+
+    if (isSyncingScrollRef.current) {
+      return;
+    }
+
+    const preview = contentPreviewRef.current;
+    if (!preview) {
+      return;
+    }
+
+    isSyncingScrollRef.current = true;
+    syncScrollByRatio(textarea, preview);
+    requestAnimationFrame(() => {
+      isSyncingScrollRef.current = false;
+    });
+  };
+
+  const handlePreviewScroll = (event: React.UIEvent<HTMLDivElement>) => {
+    if (isSyncingScrollRef.current) {
+      return;
+    }
+
+    const preview = event.currentTarget;
+    const textarea = contentTextareaRef.current;
+    if (!textarea) {
+      return;
+    }
+
+    isSyncingScrollRef.current = true;
+    syncScrollByRatio(preview, textarea);
+    setContentScroll({ top: textarea.scrollTop, left: textarea.scrollLeft });
+    requestAnimationFrame(() => {
+      isSyncingScrollRef.current = false;
+    });
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -1434,7 +1488,7 @@ export default function AdminPage() {
                           ref={contentTextareaRef}
                           value={form.content}
                           onChange={(event) => handleInput('content', event.target.value)}
-                          onScroll={(event) => setContentScroll({ top: event.currentTarget.scrollTop, left: event.currentTarget.scrollLeft })}
+                          onScroll={handleMarkdownScroll}
                           className="relative z-10 w-full min-h-[450px] border-0 outline-none bg-transparent text-transparent caret-[#111827] focus:ring-0 resize-y font-mono text-sm leading-6 p-2 selection:bg-[#dc2626]/20 selection:text-transparent"
                           required
                           placeholder="Utilize as ferramentas da barra acima ou digite markdown diretamente. Clique em '+ Imagem' para rolar até o banco de imagens."
@@ -1443,7 +1497,11 @@ export default function AdminPage() {
                     </div>
 
                     {/* Painel do Preview */}
-                    <div className="border border-[#e5e7eb] rounded-xl bg-[#f9fafb] p-5 flex flex-col min-h-[450px] max-h-[600px] overflow-y-auto shadow-sm">
+                    <div
+                      ref={contentPreviewRef}
+                      onScroll={handlePreviewScroll}
+                      className="border border-[#e5e7eb] rounded-xl bg-[#f9fafb] p-5 flex flex-col min-h-[450px] max-h-[600px] overflow-y-auto shadow-sm"
+                    >
                       <div className="border-b border-[#e5e7eb] pb-2 mb-4 flex justify-between items-center">
                         <p className="text-xs uppercase font-bold tracking-widest text-[#dc2626] font-rajdhani">
                           Pré-visualização em tempo real
