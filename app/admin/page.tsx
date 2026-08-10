@@ -1,6 +1,6 @@
 'use client';
 
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
@@ -74,33 +74,6 @@ const ADMIN_REDIRECT_STORAGE_KEY = 'gmatoscar-admin-redirect';
 const IMAGE_PAGE_SIZE = 10;
 const IMAGE_URL_PREFIX = '/api/images/';
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
-const IMAGE_MARKDOWN_INLINE_REGEX = /(<img\s+[^>]*src=["'][^"']+["'][^>]*>|!\[[^\]]*\]\([^\)]+\)|https?:\/\/\S+\.(?:png|jpe?g|webp|gif|avif)(?:\?\S*)?)/i;
-
-function escapeHtml(value: string) {
-  return value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
-
-function buildHighlightedMarkdown(content: string) {
-  const normalizedContent = content.replace(/\r\n/g, '\n');
-  const lines = normalizedContent.split('\n');
-
-  const highlightedLines = lines.map((line) => {
-    const escapedLine = escapeHtml(line);
-
-    if (IMAGE_MARKDOWN_INLINE_REGEX.test(line)) {
-      return `<span class="bg-[#dbeafe]/70 text-[#1d4ed8]">${escapedLine}</span>`;
-    }
-
-    return escapedLine;
-  });
-
-  return highlightedLines.join('\n') || '&nbsp;';
-}
 
 const quillModules = {
   toolbar: [
@@ -199,9 +172,6 @@ export default function AdminPage() {
   const [postSearchQuery, setPostSearchQuery] = useState('');
   const [activePostCategory, setActivePostCategory] = useState<AdminPostFilterOption>('Todos');
   const [publishAsDraft, setPublishAsDraft] = useState(false);
-  const contentTextareaRef = useRef<HTMLTextAreaElement | null>(null);
-  const contentOverlayRef = useRef<HTMLDivElement | null>(null);
-  const [contentScroll, setContentScroll] = useState({ top: 0, left: 0 });
   
   // Novos estados para o editor profissional e inserção de imagem
   const [editorTab, setEditorTab] = useState<'write' | 'preview'>('write');
@@ -1407,35 +1377,14 @@ export default function AdminPage() {
                         </button>
                       </div>
 
-                      <div className="relative min-h-[450px] rounded-lg border border-transparent bg-white">
-                        <div
-                          ref={contentOverlayRef}
-                          aria-hidden="true"
-                          className="pointer-events-none absolute inset-0 overflow-hidden rounded-lg"
-                        >
-                          <div
-                            className="whitespace-pre px-2 py-2 font-mono text-sm leading-6 font-normal text-[#111827]"
-                            style={{
-                              transform: `translate(${-contentScroll.left}px, ${-contentScroll.top}px)`,
-                              willChange: 'transform',
-                            }}
-                            dangerouslySetInnerHTML={{
-                              __html: buildHighlightedMarkdown(form.content || ''),
-                            }}
-                          />
-                        </div>
-                        <textarea
-                          id="post-content-textarea"
-                          ref={contentTextareaRef}
-                          wrap="off"
-                          value={form.content}
-                          onChange={(event) => handleInput('content', event.target.value)}
-                          onScroll={(event) => setContentScroll({ top: event.currentTarget.scrollTop, left: event.currentTarget.scrollLeft })}
-                          className="relative z-10 w-full min-h-[450px] border-0 outline-none bg-transparent text-transparent caret-[#111827] focus:ring-0 resize-y whitespace-pre font-mono text-sm leading-6 p-2 selection:bg-[#dc2626]/20 selection:text-transparent"
-                          required
-                          placeholder="Utilize as ferramentas da barra acima ou digite markdown diretamente. Clique em '+ Imagem' para rolar até o banco de imagens."
-                        />
-                      </div>
+                      <textarea
+                        id="post-content-textarea"
+                        value={form.content}
+                        onChange={(event) => handleInput('content', event.target.value)}
+                        className="w-full min-h-[450px] border-0 outline-none text-[#111827] focus:ring-0 resize-y font-mono text-sm p-2"
+                        required
+                        placeholder="Utilize as ferramentas da barra acima ou digite markdown diretamente. Clique em '+ Imagem' para rolar até o banco de imagens."
+                      />
                     </div>
 
                     {/* Painel do Preview */}
