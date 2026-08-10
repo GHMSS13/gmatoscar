@@ -1,6 +1,6 @@
 'use client';
 
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
@@ -172,6 +172,9 @@ export default function AdminPage() {
   const [postSearchQuery, setPostSearchQuery] = useState('');
   const [activePostCategory, setActivePostCategory] = useState<AdminPostFilterOption>('Todos');
   const [publishAsDraft, setPublishAsDraft] = useState(false);
+  const contentTextareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const contentPreviewRef = useRef<HTMLDivElement | null>(null);
+  const isSyncingScrollRef = useRef(false);
   
   // Novos estados para o editor profissional e inserção de imagem
   const [editorTab, setEditorTab] = useState<'write' | 'preview'>('write');
@@ -698,6 +701,52 @@ export default function AdminPage() {
 
   const handleInput = (field: keyof PostFormState, value: string | boolean) => {
     setForm((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const syncScrollByRatio = (source: HTMLElement, target: HTMLElement) => {
+    const sourceMax = source.scrollHeight - source.clientHeight;
+    const targetMax = target.scrollHeight - target.clientHeight;
+
+    if (sourceMax <= 0 || targetMax <= 0) {
+      target.scrollTop = 0;
+      return;
+    }
+
+    target.scrollTop = (source.scrollTop / sourceMax) * targetMax;
+  };
+
+  const handleMarkdownScroll = (event: React.UIEvent<HTMLTextAreaElement>) => {
+    if (isSyncingScrollRef.current) {
+      return;
+    }
+
+    const preview = contentPreviewRef.current;
+    if (!preview) {
+      return;
+    }
+
+    isSyncingScrollRef.current = true;
+    syncScrollByRatio(event.currentTarget, preview);
+    requestAnimationFrame(() => {
+      isSyncingScrollRef.current = false;
+    });
+  };
+
+  const handlePreviewScroll = (event: React.UIEvent<HTMLDivElement>) => {
+    if (isSyncingScrollRef.current) {
+      return;
+    }
+
+    const textarea = contentTextareaRef.current;
+    if (!textarea) {
+      return;
+    }
+
+    isSyncingScrollRef.current = true;
+    syncScrollByRatio(event.currentTarget, textarea);
+    requestAnimationFrame(() => {
+      isSyncingScrollRef.current = false;
+    });
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -1379,8 +1428,10 @@ export default function AdminPage() {
 
                       <textarea
                         id="post-content-textarea"
+                        ref={contentTextareaRef}
                         value={form.content}
                         onChange={(event) => handleInput('content', event.target.value)}
+                        onScroll={handleMarkdownScroll}
                         className="w-full min-h-[450px] border-0 outline-none text-[#111827] focus:ring-0 resize-y font-mono text-sm p-2"
                         required
                         placeholder="Utilize as ferramentas da barra acima ou digite markdown diretamente. Clique em '+ Imagem' para rolar até o banco de imagens."
@@ -1388,7 +1439,11 @@ export default function AdminPage() {
                     </div>
 
                     {/* Painel do Preview */}
-                    <div className="border border-[#e5e7eb] rounded-xl bg-[#f9fafb] p-5 flex flex-col min-h-[450px] max-h-[600px] overflow-y-auto shadow-sm">
+                    <div
+                      ref={contentPreviewRef}
+                      onScroll={handlePreviewScroll}
+                      className="border border-[#e5e7eb] rounded-xl bg-[#f9fafb] p-5 flex flex-col min-h-[450px] max-h-[600px] overflow-y-auto shadow-sm"
+                    >
                       <div className="border-b border-[#e5e7eb] pb-2 mb-4 flex justify-between items-center">
                         <p className="text-xs uppercase font-bold tracking-widest text-[#dc2626] font-rajdhani">
                           Pré-visualização em tempo real
