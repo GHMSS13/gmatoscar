@@ -52,8 +52,8 @@ export default async function NoticiasPage({ searchParams }: NoticiasPageProps) 
         placeholder="Pesquise artigos, modelos ou temas de notícias..."
         defaultQuery={query}
         label="Notícias"
-        title="ADRENALINA PURA: As Últimas da Pista e da Rua"
-        subtitle="Mergulhe no universo dos hipercarros e máquinas de alto desempenho. Cobertura exclusiva e atualizações quentes direto dos fabricantes lendários como Ferrari, Lamborghini e Bugatti, para quem respira velocidade, luxo e alto desempenho."
+        title="O Mundo dos Supercarros"
+        subtitle="Notícias, novidades e histórias sobre as máquinas que vão além do comum, da velocidade e do luxo às pistas, desertos, montanhas e aos projetos mais extraordinários do mundo automotivo."
       />
 
       <section className="px-4 sm:px-6 lg:px-8 pb-16 sm:pb-20">

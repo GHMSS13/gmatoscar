@@ -52,8 +52,8 @@ export default async function GaragemDosSonhosPage({ searchParams }: GaragemDosS
         placeholder="Pesquise seleções, modelos ou temas da garagem..."
         defaultQuery={query}
         label="Garagem dos Sonhos"
-        title="ÍCONES IMORTAIS: Desbravando as Lendas da Garagem dos Sonhos"
-        subtitle="Descubra curadorias com modelos icônicos, raros e desejados para inspirar sua garagem ideal no universo dos supercarros."
+        title="Os Carros Que Todo Entusiasta Gostaria de Ter"
+        subtitle="Explore uma seleção de supercarros, carros esportivos, máquinas de competição e modelos extraordinários que marcaram a história e conquistaram um lugar na garagem dos sonhos dos apaixonados por carros."
       />
 
       <section className="px-4 sm:px-6 lg:px-8 pb-16 sm:pb-20">

@@ -83,8 +83,8 @@ export default function MarcasPage({ searchParams }: MarcasPageProps) {
         placeholder="Pesquise marcas, países ou modelos icônicos..."
         defaultQuery={query}
         label="Marcas"
-        title="LENDAS AUTOMOTIVAS: O Legado das Marcas"
-        subtitle="Descubra as histórias épicas, as linhagens sagradas, os segredos dos escudos e o DNA que moldou os maiores construtores de sonhos do mundo. Cada marca tem uma alma; nós as revelamos para você."
+        title="Marcas de Supercarros"
+        subtitle="Conheça a história das maiores marcas de supercarros do mundo, suas origens, curiosidades, evolução, modelos mais importantes e os carros que ajudaram a construir seu legado."
       />
 
       <section className="px-4 sm:px-6 lg:px-8 pb-20 max-w-7xl mx-auto">

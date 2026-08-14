@@ -8,62 +8,24 @@ export const metadata: Metadata = {
     'Conheça o GMATOSCAR, o maior canal brasileiro sobre supercarros, hypercars e automóveis de alto desempenho.',
 };
 
-const aboutParagraphs = [
-  'Bem-vindo ao GMATOSCAR.',
-  'O GMATOSCAR é um portal brasileiro especializado em supercarros, hipercarros e esportivos de alto desempenho. Nosso propósito é reunir em um só lugar as melhores notícias, curiosidades, rankings, histórias e informações sobre os carros mais extraordinários do mundo.',
-  'Mais do que números de potência, velocidade máxima ou desempenho, acreditamos que cada carro possui uma história única. Alguns revolucionaram a indústria automotiva, outros quebraram recordes, tornaram-se símbolos de uma geração ou conquistaram um lugar entre os modelos mais desejados e exclusivos já produzidos. É esse universo que buscamos explorar todos os dias.',
-  'Aqui você encontra conteúdo sobre Ferrari, Lamborghini, Porsche, Bugatti, McLaren, Koenigsegg, Pagani, Aston Martin e outras marcas que marcaram a história do automobilismo de alto desempenho. Também acompanhamos os principais lançamentos, inovações, recordes, leilões, curiosidades e acontecimentos que movimentam o universo dos supercarros.',
-  'O GMATOSCAR nasceu para ir além das especificações técnicas. Nosso objetivo é transformar informação em entretenimento de qualidade, contando as histórias por trás das máquinas que despertam admiração em milhões de pessoas ao redor do mundo.',
-  'Além das notícias, você encontrará artigos completos sobre modelos icônicos, rankings dos carros mais rápidos, mais caros e mais exclusivos, curiosidades que pouca gente conhece e conteúdos desenvolvidos para quem deseja descobrir cada vez mais sobre esse universo fascinante.',
-  'Acreditamos que um grande portal não deve apenas informar, mas também inspirar. Por isso, produzimos conteúdos com responsabilidade, pesquisa e atenção aos detalhes, oferecendo uma experiência de leitura agradável tanto para quem já é apaixonado pelo mundo automotivo quanto para quem está começando a descobrir os carros mais incríveis do planeta.',
-  'O GMATOSCAR também está presente nas principais redes sociais, compartilhando diariamente vídeos, curiosidades e notícias para aproximar ainda mais os apaixonados por automóveis de alto desempenho.',
-  'Nossa missão é inspirar pessoas por meio das histórias, curiosidades e inovações dos carros mais extraordinários do mundo.',
-  'Nossa visão é ser a principal referência brasileira em conteúdo sobre supercarros, hipercarros e esportivos de alto desempenho, construindo uma comunidade apaixonada pelo universo automotivo e oferecendo conteúdo de qualidade que informe, entretenha e desperte a curiosidade de milhões de pessoas.',
-  'Se você é apaixonado por Ferrari, Lamborghini, Porsche, Bugatti e pelos carros que marcaram a história do automobilismo, este é o seu lugar.',
-  'Seja bem-vindo ao GMATOSCAR.',
-];
-
 export default function SobrePage() {
   return (
     <main className="min-h-screen bg-white">
       <Navbar />
 
-      {/* Hero */}
-      <section className="relative pt-24 sm:pt-36 pb-12 sm:pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      <section className="relative pt-24 sm:pt-32 pb-12 sm:pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
         <div className="absolute inset-0 grid-pattern opacity-20" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(148,163,184,0.08)_0%,transparent_60%)]" />
 
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center">
-            <div>
-              <p className="text-[#dc2626] text-xs font-bold uppercase tracking-[0.3em] font-rajdhani mb-4">
-                Sobre
-              </p>
-              <h1 className="text-3xl sm:text-4xl md:text-6xl font-serif font-semibold text-[#111827] leading-tight mb-5 sm:mb-6">
-                Sobre o <span className="text-[#dc2626]">GMATOSCAR</span>
-              </h1>
-              <p className="text-[#1f2937] text-sm sm:text-base leading-relaxed font-exo mb-7 sm:mb-8">
-                Bem-vindo ao GMATOSCAR.
-              </p>
-              <div className="w-20 h-1 bg-[#dc2626] rounded-full" />
-            </div>
-
-            <div className="relative">
-              <div className="relative aspect-video rounded-sm overflow-hidden border border-[#dc2626]/30 bg-[#050505] flex items-center justify-center px-6">
-                <div className="text-center">
-                  <p className="text-3xl sm:text-5xl md:text-6xl font-bold uppercase tracking-[0.18em] sm:tracking-[0.32em] text-white font-rajdhani whitespace-nowrap">
-                    GMATOS
-                    <span className="text-[#dc2626]">CAR</span>
-                  </p>
-                  <p className="mt-3 text-xs sm:text-sm font-semibold uppercase tracking-[0.3em] text-white/50 font-rajdhani">
-                    Supercarros
-                  </p>
-                </div>
-              </div>
-              {/* Decorative elements */}
-              <div className="absolute -top-3 -right-3 w-24 h-24 border border-[#dc2626]/20 rounded-sm" />
-              <div className="absolute -bottom-3 -left-3 w-16 h-16 border border-[#dc2626]/10 rounded-sm" />
-            </div>
+        <div className="max-w-6xl mx-auto relative z-10">
+          <div className="text-center max-w-4xl mx-auto">
+            <p className="text-[#dc2626] text-xs font-bold uppercase tracking-[0.3em] font-rajdhani mb-4">
+              Sobre
+            </p>
+            <h1 className="text-3xl sm:text-4xl md:text-6xl font-serif font-semibold text-[#111827] leading-tight mb-5 sm:mb-6">
+              Sobre o <span className="text-[#dc2626]">GMATOSCAR</span>
+            </h1>
+            <div className="w-20 h-1 bg-[#dc2626] rounded-full mx-auto" />
           </div>
         </div>
       </section>
@@ -71,15 +33,180 @@ export default function SobrePage() {
       <section className="pb-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-5xl mx-auto">
           <article className="bg-white border border-[#e5e7eb] rounded-sm p-6 sm:p-10">
-            <h2 className="text-2xl sm:text-3xl font-serif font-semibold text-[#111827] mb-8">
-              Sobre o GMATOSCAR
-            </h2>
-            <div className="space-y-6">
-              {aboutParagraphs.map((paragraph, index) => (
-                <p key={index} className="text-[#1f2937] text-sm sm:text-base leading-relaxed font-exo">
-                  {paragraph}
-                </p>
-              ))}
+            <div className="space-y-6 text-[#1f2937] font-exo">
+              <h2 className="text-2xl sm:text-3xl font-serif font-semibold text-[#111827] mb-2">
+                Mais do que carros. O extraordinário sobre quatro rodas.
+              </h2>
+
+              <p className="text-sm sm:text-base leading-relaxed">
+                O GMATOSCAR nasceu de uma paixão pelos carros que vão além do comum.
+              </p>
+
+              <p className="text-sm sm:text-base leading-relaxed">
+                Aqui, acreditamos que um supercarro não é definido apenas pelo preço, pela velocidade, pela potência ou pelo emblema estampado no capô. Para nós, um supercarro é uma máquina que foi levada ao extremo para cumprir uma missão extraordinária.
+              </p>
+
+              <p className="text-sm sm:text-base leading-relaxed">
+                E é justamente essa ideia que define o GMATOSCAR.
+              </p>
+
+              <p className="text-sm sm:text-base leading-relaxed">
+                Uma Ferrari construída para alcançar velocidades impressionantes é um supercarro. Mas um Toyota completamente preparado para atravessar as dunas de um deserto também pode ser.
+              </p>
+
+              <p className="text-sm sm:text-base leading-relaxed">
+                Um carro de Fórmula 1 desenvolvido para disputar décimos de segundo em uma pista é um supercarro. Uma máquina de rally preparada para enfrentar neve, lama e pedras também.
+              </p>
+
+              <p className="text-sm sm:text-base leading-relaxed">
+                Um hipercarro que quebra recordes de velocidade é extraordinário. Mas um veículo criado para subir montanhas, atravessar terrenos impossíveis ou resistir durante horas às condições mais extremas também merece esse lugar.
+              </p>
+
+              <h2 className="text-2xl sm:text-3xl font-serif font-semibold text-[#111827] mt-8 mb-2">
+                O que você encontra no GMATOSCAR
+              </h2>
+
+              <p className="text-sm sm:text-base leading-relaxed">
+                O GMATOSCAR é um portal brasileiro dedicado ao universo dos supercarros e às máquinas mais extraordinárias do mundo.
+              </p>
+
+              <p className="text-sm sm:text-base leading-relaxed">
+                Aqui você encontra:
+              </p>
+
+              <ul className="list-disc pl-6 space-y-2 text-sm sm:text-base leading-relaxed">
+                <li>Notícias do mundo automotivo;</li>
+                <li>Curiosidades sobre carros incríveis;</li>
+                <li>Histórias de modelos que marcaram época;</li>
+                <li>Supercarros de rua e hipercarros;</li>
+                <li>Carros de competição;</li>
+                <li>Máquinas de velocidade e resistência;</li>
+                <li>Veículos preparados para terrenos extremos;</li>
+                <li>Carros de luxo e alta exclusividade;</li>
+                <li>Projetos de engenharia fora do comum;</li>
+                <li>Rankings e comparações;</li>
+                <li>Informações sobre grandes fabricantes e modelos históricos.</li>
+              </ul>
+
+              <p className="text-sm sm:text-base leading-relaxed">
+                Falamos sobre Ferrari, Lamborghini, Porsche, Bugatti, McLaren, Koenigsegg, Pagani e muitas outras marcas.
+              </p>
+
+              <p className="text-sm sm:text-base leading-relaxed">
+                Mas o GMATOSCAR não se limita aos nomes mais famosos da indústria.
+              </p>
+
+              <p className="text-sm sm:text-base leading-relaxed">
+                Se existe um carro capaz de fazer algo extraordinário, ele pode encontrar seu lugar aqui.
+              </p>
+
+              <h2 className="text-2xl sm:text-3xl font-serif font-semibold text-[#111827] mt-8 mb-2">
+                Nossa visão sobre os supercarros
+              </h2>
+
+              <p className="text-sm sm:text-base leading-relaxed">
+                A palavra "supercarro" não possui uma definição única e universal.
+              </p>
+
+              <p className="text-sm sm:text-base leading-relaxed">
+                Por isso, o GMATOSCAR possui a sua própria maneira de enxergar esse conceito.
+              </p>
+
+              <p className="text-sm sm:text-base leading-relaxed">
+                Para nós, um supercarro é aquele que ultrapassa os limites de um automóvel comum.
+              </p>
+
+              <p className="text-sm sm:text-base leading-relaxed">
+                Pode ser pela velocidade.
+              </p>
+
+              <p className="text-sm sm:text-base leading-relaxed">
+                Pelo luxo.
+              </p>
+
+              <p className="text-sm sm:text-base leading-relaxed">
+                Pela tecnologia.
+              </p>
+
+              <p className="text-sm sm:text-base leading-relaxed">
+                Pela resistência.
+              </p>
+
+              <p className="text-sm sm:text-base leading-relaxed">
+                Pela capacidade de enfrentar obstáculos.
+              </p>
+
+              <p className="text-sm sm:text-base leading-relaxed">
+                Pela engenharia.
+              </p>
+
+              <p className="text-sm sm:text-base leading-relaxed">
+                Pela competição.
+              </p>
+
+              <p className="text-sm sm:text-base leading-relaxed">
+                Ou simplesmente pela história que construiu.
+              </p>
+
+              <p className="text-sm sm:text-base leading-relaxed">
+                Essa visão permite que o GMATOSCAR explore um universo muito maior do que apenas os carros mais caros e rápidos do planeta.
+              </p>
+
+              <p className="text-sm sm:text-base leading-relaxed">
+                Porque existem muitas maneiras de criar um carro extraordinário.
+              </p>
+
+              <h2 className="text-2xl sm:text-3xl font-serif font-semibold text-[#111827] mt-8 mb-2">
+                Conteúdo para quem é apaixonado por carros
+              </h2>
+
+              <p className="text-sm sm:text-base leading-relaxed">
+                Nosso objetivo é transformar informação em entretenimento.
+              </p>
+
+              <p className="text-sm sm:text-base leading-relaxed">
+                Não queremos apenas apresentar números de potência, velocidade máxima ou ficha técnica. Queremos contar as histórias por trás das máquinas, revelar curiosidades que pouca gente conhece e mostrar o que torna cada carro especial.
+              </p>
+
+              <h2 className="text-2xl sm:text-3xl font-serif font-semibold text-[#111827] mt-8 mb-2">
+                Nossa missão
+              </h2>
+
+              <p className="text-sm sm:text-base leading-relaxed">
+                Nossa missão é descobrir, contar e compartilhar as histórias dos carros mais extraordinários do mundo, e muitas vezes a história de um Supercarro carrega uma cultura.
+              </p>
+
+              <p className="text-sm sm:text-base leading-relaxed">
+                Queremos criar um lugar onde qualquer pessoa possa descobrir uma nova máquina, conhecer sua história, entender sua importância e se surpreender com aquilo que os automóveis são capazes de fazer.
+              </p>
+
+              <h2 className="text-2xl sm:text-3xl font-serif font-semibold text-[#111827] mt-8 mb-2">
+                O futuro do GMATOSCAR
+              </h2>
+
+              <p className="text-sm sm:text-base leading-relaxed">
+                O GMATOSCAR nasceu na internet, mas a nossa ambição vai muito além das redes sociais.
+              </p>
+
+              <p className="text-sm sm:text-base leading-relaxed">
+                Queremos construir uma das maiores referências brasileiras em conteúdo sobre supercarros, criando uma comunidade de pessoas apaixonadas por velocidade, luxo, competição, engenharia, história e, acima de tudo, por máquinas extraordinárias.
+              </p>
+
+              <p className="text-sm sm:text-base leading-relaxed">
+                Porque, no final, essa é a essência do GMATOSCAR:
+              </p>
+
+              <blockquote className="border-l-4 border-[#dc2626] pl-4 py-2 italic text-[#4b5563] bg-[#f9fafb]">
+                <strong className="font-bold text-[#111827]">Não importa apenas o carro. Importa o que ele é capaz de fazer.</strong>
+              </blockquote>
+
+              <p className="text-sm sm:text-base leading-relaxed font-bold text-[#111827]">
+                Bem-vindo ao GMATOSCAR.
+              </p>
+
+              <p className="text-sm sm:text-base leading-relaxed font-bold text-[#111827]">
+                O universo dos carros que vão além do comum.
+              </p>
             </div>
           </article>
         </div>

@@ -52,8 +52,8 @@ export default async function RankingPage({ searchParams }: RankingPageProps) {
         placeholder="Pesquise rankings, comparativos ou modelos..."
         defaultQuery={query}
         label="Rankings"
-        title="Comparativos e Listas dos Gigantes"
-        subtitle="Confira rankings de velocidade, preço, exclusividade e desempenho para descobrir quais modelos lideram cada categoria."
+        title="Os Melhores Supercarros do Mundo"
+        subtitle="Descubra quais são os supercarros que mais se destacam em cada categoria, dos carros mais rápidos e potentes aos modelos mais luxuosos, exclusivos, tecnológicos e preparados para os desafios mais extremos."
       />
 
       <section className="px-4 sm:px-6 lg:px-8 pb-16 sm:pb-20">
