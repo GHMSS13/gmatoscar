@@ -138,7 +138,7 @@ export default function HomeTopNewsSection({
     });
   }
 
-  const normalizedDreamGaragePosts = [...dreamGaragePosts.slice(0, 10)];
+  const normalizedDreamGaragePosts = [...dreamGaragePosts.slice(0, 6)];
 
   const additionalRecentPosts = heroPosts
     .slice(2, 6)
@@ -184,7 +184,7 @@ export default function HomeTopNewsSection({
     });
   }
 
-  while (normalizedDreamGaragePosts.length < 10) {
+  while (normalizedDreamGaragePosts.length === 0) {
     normalizedDreamGaragePosts.push({
       id: `fallback-garage-${normalizedDreamGaragePosts.length}`,
       title: 'Garagem dos Sonhos em atualização',
