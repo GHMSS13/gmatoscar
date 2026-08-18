@@ -7,16 +7,20 @@ interface NewsCardProps {
   item: Post;
   variant?: 'default' | 'featured' | 'horizontal' | 'compact' | 'mobile-medium' | 'related';
   theme?: 'dark' | 'light';
+  sourcePath?: string;
 }
 
-export default function NewsCard({ item, variant = 'default', theme = 'dark' }: NewsCardProps) {
+export default function NewsCard({ item, variant = 'default', theme = 'dark', sourcePath }: NewsCardProps) {
   const isLight = theme === 'light';
+  const articleHref = sourcePath
+    ? `/noticias/${item.slug}?from=${encodeURIComponent(sourcePath)}`
+    : `/noticias/${item.slug}`;
 
   if (variant === 'featured') {
     if (isLight) {
       return (
         <article className="news-card group rounded-xl overflow-hidden cursor-pointer border border-[#e5e7eb] bg-white">
-          <Link href={`/noticias/${item.slug}`} className="block h-full">
+          <Link href={articleHref} className="block h-full">
             <div className="relative aspect-[16/10] sm:hidden overflow-hidden">
               <Image
                 src={item.image_url}
@@ -79,7 +83,7 @@ export default function NewsCard({ item, variant = 'default', theme = 'dark' }: 
 
     return (
       <article className={`news-card relative group h-full rounded-xl overflow-hidden cursor-pointer ${isLight ? 'bg-white border border-[#e5e7eb]' : 'card-glow bg-[#111]'}`}>
-        <Link href={`/noticias/${item.slug}`} className="block h-full">
+        <Link href={articleHref} className="block h-full">
           <div className="relative h-full min-h-[250px] sm:min-h-[320px] md:min-h-[430px] overflow-hidden">
             <Image
               src={item.image_url}
@@ -119,7 +123,7 @@ export default function NewsCard({ item, variant = 'default', theme = 'dark' }: 
   if (variant === 'horizontal') {
     return (
       <article className={`news-card group flex flex-col sm:flex-row gap-4 rounded-xl overflow-hidden transition-all duration-300 cursor-pointer ${isLight ? 'bg-white border border-[#e5e7eb] hover:border-[#dc2626]/40' : 'bg-[#111] border border-[#1e1e1e] hover:border-[#dc2626]/30'}`}>
-        <Link href={`/noticias/${item.slug}`} className="flex flex-col sm:flex-row gap-4 w-full p-4">
+        <Link href={articleHref} className="flex flex-col sm:flex-row gap-4 w-full p-4">
           <div className="relative w-full h-44 sm:w-32 sm:h-32 flex-shrink-0 rounded-lg overflow-hidden">
             <Image
               src={item.image_url}
@@ -148,7 +152,7 @@ export default function NewsCard({ item, variant = 'default', theme = 'dark' }: 
   if (variant === 'compact') {
     return (
       <article className="group overflow-hidden transition-all duration-300 cursor-pointer">
-        <Link href={`/noticias/${item.slug}`} className="flex gap-4 py-4">
+        <Link href={articleHref} className="flex gap-4 py-4">
           <div className="relative w-[132px] h-[94px] flex-shrink-0 rounded-[2px] overflow-hidden">
             <Image
               src={item.image_url}
@@ -175,7 +179,7 @@ export default function NewsCard({ item, variant = 'default', theme = 'dark' }: 
   if (variant === 'mobile-medium') {
     return (
       <article className={`group rounded-xl overflow-hidden transition-all duration-300 cursor-pointer ${isLight ? 'bg-white border border-[#e5e7eb] hover:border-[#d1d5db]' : 'bg-[#111] border border-[#1e1e1e] hover:border-[#dc2626]/30'}`}>
-        <Link href={`/noticias/${item.slug}`} className="flex gap-3 p-3.5">
+        <Link href={articleHref} className="flex gap-3 p-3.5">
           <div className="relative w-[124px] h-[92px] flex-shrink-0 rounded-[2px] overflow-hidden">
             <Image
               src={item.image_url}
@@ -205,7 +209,7 @@ export default function NewsCard({ item, variant = 'default', theme = 'dark' }: 
   if (variant === 'related') {
     return (
       <article className={`news-card group rounded-xl overflow-hidden cursor-pointer h-full flex flex-col ${isLight ? 'bg-white border border-[#e5e7eb]' : 'bg-[#111] border border-[#1e1e1e] card-glow'}`}>
-        <Link href={`/noticias/${item.slug}`} className="flex flex-col h-full">
+        <Link href={articleHref} className="flex flex-col h-full">
           <div className="relative aspect-[16/9] overflow-hidden">
             <Image
               src={item.image_url}
@@ -240,7 +244,7 @@ export default function NewsCard({ item, variant = 'default', theme = 'dark' }: 
 
   return (
     <article className={`news-card group rounded-xl overflow-hidden cursor-pointer h-full flex flex-col ${isLight ? 'bg-white border border-[#e5e7eb]' : 'bg-[#111] border border-[#1e1e1e] card-glow'}`}>
-      <Link href={`/noticias/${item.slug}`} className="flex flex-col h-full">
+      <Link href={articleHref} className="flex flex-col h-full">
         <div className="relative aspect-[16/9] overflow-hidden">
           <Image
             src={item.image_url}
@@ -252,10 +256,10 @@ export default function NewsCard({ item, variant = 'default', theme = 'dark' }: 
           <div className={`absolute inset-0 ${isLight ? 'bg-gradient-to-t from-white/10 to-transparent' : 'bg-gradient-to-t from-black/40 to-transparent'}`} />
         </div>
         <div className="flex flex-col flex-1 p-4 sm:p-5">
-          <h3 className={`text-base sm:text-lg leading-tight mb-2 sm:mb-3 group-hover:text-[#dc2626] transition-colors duration-300 line-clamp-2 ${isLight ? 'font-serif font-semibold text-[#111]' : 'font-rajdhani font-bold text-white'}`}>
+          <h3 className={`text-lg sm:text-xl leading-tight mb-2 sm:mb-3 group-hover:text-[#dc2626] transition-colors duration-300 line-clamp-2 ${isLight ? 'font-serif font-semibold text-[#111]' : 'font-rajdhani font-bold text-white'}`}>
             {item.title}
           </h3>
-          <p className={`text-sm leading-relaxed mb-3 sm:mb-4 flex-1 line-clamp-2 sm:line-clamp-3 font-exo ${isLight ? 'text-[#4b5563]' : 'text-white/50'}`}>
+          <p className={`text-[15px] sm:text-base leading-relaxed mb-3 sm:mb-4 flex-1 line-clamp-2 sm:line-clamp-3 font-exo ${isLight ? 'text-[#4b5563]' : 'text-white/50'}`}>
             {item.excerpt}
           </p>
           <div className={`flex items-center justify-between pt-2 sm:pt-3 mt-auto ${isLight ? 'border-t border-[#e5e7eb]' : 'border-t border-[#1e1e1e]'}`}>

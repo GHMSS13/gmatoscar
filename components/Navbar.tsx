@@ -15,7 +15,11 @@ const navLinks = [
   { label: 'Sobre', href: '/sobre' },
 ];
 
-export default function Navbar() {
+interface NavbarProps {
+  activeSection?: string;
+}
+
+export default function Navbar({ activeSection }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
@@ -48,7 +52,7 @@ export default function Navbar() {
 
           <nav className="hidden md:flex flex-1 items-center justify-center md:px-6 lg:px-0 gap-4 lg:gap-10 text-[10px] lg:text-sm font-semibold uppercase tracking-[0.12em] lg:tracking-[0.28em] font-rajdhani">
             {navLinks.map((link) => {
-              const isActive = isActiveLink(link.href);
+              const isActive = activeSection ? link.label === activeSection : isActiveLink(link.href);
               return (
                 <Link
                   key={link.href}
@@ -100,7 +104,7 @@ export default function Navbar() {
       >
         <nav className="bg-[#050505]/98 border-t border-white/10 px-3 sm:px-4 py-3 sm:py-4 flex flex-col gap-1.5 sm:gap-2">
           {navLinks.map((link) => {
-            const isActive = isActiveLink(link.href);
+            const isActive = activeSection ? link.label === activeSection : isActiveLink(link.href);
             return (
               <Link
                 key={link.href}

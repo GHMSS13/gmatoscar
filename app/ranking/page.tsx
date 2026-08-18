@@ -69,7 +69,7 @@ export default async function RankingPage({ searchParams }: RankingPageProps) {
                   <span className="inline-flex items-center rounded-full border border-[#dc2626]/25 bg-[#fee2e2] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#b91c1c] font-rajdhani">
                     {getPostSection(post)}
                   </span>
-                  <NewsCard item={post} theme="light" />
+                  <NewsCard item={post} theme="light" sourcePath="/ranking" />
                 </div>
               ))}
             </div>

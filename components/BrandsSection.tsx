@@ -56,7 +56,11 @@ export default function BrandsSection() {
             {items.map((brand) => (
               <CarouselItem key={brand.id} className="basis-full sm:basis-1/2 lg:basis-1/4">
                 <Link
-                  href={brandArticleSlugs[brand.id] ? `/noticias/${brandArticleSlugs[brand.id]}` : `/marcas/${brand.id}`}
+                  href={
+                    brandArticleSlugs[brand.id]
+                      ? `/noticias/${brandArticleSlugs[brand.id]}?from=/marcas`
+                      : `/marcas/${brand.id}`
+                  }
                   className="group relative block rounded-xl overflow-hidden border border-[#e5e7eb] bg-white hover:border-[#dc2626]/40 transition-all duration-300 h-[300px] sm:h-[320px]"
                 >
                   <div className="absolute inset-0">

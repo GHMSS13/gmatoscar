@@ -135,7 +135,7 @@ function PesquisaContent({ posts }: PesquisaContentProps) {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {results.map((item) => (
-              <NewsCard key={item.id} item={item} theme="light" />
+              <NewsCard key={item.id} item={item} theme="light" sourcePath="/pesquisa" />
             ))}
           </div>
         )}
