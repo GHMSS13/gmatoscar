@@ -1,6 +1,7 @@
-export const PUBLICATION_OPTIONS = ['Noticias', 'Rankings', 'Garagem dos Sonhos'] as const;
+export const PUBLICATION_OPTIONS = ['Noticias', 'Rankings', 'Garagem dos Sonhos', 'Marcas'] as const;
 export const ADMIN_POST_FILTER_OPTIONS = ['Todos', ...PUBLICATION_OPTIONS, 'Rascunho'] as const;
 export const LEGACY_DREAM_GARAGE_CUTOFF = '2026-07-10';
+const BRAND_OVERVIEW_SLUGS = new Set(['ferrari', 'lamborghini', 'bugatti']);
 
 export type PublicationCategory = (typeof PUBLICATION_OPTIONS)[number];
 export type AdminPostFilterOption = (typeof ADMIN_POST_FILTER_OPTIONS)[number];
@@ -34,6 +35,10 @@ function resolveMatchedPublicationCategory(value: string): PublicationCategory |
     return 'Noticias';
   }
 
+  if (normalized.includes('marca')) {
+    return 'Marcas';
+  }
+
   return null;
 }
 
@@ -50,6 +55,10 @@ export function resolvePublicationCategory(value: string): PublicationCategory {
 }
 
 export function getEffectivePublicationCategory(source: PublicationCategorySource): PublicationCategory {
+  if (source.slug && BRAND_OVERVIEW_SLUGS.has(source.slug.trim().toLowerCase())) {
+    return 'Marcas';
+  }
+
   const categoryMatch = resolveMatchedPublicationCategory(source.category ?? '');
   if (categoryMatch === 'Rankings' || categoryMatch === 'Garagem dos Sonhos') {
     return categoryMatch;

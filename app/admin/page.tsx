@@ -1128,6 +1128,7 @@ export default function AdminPage() {
                       <option value="Noticias">Notícias</option>
                       <option value="Rankings">Rankings</option>
                       <option value="Garagem dos Sonhos">Garagem dos Sonhos</option>
+                      <option value="Marcas">Marcas</option>
                     </select>
                   </label>
                   <label className="block lg:col-span-1">

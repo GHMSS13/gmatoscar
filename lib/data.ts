@@ -121,7 +121,7 @@ export const brands: Brand[] = [
     country: 'Franca',
     description: 'Hipercarros extremos com foco em velocidade máxima, luxo e engenharia de altíssimo nível.',
     logo: createBrandLogo('Bugatti', '#003087'),
-    topModelImage: '/api/images/16d09679-2b30-4c88-8be5-78e978186984?filename=bugatti-logo.avif',
+    topModelImage: '/api/images/b1f9bc9b-d086-4ef1-b201-00975ec28cdb?filename=bugatti-logo-2026.avif',
     founded: 1909,
     topModel: 'Tourbillon',
     maxSpeed: '445 km/h',
