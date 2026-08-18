@@ -221,10 +221,10 @@ export default function NewsCard({ item, variant = 'default', theme = 'dark', so
             <div className={`absolute inset-0 ${isLight ? 'bg-gradient-to-t from-white/10 to-transparent' : 'bg-gradient-to-t from-black/40 to-transparent'}`} />
           </div>
           <div className="flex flex-col flex-1 p-4 sm:p-5">
-            <h3 className={`text-xl md:text-2xl leading-tight mb-2 sm:mb-3 group-hover:text-[#dc2626] transition-colors duration-300 line-clamp-3 ${isLight ? 'font-serif font-semibold text-[#111]' : 'font-rajdhani font-bold text-white'}`}>
+            <h3 className={`text-lg sm:text-xl leading-tight mb-2 sm:mb-3 group-hover:text-[#dc2626] transition-colors duration-300 line-clamp-3 ${isLight ? 'font-serif font-semibold text-[#111]' : 'font-rajdhani font-bold text-white'}`}>
               {item.title}
             </h3>
-            <p className={`text-sm leading-relaxed mb-3 sm:mb-4 flex-1 line-clamp-2 sm:line-clamp-3 font-exo ${isLight ? 'text-[#4b5563]' : 'text-white/50'}`}>
+            <p className={`text-[15px] sm:text-base leading-relaxed mb-3 sm:mb-4 flex-1 line-clamp-2 sm:line-clamp-3 font-exo ${isLight ? 'text-[#4b5563]' : 'text-white/50'}`}>
               {item.excerpt}
             </p>
             <div className={`flex items-center justify-between pt-2 sm:pt-3 mt-auto ${isLight ? 'border-t border-[#e5e7eb]' : 'border-t border-[#1e1e1e]'}`}>
