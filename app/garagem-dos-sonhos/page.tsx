@@ -26,7 +26,7 @@ function normalizeText(value: string) {
 }
 
 export default async function GaragemDosSonhosPage({ searchParams }: GaragemDosSonhosPageProps) {
-  const allPosts = await getPosts();
+  const allPosts = await getPosts({ includePrivateModelPosts: true });
   const garagePosts = allPosts.filter((post) => getPostSection(post) === 'Garagem dos Sonhos');
   const query = (searchParams?.q ?? '').trim();
   const normalizedQuery = normalizeText(query);
@@ -65,12 +65,7 @@ export default async function GaragemDosSonhosPage({ searchParams }: GaragemDosS
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {posts.map((post) => (
-                <div key={post.id} className="space-y-2">
-                  <span className="inline-flex items-center rounded-full border border-[#dc2626]/25 bg-[#fee2e2] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#b91c1c] font-rajdhani">
-                    {getPostSection(post)}
-                  </span>
-                  <NewsCard item={post} theme="light" />
-                </div>
+                <NewsCard key={post.id} item={post} theme="light" />
               ))}
             </div>
           )}

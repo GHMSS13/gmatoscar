@@ -11,6 +11,11 @@ import {
 } from '@/components/ui/carousel';
 
 const featuredBrands = ['ferrari', 'lamborghini', 'porsche', 'bugatti', 'pagani', 'mclaren', 'koenigsegg'];
+const brandArticleSlugs: Record<string, string> = {
+  ferrari: 'ferrari',
+  lamborghini: 'lamborghini',
+  bugatti: 'bugatti',
+};
 const countryFlags: Record<string, string> = {
   Italia: '🇮🇹',
   Franca: '🇫🇷',
@@ -51,7 +56,7 @@ export default function BrandsSection() {
             {items.map((brand) => (
               <CarouselItem key={brand.id} className="basis-full sm:basis-1/2 lg:basis-1/4">
                 <Link
-                  href={`/marcas/${brand.id}`}
+                  href={brandArticleSlugs[brand.id] ? `/noticias/${brandArticleSlugs[brand.id]}` : `/marcas/${brand.id}`}
                   className="group relative block rounded-xl overflow-hidden border border-[#e5e7eb] bg-white hover:border-[#dc2626]/40 transition-all duration-300 h-[300px] sm:h-[320px]"
                 >
                   <div className="absolute inset-0">
@@ -81,7 +86,7 @@ export default function BrandsSection() {
                       {brand.description}
                     </p>
                     <div className="inline-flex items-center gap-1 text-xs font-rajdhani font-bold uppercase tracking-[0.2em] text-white group-hover:text-[#dc2626] transition-colors duration-300">
-                      Ver Marca
+                      {brandArticleSlugs[brand.id] ? 'Ver Artigo' : 'Ver Marca'}
                       <ArrowRight size={12} className="transition-transform group-hover:translate-x-1" />
                     </div>
                   </div>
