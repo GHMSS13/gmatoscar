@@ -18,6 +18,7 @@ export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
   const posts = await getPosts();
+  const allPublishedPosts = await getPosts({ includePrivateModelPosts: true });
   const topWeekPosts = posts.slice(0, 5);
   const curiosityPost = posts[5] ?? posts[0] ?? null;
 
@@ -30,7 +31,7 @@ export default async function HomePage() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(148,163,184,0.08)_0%,transparent_70%)]" />
 
         <div className="relative z-10">
-          <NewsGrid posts={posts} theme="light" />
+          <NewsGrid posts={allPublishedPosts} theme="light" />
         </div>
       </section>
 
