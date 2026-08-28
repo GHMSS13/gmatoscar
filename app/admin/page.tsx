@@ -428,7 +428,7 @@ export default function AdminPage() {
 
   // Auxiliar para inserir texto na área de escrita do post
   const insertTextAtCursor = (before: string, after: string = '') => {
-    const textarea = document.getElementById('post-content-textarea') as HTMLTextAreaElement;
+    const textarea = contentTextareaRef.current || (document.getElementById('post-content-textarea') as HTMLTextAreaElement);
     if (!textarea) return;
 
     const start = textarea.selectionStart;
@@ -441,8 +441,31 @@ export default function AdminPage() {
     setForm((prev) => ({ ...prev, content: newValue }));
 
     setTimeout(() => {
-      textarea.focus();
-      textarea.setSelectionRange(start + before.length, start + before.length + selectedText.length);
+      const targetStart = start + before.length;
+      const targetEnd = targetStart + selectedText.length;
+
+      // Restaura a seleção antes do foco para evitar que o cursor vá para o final do documento
+      textarea.setSelectionRange(targetStart, targetEnd);
+      textarea.focus({ preventScroll: true });
+
+      // Calcula a linha da inserção para manter o scroll ajustado no local correto
+      const textBeforeCursor = newValue.substring(0, targetStart);
+      const lineNumber = textBeforeCursor.split('\n').length;
+      const computedStyle = window.getComputedStyle(textarea);
+      const lineHeight = parseFloat(computedStyle.lineHeight) || 20;
+
+      // Centraliza a posição da inserção dentro do textarea
+      const targetScrollTop = Math.max(0, lineNumber * lineHeight - textarea.clientHeight / 2);
+      textarea.scrollTop = targetScrollTop;
+
+      // Sincroniza o painel de pré-visualização (preview)
+      const preview = contentPreviewRef.current;
+      if (preview) {
+        syncScrollByRatio(textarea, preview);
+      }
+
+      // Traz a área do editor suavemente para a visão do usuário se ele tiver rolado para longe
+      textarea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }, 0);
   };
 
