@@ -34,7 +34,7 @@ export default function DesktopPageSearchBar({
   activeFilterValue = 'todos',
 }: DesktopPageSearchBarProps) {
   return (
-    <section className="pt-20 sm:pt-24 border-b border-[#e5e7eb] bg-[radial-gradient(ellipse_at_top,rgba(15,23,42,0.05)_0%,rgba(255,255,255,1)_70%)]">
+    <section className="pt-20 sm:pt-24 bg-[radial-gradient(ellipse_at_top,rgba(15,23,42,0.05)_0%,rgba(255,255,255,1)_70%)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-5 sm:pb-6">
         <p className={`text-[#bc2a1f] text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.34em] font-rajdhani ${labelClassName ?? ''}`}>
           {label}

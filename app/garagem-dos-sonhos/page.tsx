@@ -18,6 +18,7 @@ interface GaragemDosSonhosPageProps {
   searchParams?: {
     q?: string;
     theme?: string;
+    brand?: string;
   };
 }
 
@@ -26,6 +27,17 @@ const garageThemes = [
   { value: 'luxo', label: 'Carros de Luxo' },
   { value: 'esportivos', label: 'Carros Esportivos' },
   { value: 'off-road', label: 'Off Road' },
+] as const;
+
+const garageBrandLinks = [
+  { label: 'Todos', value: 'todos' },
+  { label: 'Ferrari', value: 'ferrari' },
+  { label: 'Lamborghini', value: 'lamborghini' },
+  { label: 'Bugatti', value: 'bugatti' },
+  { label: 'McLaren', value: 'mclaren' },
+  { label: 'Porsche', value: 'porsche' },
+  { label: 'Koenigsegg', value: 'koenigsegg' },
+  { label: 'Pagani', value: 'pagani' },
 ] as const;
 
 function normalizeText(value: string) {
@@ -63,11 +75,22 @@ function matchesGarageTheme(post: { title: string; excerpt: string; content: str
   return (themeKeywords[theme] ?? []).some((keyword) => searchable.includes(normalizeText(keyword)));
 }
 
+function matchesGarageBrand(post: { title: string; excerpt: string; content: string; category: string; slug: string; garage_theme?: string | null }, brand: string) {
+  if (!brand || brand === 'todos') {
+    return true;
+  }
+
+  const searchable = normalizeText([post.title, post.slug].join(' '));
+
+  return searchable.includes(normalizeText(brand));
+}
+
 export default async function GaragemDosSonhosPage({ searchParams }: GaragemDosSonhosPageProps) {
   const allPosts = await getPosts({ includePrivateModelPosts: true });
   const garagePosts = allPosts.filter((post) => getPostSection(post) === 'Garagem dos Sonhos');
   const query = (searchParams?.q ?? '').trim();
   const selectedTheme = (searchParams?.theme ?? 'todos').trim().toLowerCase();
+  const selectedBrand = (searchParams?.brand ?? '').trim().toLowerCase();
   const normalizedQuery = normalizeText(query);
 
   const posts = garagePosts.filter((post) => {
@@ -81,8 +104,9 @@ export default async function GaragemDosSonhosPage({ searchParams }: GaragemDosS
     ].join(' ')).includes(normalizedQuery);
 
     const matchesTheme = matchesGarageTheme(post, selectedTheme);
+    const matchesBrand = matchesGarageBrand(post, selectedBrand);
 
-    return matchesQuery && matchesTheme;
+    return matchesQuery && matchesTheme && matchesBrand;
   });
 
   const buildThemeUrl = (themeValue: string) => {
@@ -92,8 +116,31 @@ export default async function GaragemDosSonhosPage({ searchParams }: GaragemDosS
       params.set('q', query);
     }
 
+    if (selectedBrand) {
+      params.set('brand', selectedBrand);
+    }
+
     if (themeValue !== 'todos') {
       params.set('theme', themeValue);
+    }
+
+    const suffix = params.toString();
+    return suffix ? `/garagem-dos-sonhos?${suffix}` : '/garagem-dos-sonhos';
+  };
+
+  const buildBrandUrl = (brandValue: string) => {
+    const params = new URLSearchParams();
+
+    if (query) {
+      params.set('q', query);
+    }
+
+    if (selectedTheme !== 'todos') {
+      params.set('theme', selectedTheme);
+    }
+
+    if (brandValue !== 'todos') {
+      params.set('brand', brandValue);
     }
 
     const suffix = params.toString();
@@ -118,6 +165,31 @@ export default async function GaragemDosSonhosPage({ searchParams }: GaragemDosS
         }))}
         activeFilterValue={selectedTheme}
       />
+
+      <div className="px-4 sm:px-6 lg:px-8 pb-4 sm:pb-5">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center justify-center gap-2 overflow-x-auto pb-1 sm:gap-2.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {garageBrandLinks.map((brand) => {
+              const isActive = selectedBrand === brand.value;
+
+              return (
+                <Link
+                  key={brand.label}
+                  href={buildBrandUrl(brand.value)}
+                  className={[
+                    'shrink-0 inline-flex whitespace-nowrap rounded-full border px-2.5 py-1.5 text-[10px] font-rajdhani font-bold uppercase tracking-[0.12em] transition-colors duration-300 sm:px-3 sm:py-2 sm:text-[11px]',
+                    isActive
+                      ? 'border-[#dc2626] bg-[#dc2626] text-white shadow-sm'
+                      : 'border-[#e5e7eb] bg-[#fafafa] text-[#111827] hover:border-[#dc2626]/35 hover:text-[#dc2626] hover:bg-white',
+                  ].join(' ')}
+                >
+                  {brand.label}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </div>
 
       <section className="px-4 sm:px-6 lg:px-8 pb-16 sm:pb-20">
         <div className="max-w-7xl mx-auto">
