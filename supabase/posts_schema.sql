@@ -9,6 +9,7 @@ create table if not exists public.posts (
   excerpt text not null,
   content text not null,
   category text not null,
+  garage_theme text,
   date date not null,
   read_time text not null,
   image_url text not null,
@@ -23,6 +24,9 @@ create table if not exists public.posts (
 create index if not exists idx_posts_published_date on public.posts (published, date desc);
 create index if not exists idx_posts_slug on public.posts (slug);
 create index if not exists idx_posts_category on public.posts (category);
+create index if not exists idx_posts_garage_theme on public.posts (garage_theme);
+
+alter table public.posts add column if not exists garage_theme text;
 
 create or replace function public.set_posts_updated_at()
 returns trigger

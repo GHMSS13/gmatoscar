@@ -209,20 +209,20 @@ export default function HomeTopNewsSection({
     {
       title: 'Carros de Luxo',
       description: 'Modelos com acabamento premium, conforto extremo e foco em exclusividade.',
-      href: '/pesquisa?q=carros%20de%20luxo',
+      href: '/garagem-dos-sonhos?theme=luxo',
       badge: 'Luxo',
     },
     {
       title: 'Carros Esportivos',
       description: 'Seleções para quem busca dirigibilidade, desempenho e design agressivo.',
-      href: '/pesquisa?q=carros%20esportivos',
+      href: '/garagem-dos-sonhos?theme=esportivos',
       badge: 'Esportivos',
     },
     {
-      title: 'Modelos Mais Caros',
-      description: 'Veja os supercarros mais valiosos e desejados do mercado global.',
-      href: '/pesquisa?q=modelos%20mais%20caros',
-      badge: 'Top Preço',
+      title: 'Off Road',
+      description: 'Explore veículos preparados para trilhas, terrenos difíceis e aventura fora da estrada.',
+      href: '/garagem-dos-sonhos?theme=off-road',
+      badge: 'Off Road',
     },
   ];
 

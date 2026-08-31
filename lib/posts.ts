@@ -41,6 +41,7 @@ export interface Post {
   excerpt: string;
   content: string;
   category: string;
+  garage_theme?: string | null;
   date: string;
   read_time: string;
   image_url: string;

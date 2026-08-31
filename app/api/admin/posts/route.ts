@@ -12,6 +12,7 @@ interface PostPayload {
   excerpt: string;
   content: string;
   category: string;
+  garage_theme?: string | null;
   date: string;
   read_time: string;
   image_url: string;
@@ -24,6 +25,10 @@ interface PostPayload {
 const sanitizePostPayload = (post: PostPayload): PostPayload => ({
   ...post,
   category: resolvePublicationCategory(post.category),
+  garage_theme:
+    post.category === 'Garagem dos Sonhos' && post.garage_theme
+      ? post.garage_theme.trim()
+      : null,
 });
 
 type SupabaseClientResult =

@@ -20,6 +20,7 @@ interface PostFormState {
   excerpt: string;
   content: string;
   category: string;
+  garage_theme: string;
   date: string;
   read_time: string;
   image_url: string;
@@ -55,12 +56,19 @@ interface LibraryResponse {
   totalPages: number;
 }
 
+const garageThemeOptions = [
+  { value: 'luxo', label: 'Carros de Luxo' },
+  { value: 'esportivos', label: 'Carros Esportivos' },
+  { value: 'off-road', label: 'Off Road' },
+] as const;
+
 const initialFormState: PostFormState = {
   title: '',
   slug: '',
   excerpt: '',
   content: '',
   category: 'Noticias',
+  garage_theme: 'luxo',
   date: new Date().toISOString().slice(0, 10),
   read_time: '3 min',
   image_url: '',
@@ -511,6 +519,7 @@ export default function AdminPage() {
         excerpt: data.excerpt,
         content: data.content,
         category: resolvePublicationCategory(data.category),
+        garage_theme: data.garage_theme || '',
         date: data.date,
         read_time: data.read_time,
         image_url: data.image_url,
@@ -797,6 +806,7 @@ export default function AdminPage() {
         excerpt: form.excerpt.trim(),
         content: form.content.trim(),
         category: resolvePublicationCategory(form.category),
+        garage_theme: form.category === 'Garagem dos Sonhos' ? form.garage_theme : null,
         date: form.date,
         read_time: form.read_time.trim(),
         image_url: form.image_url.trim(),
@@ -1144,7 +1154,15 @@ export default function AdminPage() {
                     <span className="text-[#374151] text-sm font-exo">Publicar em</span>
                     <select
                       value={form.category}
-                      onChange={(event) => handleInput('category', event.target.value)}
+                      onChange={(event) => {
+                        const nextCategory = event.target.value;
+                        handleInput('category', nextCategory);
+                        if (nextCategory !== 'Garagem dos Sonhos') {
+                          handleInput('garage_theme', '');
+                        } else if (!form.garage_theme) {
+                          handleInput('garage_theme', 'luxo');
+                        }
+                      }}
                       className="mt-2 w-full rounded-xl border border-[#d1d5db] bg-white px-4 py-3 text-[#111827] outline-none transition-all focus:border-[#dc2626]"
                       required
                     >
@@ -1165,6 +1183,24 @@ export default function AdminPage() {
                     />
                   </label>
                 </div>
+
+                {form.category === 'Garagem dos Sonhos' && (
+                  <label className="block">
+                    <span className="text-[#374151] text-sm font-exo">Tema da Garagem dos Sonhos</span>
+                    <select
+                      value={form.garage_theme}
+                      onChange={(event) => handleInput('garage_theme', event.target.value)}
+                      className="mt-2 w-full rounded-xl border border-[#d1d5db] bg-white px-4 py-3 text-[#111827] outline-none transition-all focus:border-[#dc2626]"
+                    >
+                      <option value="">Selecione um tema</option>
+                      {garageThemeOptions.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                )}
 
                 <div className="grid gap-6 lg:grid-cols-2">
                   <label className="block">

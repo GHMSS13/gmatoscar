@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import DesktopPageSearchBar from '@/components/DesktopPageSearchBar';
 import NewsCard from '@/components/NewsCard';
 import { getPostSection, getPosts } from '@/lib/posts';
+import { SlidersHorizontal } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Garagem dos Sonhos | GMATOSCAR',
@@ -15,8 +17,16 @@ export const dynamic = 'force-dynamic';
 interface GaragemDosSonhosPageProps {
   searchParams?: {
     q?: string;
+    theme?: string;
   };
 }
+
+const garageThemes = [
+  { value: 'todos', label: 'Todos' },
+  { value: 'luxo', label: 'Carros de Luxo' },
+  { value: 'esportivos', label: 'Carros Esportivos' },
+  { value: 'off-road', label: 'Off Road' },
+] as const;
 
 function normalizeText(value: string) {
   return value
@@ -25,23 +35,70 @@ function normalizeText(value: string) {
     .replace(/[\u0300-\u036f]/g, '');
 }
 
+function matchesGarageTheme(post: { title: string; excerpt: string; content: string; category: string; slug: string; garage_theme?: string | null }, theme: string) {
+  if (!theme || theme === 'todos') {
+    return true;
+  }
+
+  const normalizedGarageTheme = normalizeText(post.garage_theme ?? '');
+  if (normalizedGarageTheme && normalizedGarageTheme.includes(theme)) {
+    return true;
+  }
+
+  const searchable = normalizeText([
+    post.title,
+    post.excerpt,
+    post.content,
+    post.category,
+    post.slug,
+    post.garage_theme ?? '',
+  ].join(' '));
+
+  const themeKeywords: Record<string, string[]> = {
+    luxo: ['luxo', 'premium', 'exclusivo', 'superluxo', 'de luxo', 'ultra luxuoso'],
+    esportivos: ['esportivo', 'sport', 'gt', 'supercarro', 'sportscar', 'performance'],
+    'off-road': ['off road', 'off-road', 'todo terreno', '4x4', 'suv', 'terrain', 'rally', 'fora de estrada'],
+  };
+
+  return (themeKeywords[theme] ?? []).some((keyword) => searchable.includes(normalizeText(keyword)));
+}
+
 export default async function GaragemDosSonhosPage({ searchParams }: GaragemDosSonhosPageProps) {
   const allPosts = await getPosts({ includePrivateModelPosts: true });
   const garagePosts = allPosts.filter((post) => getPostSection(post) === 'Garagem dos Sonhos');
   const query = (searchParams?.q ?? '').trim();
+  const selectedTheme = (searchParams?.theme ?? 'todos').trim().toLowerCase();
   const normalizedQuery = normalizeText(query);
 
   const posts = garagePosts.filter((post) => {
-    if (!normalizedQuery) {
-      return true;
+    const matchesQuery = !normalizedQuery || normalizeText([
+      post.title,
+      post.excerpt,
+      post.content,
+      post.category,
+      post.slug,
+      post.garage_theme ?? '',
+    ].join(' ')).includes(normalizedQuery);
+
+    const matchesTheme = matchesGarageTheme(post, selectedTheme);
+
+    return matchesQuery && matchesTheme;
+  });
+
+  const buildThemeUrl = (themeValue: string) => {
+    const params = new URLSearchParams();
+
+    if (query) {
+      params.set('q', query);
     }
 
-    const searchable = normalizeText(
-      [post.title, post.excerpt, post.content, post.category, post.slug].join(' ')
-    );
+    if (themeValue !== 'todos') {
+      params.set('theme', themeValue);
+    }
 
-    return searchable.includes(normalizedQuery);
-  });
+    const suffix = params.toString();
+    return suffix ? `/garagem-dos-sonhos?${suffix}` : '/garagem-dos-sonhos';
+  };
 
   return (
     <main className="min-h-screen bg-white">
@@ -54,13 +111,19 @@ export default async function GaragemDosSonhosPage({ searchParams }: GaragemDosS
         label="Garagem dos Sonhos"
         title="Os Carros Que Todo Entusiasta Gostaria de Ter"
         subtitle="Explore uma seleção de supercarros, carros esportivos, máquinas de competição e modelos extraordinários que marcaram a história e conquistaram um lugar na garagem dos sonhos dos apaixonados por carros."
+        filterOptions={garageThemes.map((theme) => ({
+          label: theme.label,
+          value: theme.value,
+          href: buildThemeUrl(theme.value),
+        }))}
+        activeFilterValue={selectedTheme}
       />
 
       <section className="px-4 sm:px-6 lg:px-8 pb-16 sm:pb-20">
         <div className="max-w-7xl mx-auto">
           {posts.length === 0 ? (
             <div className="rounded-xl border border-[#e5e7eb] bg-[#f9fafb] p-6 text-sm font-exo text-[#4b5563]">
-              Nenhum resultado encontrado para o termo pesquisado.
+              Nenhum resultado encontrado para o termo ou filtro selecionado.
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">

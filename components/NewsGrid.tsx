@@ -86,8 +86,6 @@ export default function NewsGrid({ posts, theme = 'dark' }: NewsGridProps) {
 
   const infoCards = [...rankingInfoCards, ...dreamGarageInfoCards];
 
-  const morePosts = sourcePosts.slice(8, 14);
-
   return (
     <>
       <HomeTopNewsSection
@@ -98,22 +96,6 @@ export default function NewsGrid({ posts, theme = 'dark' }: NewsGridProps) {
         dreamGaragePosts={dreamGaragePosts}
         rankingPosts={rankingPosts}
       />
-
-      {morePosts.length > 0 && (
-        <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto pb-10 sm:pb-14 pt-2 sm:pt-3">
-          <div className="flex items-center gap-3 mb-4 sm:mb-5">
-            <span className="w-1 h-5 bg-[#dc2626] rounded-full" />
-            <h3 className="font-rajdhani font-bold uppercase tracking-[0.2em] text-xs sm:text-sm text-[#111827]">
-              Mais Conteúdos
-            </h3>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            {morePosts.map((item) => (
-              <NewsCard key={item.id} item={item} theme={theme} />
-            ))}
-          </div>
-        </section>
-      )}
     </>
   );
 }

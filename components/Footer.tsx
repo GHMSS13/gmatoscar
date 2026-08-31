@@ -103,7 +103,7 @@ export default function Footer() {
               <span className="text-[#dc2626]">CAR</span>
             </Link>
             <p className="text-white/40 text-sm leading-relaxed mb-6 max-w-sm font-exo">
-              O GMATOSCAR é um portal brasileiro especializado em supercarros, hipercarros e esportivos de alto desempenho. Descubra curiosidades, notícias, rankings e histórias dos carros mais incríveis do mundo.
+              O GMATOSCAR nasceu da paixão por máquinas que vão além do comum. Celebramos supercarros, hipercarros, esportivos e veículos extraordinários que desafiam limites, inspiram engenharia e marcam a história do automóvel. Em notícias, rankings, curiosidades e histórias, conectamos fãs de velocidade, design e inovação.
             </p>
           </div>
 
