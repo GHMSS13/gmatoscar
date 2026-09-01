@@ -227,13 +227,13 @@ export default function HomeTopNewsSection({
   ];
 
   const dreamGarageBrandLinks = [
-    { label: 'Ferrari', href: '/marcas/ferrari' },
-    { label: 'Lamborghini', href: '/marcas/lamborghini' },
-    { label: 'Bugatti', href: '/marcas/bugatti' },
-    { label: 'McLaren', href: '/marcas/mclaren' },
-    { label: 'Porsche', href: '/marcas/porsche' },
-    { label: 'Koenigsegg', href: '/marcas/koenigsegg' },
-    { label: 'Pagani', href: '/marcas/pagani' },
+    { label: 'Ferrari', href: '/garagem-dos-sonhos?brand=ferrari' },
+    { label: 'Lamborghini', href: '/garagem-dos-sonhos?brand=lamborghini' },
+    { label: 'Bugatti', href: '/garagem-dos-sonhos?brand=bugatti' },
+    { label: 'McLaren', href: '/garagem-dos-sonhos?brand=mclaren' },
+    { label: 'Porsche', href: '/garagem-dos-sonhos?brand=porsche' },
+    { label: 'Koenigsegg', href: '/garagem-dos-sonhos?brand=koenigsegg' },
+    { label: 'Pagani', href: '/garagem-dos-sonhos?brand=pagani' },
   ];
 
   const normalizedRankingPosts = [...rankingPosts.slice(0, 9)];
@@ -367,10 +367,10 @@ export default function HomeTopNewsSection({
           </h2>
         </div>
         <Link
-          href="/pesquisa"
+          href="/noticias"
           className="hidden sm:inline-flex shrink-0 whitespace-nowrap items-center justify-center gap-2 rounded-lg bg-[#dc2626] px-5 py-2 text-[12px] text-white hover:bg-[#b91c1c] font-rajdhani font-bold uppercase tracking-[0.14em] transition-colors duration-300 shadow-[0_8px_20px_rgba(220,38,38,0.25)] group"
         >
-          Ver Tudo <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5" />
+          Notícias Recentes <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5" />
         </Link>
       </div>
 
