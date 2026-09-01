@@ -53,8 +53,8 @@ function matchesGarageTheme(post: { title: string; excerpt: string; content: str
   }
 
   const normalizedGarageTheme = normalizeText(post.garage_theme ?? '');
-  if (normalizedGarageTheme && normalizedGarageTheme.includes(theme)) {
-    return true;
+  if (normalizedGarageTheme) {
+    return normalizedGarageTheme === theme;
   }
 
   const searchable = normalizeText([

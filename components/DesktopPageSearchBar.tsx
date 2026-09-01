@@ -49,51 +49,53 @@ export default function DesktopPageSearchBar({
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-5 sm:pb-6">
         <form action={action} method="get" className="flex flex-col sm:flex-row sm:items-center gap-3">
-          <div className="relative flex-1">
-            <Search
-              size={18}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-[#6b7280]"
-              aria-hidden="true"
-            />
-            <input
-              type="text"
-              name="q"
-              defaultValue={defaultQuery}
-              placeholder={placeholder}
-              className="h-11 sm:h-12 w-full rounded-full border border-[#d1d5db] bg-white pl-11 sm:pl-12 pr-5 text-[14px] sm:text-[15px] leading-none font-exo text-[#111827] placeholder:text-[#6b7280] outline-none transition-colors duration-300 focus:border-[#dc2626]/60"
-            />
-          </div>
-
-          {filterOptions.length > 0 && (
-            <div className="relative">
-              <details className="group relative">
-                <summary className="list-none flex h-11 sm:h-12 w-11 sm:w-12 cursor-pointer items-center justify-center rounded-full border border-[#d1d5db] bg-white text-[#374151] transition-all duration-300 hover:border-[#dc2626]/50 hover:text-[#111827] focus:outline-none">
-                  <SlidersHorizontal size={17} aria-hidden="true" />
-                </summary>
-
-                <div className="absolute right-0 top-full z-20 mt-2 w-52 rounded-xl border border-[#e5e7eb] bg-white p-2 shadow-xl">
-                  {filterOptions.map((option) => {
-                    const isActive = option.value === activeFilterValue;
-
-                    return (
-                      <a
-                        key={option.value}
-                        href={option.href}
-                        className={[
-                          'block rounded-lg px-3 py-2 text-left text-[11px] sm:text-[12px] font-rajdhani font-bold uppercase tracking-[0.12em] transition-colors duration-200',
-                          isActive
-                            ? 'bg-[#dc2626] text-white'
-                            : 'text-[#374151] hover:bg-[#f3f4f6] hover:text-[#111827]',
-                        ].join(' ')}
-                      >
-                        {option.label}
-                      </a>
-                    );
-                  })}
-                </div>
-              </details>
+          <div className="flex min-w-0 flex-1 items-center gap-3 sm:contents">
+            <div className="relative flex-1">
+              <Search
+                size={18}
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-[#6b7280]"
+                aria-hidden="true"
+              />
+              <input
+                type="text"
+                name="q"
+                defaultValue={defaultQuery}
+                placeholder={placeholder}
+                className="h-11 sm:h-12 w-full rounded-full border border-[#d1d5db] bg-white pl-11 sm:pl-12 pr-5 text-[14px] sm:text-[15px] leading-none font-exo text-[#111827] placeholder:text-[#6b7280] outline-none transition-colors duration-300 focus:border-[#dc2626]/60"
+              />
             </div>
-          )}
+
+            {filterOptions.length > 0 && (
+              <div className="relative shrink-0">
+                <details className="group relative">
+                  <summary className="list-none flex h-11 sm:h-12 w-11 sm:w-12 cursor-pointer items-center justify-center rounded-full border border-[#d1d5db] bg-white text-[#374151] transition-all duration-300 hover:border-[#dc2626]/50 hover:text-[#111827] focus:outline-none">
+                    <SlidersHorizontal size={17} aria-hidden="true" />
+                  </summary>
+
+                  <div className="absolute right-0 top-full z-20 mt-2 w-52 rounded-xl border border-[#e5e7eb] bg-white p-2 shadow-xl">
+                    {filterOptions.map((option) => {
+                      const isActive = option.value === activeFilterValue;
+
+                      return (
+                        <a
+                          key={option.value}
+                          href={option.href}
+                          className={[
+                            'block rounded-lg px-3 py-2 text-left text-[11px] sm:text-[12px] font-rajdhani font-bold uppercase tracking-[0.12em] transition-colors duration-200',
+                            isActive
+                              ? 'bg-[#dc2626] text-white'
+                              : 'text-[#374151] hover:bg-[#f3f4f6] hover:text-[#111827]',
+                          ].join(' ')}
+                        >
+                          {option.label}
+                        </a>
+                      );
+                    })}
+                  </div>
+                </details>
+              </div>
+            )}
+          </div>
 
           <button
             type="submit"
