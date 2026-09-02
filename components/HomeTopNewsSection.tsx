@@ -858,7 +858,7 @@ export default function HomeTopNewsSection({
                   <CarouselItem key={brand.label} className="basis-auto pl-2">
                     <Link
                       href={brand.href}
-                      className="inline-flex whitespace-nowrap rounded-full border border-[#e5e7eb] bg-[#fafafa] px-4 py-2 text-[11px] sm:text-[12px] font-rajdhani font-bold uppercase tracking-[0.14em] text-[#111827] hover:border-[#dc2626]/35 hover:text-[#dc2626] hover:bg-white transition-colors duration-300"
+                      className="inline-flex whitespace-nowrap rounded-sm border border-[#d1d5db] bg-white px-4 py-1.5 text-xs font-rajdhani font-bold uppercase tracking-widest text-[#111827] hover:border-[#dc2626]/40 transition-all duration-200"
                     >
                       {brand.label}
                     </Link>
@@ -875,7 +875,7 @@ export default function HomeTopNewsSection({
               <Link
                 key={`${brand.label}-desktop-center`}
                 href={brand.href}
-                className="inline-flex whitespace-nowrap rounded-full border border-[#e5e7eb] bg-[#fafafa] px-4 py-2 text-[12px] font-rajdhani font-bold uppercase tracking-[0.14em] text-[#111827] hover:border-[#dc2626]/35 hover:text-[#dc2626] hover:bg-white transition-colors duration-300"
+                className="inline-flex whitespace-nowrap rounded-sm border border-[#d1d5db] bg-white px-4 py-1.5 text-xs font-rajdhani font-bold uppercase tracking-widest text-[#111827] hover:border-[#dc2626]/40 transition-all duration-200"
               >
                 {brand.label}
               </Link>

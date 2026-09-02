@@ -97,10 +97,6 @@ export default async function GaragemDosSonhosPage({ searchParams }: GaragemDosS
     const matchesQuery = !normalizedQuery || normalizeText([
       post.title,
       post.excerpt,
-      post.content,
-      post.category,
-      post.slug,
-      post.garage_theme ?? '',
     ].join(' ')).includes(normalizedQuery);
 
     const matchesTheme = matchesGarageTheme(post, selectedTheme);
@@ -170,14 +166,14 @@ export default async function GaragemDosSonhosPage({ searchParams }: GaragemDosS
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-center gap-2 overflow-x-auto pb-1 sm:gap-2.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {garageBrandLinks.map((brand) => {
-              const isActive = selectedBrand === brand.value;
+              const isActive = selectedBrand === brand.value || (brand.value === 'todos' && !selectedBrand);
 
               return (
                 <Link
                   key={brand.label}
                   href={buildBrandUrl(brand.value)}
                   className={[
-                    'shrink-0 inline-flex whitespace-nowrap rounded-full border px-2.5 py-1.5 text-[10px] font-rajdhani font-bold uppercase tracking-[0.12em] transition-colors duration-300 sm:px-3 sm:py-2 sm:text-[11px]',
+                    'shrink-0 inline-flex whitespace-nowrap rounded-sm border px-4 py-1.5 text-xs font-rajdhani font-bold uppercase tracking-widest transition-colors duration-200',
                     isActive
                       ? 'border-[#dc2626] bg-[#dc2626] text-white shadow-sm'
                       : 'border-[#e5e7eb] bg-[#fafafa] text-[#111827] hover:border-[#dc2626]/35 hover:text-[#dc2626] hover:bg-white',
