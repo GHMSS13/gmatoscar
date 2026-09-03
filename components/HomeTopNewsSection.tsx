@@ -841,7 +841,7 @@ export default function HomeTopNewsSection({
           ))}
         </div>
 
-        <div className="mb-4 rounded-xl border border-[#e5e7eb] bg-white p-3 sm:p-4">
+        <div className="mb-4 rounded-xl border border-[#f3d6d6] bg-[#fff8f8] p-3 shadow-[0_2px_10px_rgba(220,38,38,0.06)] sm:border-[#e5e7eb] sm:bg-white sm:p-4 sm:shadow-none">
           <div className="flex items-center justify-between gap-3 mb-3">
             <h4 className="text-[#111827] text-[1.02rem] sm:text-[1.14rem] font-rajdhani font-bold uppercase tracking-[0.1em]">
               Explore por Marcas
@@ -851,7 +851,7 @@ export default function HomeTopNewsSection({
             </span>
           </div>
 
-          <div className="relative px-8 sm:px-10 lg:hidden">
+          <div className="relative px-9 sm:px-11 lg:hidden">
             <Carousel opts={{ align: 'start', loop: false }} className="w-full">
               <CarouselContent className="-ml-2">
                 {dreamGarageBrandLinks.map((brand) => (
@@ -865,8 +865,8 @@ export default function HomeTopNewsSection({
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="-left-1 h-8 w-8 border-[#e5e7eb] bg-white hover:bg-white" />
-              <CarouselNext className="-right-1 h-8 w-8 border-[#e5e7eb] bg-white hover:bg-white" />
+              <CarouselPrevious className="-left-9 sm:-left-11 h-8 w-8 border-[#dc2626]/40 bg-white text-[#dc2626] hover:bg-white hover:border-[#dc2626]" />
+              <CarouselNext className="-right-9 sm:-right-11 h-8 w-8 border-[#dc2626]/40 bg-white text-[#dc2626] hover:bg-white hover:border-[#dc2626]" />
             </Carousel>
           </div>
 

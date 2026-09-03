@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import DesktopPageSearchBar from '@/components/DesktopPageSearchBar';
+import GarageBrandCarousel from '@/components/GarageBrandCarousel';
 import NewsCard from '@/components/NewsCard';
 import { getPostSection, getPosts } from '@/lib/posts';
 import { SlidersHorizontal } from 'lucide-react';
@@ -164,26 +164,13 @@ export default async function GaragemDosSonhosPage({ searchParams }: GaragemDosS
 
       <div className="px-4 sm:px-6 lg:px-8 pb-4 sm:pb-5">
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-center gap-2 overflow-x-auto pb-1 sm:gap-2.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {garageBrandLinks.map((brand) => {
-              const isActive = selectedBrand === brand.value || (brand.value === 'todos' && !selectedBrand);
-
-              return (
-                <Link
-                  key={brand.label}
-                  href={buildBrandUrl(brand.value)}
-                  className={[
-                    'shrink-0 inline-flex whitespace-nowrap rounded-sm border px-4 py-1.5 text-xs font-rajdhani font-bold uppercase tracking-widest transition-colors duration-200',
-                    isActive
-                      ? 'border-[#dc2626] bg-[#dc2626] text-white shadow-sm'
-                      : 'border-[#e5e7eb] bg-[#fafafa] text-[#111827] hover:border-[#dc2626]/35 hover:text-[#dc2626] hover:bg-white',
-                  ].join(' ')}
-                >
-                  {brand.label}
-                </Link>
-              );
-            })}
-          </div>
+          <GarageBrandCarousel
+            brands={garageBrandLinks.map((brand) => ({
+              label: brand.label,
+              href: buildBrandUrl(brand.value),
+              isActive: selectedBrand === brand.value || (brand.value === 'todos' && !selectedBrand),
+            }))}
+          />
         </div>
       </div>
 

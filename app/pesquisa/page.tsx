@@ -6,19 +6,28 @@ import { Search, Filter, X } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import NewsCard from '@/components/NewsCard';
-import { categories } from '@/lib/data';
-import { type Post, getPosts } from '@/lib/posts';
+import { type Post, getPostSection, getPosts } from '@/lib/posts';
 
 interface PesquisaContentProps {
   posts: Post[];
 }
+
+const searchCategories = ['Todos', 'Notícias', 'Marcas', 'Rankings', 'Carros'] as const;
+type SearchCategory = (typeof searchCategories)[number];
+
+const searchCategorySections: Record<Exclude<SearchCategory, 'Todos'>, ReturnType<typeof getPostSection>> = {
+  'Notícias': 'Noticias',
+  'Marcas': 'Marcas',
+  'Rankings': 'Rankings',
+  'Carros': 'Garagem dos Sonhos',
+};
 
 function PesquisaContent({ posts }: PesquisaContentProps) {
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get('q') ?? '';
 
   const [query, setQuery] = useState(initialQuery);
-  const [activeCategory, setActiveCategory] = useState('Todos');
+  const [activeCategory, setActiveCategory] = useState<SearchCategory>('Todos');
   const [results, setResults] = useState<Post[]>(posts);
 
   useEffect(() => {
@@ -38,7 +47,8 @@ function PesquisaContent({ posts }: PesquisaContentProps) {
     }
 
     if (activeCategory !== 'Todos') {
-      filtered = filtered.filter((item) => item.category === activeCategory);
+      const section = searchCategorySections[activeCategory];
+      filtered = filtered.filter((item) => getPostSection(item) === section);
     }
 
     setResults(filtered);
@@ -97,7 +107,7 @@ function PesquisaContent({ posts }: PesquisaContentProps) {
           <span className="text-[#9ca3af] text-xs font-exo uppercase tracking-widest">Filtrar por categoria</span>
         </div>
         <div className="flex flex-wrap gap-2">
-          {categories.map((cat) => (
+          {searchCategories.map((cat) => (
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
