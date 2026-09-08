@@ -15,14 +15,18 @@ const brandArticleSlugs: Record<string, string> = {
   ferrari: 'ferrari',
   lamborghini: 'lamborghini',
   bugatti: 'bugatti',
+  porsche: 'porsche',
+  pagani: 'pagani',
+  mclaren: 'mclaren',
+  koenigsegg: 'koenigsegg',
 };
 const countryFlags: Record<string, string> = {
-  Italia: '🇮🇹',
-  Franca: '🇫🇷',
-  Alemanha: '🇩🇪',
-  Suecia: '🇸🇪',
-  'Reino Unido': '🇬🇧',
-  Croacia: '🇭🇷',
+  Italia: 'it',
+  Franca: 'fr',
+  Alemanha: 'de',
+  Suecia: 'se',
+  'Reino Unido': 'gb',
+  Croacia: 'hr',
 };
 
 export default function BrandsSection() {
@@ -76,20 +80,25 @@ export default function BrandsSection() {
 
                   <div className="relative h-full p-4 sm:p-5 flex flex-col justify-end">
                     <div className="inline-flex items-center gap-2 mb-2.5">
-                      <span className="text-sm leading-none" aria-label={`Bandeira de ${brand.country}`} title={brand.country}>
-                        {countryFlags[brand.country] ?? '🌍'}
-                      </span>
-                      <p className="text-white/80 text-[10px] font-rajdhani font-bold uppercase tracking-[0.16em]">
+                      <img
+                        src={`https://flagcdn.com/24x18/${countryFlags[brand.country] ?? 'un'}.png`}
+                        alt={`Bandeira de ${brand.country}`}
+                        title={brand.country}
+                        width={20}
+                        height={15}
+                        className="rounded-[2px] shadow-sm"
+                      />
+                      <p className="text-shadow-overlay text-white/80 text-[10px] font-rajdhani font-bold uppercase tracking-[0.16em]">
                         {brand.country}
                       </p>
                     </div>
-                    <h3 className="text-white font-rajdhani font-bold text-[2rem] sm:text-[2.2rem] leading-none mb-2 group-hover:text-[#dc2626] transition-colors line-clamp-1">
+                    <h3 className="text-shadow-overlay text-white font-rajdhani font-bold text-[2rem] sm:text-[2.2rem] leading-none mb-2 group-hover:text-[#dc2626] transition-colors line-clamp-1">
                       {brand.name}
                     </h3>
-                    <p className="text-white/75 text-[14px] sm:text-[15px] lg:text-[15px] leading-[1.5] font-exo line-clamp-2 mb-3.5">
+                    <p className="text-shadow-overlay text-white/75 text-[14px] sm:text-[15px] lg:text-[15px] leading-[1.5] font-exo line-clamp-2 mb-3.5">
                       {brand.description}
                     </p>
-                    <div className="inline-flex items-center gap-1 text-xs font-rajdhani font-bold uppercase tracking-[0.2em] text-white group-hover:text-[#dc2626] transition-colors duration-300">
+                    <div className="text-shadow-overlay inline-flex items-center gap-1 text-xs font-rajdhani font-bold uppercase tracking-[0.2em] text-white group-hover:text-[#dc2626] transition-colors duration-300">
                       {brandArticleSlugs[brand.id] ? 'Ver Artigo' : 'Ver Marca'}
                       <ArrowRight size={12} className="transition-transform group-hover:translate-x-1" />
                     </div>

@@ -57,14 +57,14 @@ export default function NewsCard({ item, variant = 'default', theme = 'dark', so
               <div className="absolute inset-0 bg-gradient-to-t from-white via-white/70 to-transparent" />
 
               <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
-                <h2 className="text-xl md:text-2xl leading-tight mb-2 group-hover:text-[#dc2626] transition-colors duration-300 line-clamp-2 font-serif font-semibold text-[#111]">
+                <h2 className="text-shadow-overlay-light text-xl md:text-2xl leading-tight mb-2 group-hover:text-[#dc2626] transition-colors duration-300 line-clamp-2 font-serif font-semibold text-[#111]">
                   {item.title}
                 </h2>
-                <p className="text-sm leading-relaxed mb-3 line-clamp-2 font-exo text-[#4b5563]">
+                <p className="text-shadow-overlay-light text-sm leading-relaxed mb-3 line-clamp-2 font-exo text-[#4b5563]">
                   {item.excerpt}
                 </p>
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3 text-xs font-exo text-[#6b7280]">
+                  <div className="text-shadow-overlay-light flex items-center gap-3 text-xs font-exo text-[#6b7280]">
                     <span>{item.date}</span>
                     <span className="flex items-center gap-1">
                       <Clock size={12} /> {item.read_time}
@@ -96,14 +96,14 @@ export default function NewsCard({ item, variant = 'default', theme = 'dark', so
 
             {/* Content overlay */}
             <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
-              <h2 className={`text-xl md:text-2xl leading-tight mb-2 group-hover:text-[#dc2626] transition-colors duration-300 line-clamp-2 ${isLight ? 'font-serif font-semibold text-[#111]' : 'font-rajdhani font-bold text-white'}`}>
+              <h2 className={`${isLight ? 'text-shadow-overlay-light' : 'text-shadow-overlay'} text-xl md:text-2xl leading-tight mb-2 group-hover:text-[#dc2626] transition-colors duration-300 line-clamp-2 ${isLight ? 'font-serif font-semibold text-[#111]' : 'font-rajdhani font-bold text-white'}`}>
                 {item.title}
               </h2>
-              <p className={`text-sm leading-relaxed mb-3 line-clamp-2 font-exo ${isLight ? 'text-[#4b5563]' : 'text-white/60'}`}>
+              <p className={`${isLight ? 'text-shadow-overlay-light' : 'text-shadow-overlay'} text-sm leading-relaxed mb-3 line-clamp-2 font-exo ${isLight ? 'text-[#4b5563]' : 'text-white/75'}`}>
                 {item.excerpt}
               </p>
               <div className="flex items-center justify-between">
-                <div className={`flex items-center gap-3 text-xs font-exo ${isLight ? 'text-[#6b7280]' : 'text-white/40'}`}>
+                <div className={`${isLight ? 'text-shadow-overlay-light' : 'text-shadow-overlay'} flex items-center gap-3 text-xs font-exo ${isLight ? 'text-[#6b7280]' : 'text-white/40'}`}>
                   <span>{item.date}</span>
                   <span className="flex items-center gap-1">
                     <Clock size={12} /> {item.read_time}

@@ -396,13 +396,13 @@ export default function HomeTopNewsSection({
                           <p className="inline-flex bg-[#dc2626] text-white text-[10px] font-rajdhani font-bold uppercase tracking-[0.2em] px-2.5 py-1 rounded-sm mb-2.5 sm:mb-3">
                             Lançamentos
                           </p>
-                          <h3 className="text-[1.6rem] sm:text-[1.85rem] lg:text-[1.95rem] leading-[1.03] text-white font-serif font-semibold mb-1.5 sm:mb-2 line-clamp-2">
+                          <h3 className="text-shadow-overlay text-[1.6rem] sm:text-[1.85rem] lg:text-[1.95rem] leading-[1.03] text-white font-serif font-semibold mb-1.5 sm:mb-2 line-clamp-2">
                             {item.title}
                           </h3>
-                          <p className="text-white/80 text-[14px] sm:text-[15px] lg:text-[15px] leading-[1.5] line-clamp-1 font-exo mb-1.5 sm:mb-2">
+                          <p className="text-shadow-overlay text-white/75 text-[14px] sm:text-[15px] lg:text-[15px] leading-[1.5] line-clamp-1 font-exo mb-1.5 sm:mb-2">
                             {item.excerpt}
                           </p>
-                          <div className="flex items-center gap-2.5 text-[10px] sm:text-[11px] text-white/75 font-exo">
+                          <div className="text-shadow-overlay flex items-center gap-2.5 text-[10px] sm:text-[11px] text-white/75 font-exo">
                             <span>{item.date}</span>
                             <span className="inline-flex items-center gap-1">
                               <Clock size={11} /> {item.read_time}
@@ -578,10 +578,10 @@ export default function HomeTopNewsSection({
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
                       <div className="absolute bottom-0 left-0 right-0 p-3.5">
-                        <h3 className="text-white font-rajdhani font-bold text-[1.08rem] leading-[1.08] line-clamp-2">
+                        <h3 className="text-shadow-overlay text-white font-rajdhani font-bold text-[1.08rem] leading-[1.08] line-clamp-2">
                           {item.title}
                         </h3>
-                        <p className="text-white/70 text-[11px] mt-1.5 font-exo inline-flex items-center gap-1">
+                        <p className="text-shadow-overlay text-white/70 text-[11px] mt-1.5 font-exo inline-flex items-center gap-1">
                           <Clock size={10} /> {item.read_time}
                         </p>
                       </div>
@@ -752,10 +752,10 @@ export default function HomeTopNewsSection({
                     <p className="hidden lg:inline-flex bg-[#dc2626] text-white text-[9px] font-rajdhani font-bold uppercase tracking-[0.16em] px-2 py-0.5 rounded-sm mb-1.5">
                       Garagem dos Sonhos
                     </p>
-                    <h4 className="text-white text-[1.05rem] sm:text-[1.15rem] font-rajdhani font-bold leading-[1.04] line-clamp-2 uppercase">
+                    <h4 className="text-shadow-overlay text-white text-[1.05rem] sm:text-[1.15rem] font-rajdhani font-bold leading-[1.04] line-clamp-2 uppercase">
                       {item.post?.title || 'Garagem dos Sonhos em atualização'}
                     </h4>
-                    <p className="hidden lg:block mt-1 text-white/75 text-[15px] leading-[1.5] font-exo line-clamp-2">
+                    <p className="text-shadow-overlay hidden lg:block mt-1 text-white/75 text-[15px] leading-[1.5] font-exo line-clamp-2">
                       {item.post?.excerpt || 'Novas seleções e conteúdos especiais chegando em breve.'}
                     </p>
                   </div>
@@ -773,7 +773,7 @@ export default function HomeTopNewsSection({
                       sizes="33vw"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
-                    <p className="absolute left-2 bottom-1.5 text-white text-[10px] font-rajdhani font-bold uppercase tracking-[0.08em]">
+                    <p className="text-shadow-overlay absolute left-2 bottom-1.5 text-white text-[10px] font-rajdhani font-bold uppercase tracking-[0.08em]">
                       Interiores
                     </p>
                   </div>
@@ -786,7 +786,7 @@ export default function HomeTopNewsSection({
                     <svg viewBox="0 0 100 40" className="absolute left-2 right-2 top-3 h-8 text-[#ef4444]" fill="none" aria-hidden="true">
                       <path d="M2 30 L22 24 L37 27 L52 17 L69 20 L82 9 L98 11" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
-                    <p className="absolute left-2 bottom-1.5 text-white text-[10px] font-rajdhani font-bold uppercase tracking-[0.08em]">
+                    <p className="text-shadow-overlay absolute left-2 bottom-1.5 text-white text-[10px] font-rajdhani font-bold uppercase tracking-[0.08em]">
                       Dados Técnicos
                     </p>
                   </div>
@@ -802,7 +802,7 @@ export default function HomeTopNewsSection({
                       sizes="33vw"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
-                    <p className="absolute left-2 bottom-1.5 text-white text-[10px] font-rajdhani font-bold uppercase tracking-[0.08em]">
+                    <p className="text-shadow-overlay absolute left-2 bottom-1.5 text-white text-[10px] font-rajdhani font-bold uppercase tracking-[0.08em]">
                       Galeria
                     </p>
                   </div>
@@ -828,10 +828,10 @@ export default function HomeTopNewsSection({
                     <p className="inline-flex bg-[#dc2626] text-white text-[9px] font-rajdhani font-bold uppercase tracking-[0.16em] px-2 py-0.5 rounded-sm mb-1.5">
                       Garagem dos Sonhos
                     </p>
-                    <h4 className="text-white text-[1.2rem] xl:text-[1.28rem] font-rajdhani font-bold leading-[1.04] line-clamp-2 uppercase">
+                    <h4 className="text-shadow-overlay text-white text-[1.2rem] xl:text-[1.28rem] font-rajdhani font-bold leading-[1.04] line-clamp-2 uppercase">
                       {item.post?.title || 'Garagem dos Sonhos em atualização'}
                     </h4>
-                    <p className="mt-1 text-white/75 text-[15px] leading-[1.5] font-exo line-clamp-2">
+                    <p className="text-shadow-overlay mt-1 text-white/75 text-[15px] leading-[1.5] font-exo line-clamp-2">
                       {item.post?.excerpt || 'Novas seleções e conteúdos especiais chegando em breve.'}
                     </p>
                   </div>
@@ -1009,7 +1009,7 @@ export default function HomeTopNewsSection({
         </div>
       </section>
 
-      <section className="mt-8 sm:mt-9 lg:mt-11 rounded-2xl border border-[#e5e7eb] bg-white p-3 sm:p-5">
+      <section className="mt-3 sm:mt-4 lg:mt-5 rounded-2xl border border-[#e5e7eb] bg-white p-3 sm:p-5">
         <div className="flex items-end justify-between gap-3 mb-3 sm:mb-4">
           <div>
             <p className="text-[#dc2626] text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.26em] font-rajdhani mb-1">
@@ -1047,13 +1047,13 @@ export default function HomeTopNewsSection({
                   #01
                 </span>
                 <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4">
-                  <h3 className="text-white text-[1.22rem] sm:text-[1.48rem] font-rajdhani font-bold leading-[1.02] line-clamp-2 uppercase mb-1.5">
+                  <h3 className="text-shadow-overlay text-white text-[1.22rem] sm:text-[1.48rem] font-rajdhani font-bold leading-[1.02] line-clamp-2 uppercase mb-1.5">
                     {normalizedRankingPosts[0]?.title || 'Ranking em atualização'}
                   </h3>
-                  <p className="text-white/80 text-[14px] sm:text-[15px] lg:text-[15px] leading-[1.5] font-exo line-clamp-2 mb-2">
+                  <p className="text-shadow-overlay text-white/75 text-[14px] sm:text-[15px] lg:text-[15px] leading-[1.5] font-exo line-clamp-2 mb-2">
                     {normalizedRankingPosts[0]?.excerpt || 'Novos comparativos e listas especiais chegando em breve.'}
                   </p>
-                  <p className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] lg:text-[13px] text-white/75 font-exo">
+                  <p className="text-shadow-overlay inline-flex items-center gap-1 text-[10px] sm:text-[11px] lg:text-[13px] text-white/75 font-exo">
                     <Clock size={10} /> {normalizedRankingPosts[0]?.read_time || 'Em breve'}
                   </p>
                 </div>
@@ -1181,10 +1181,10 @@ export default function HomeTopNewsSection({
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
                         <div className="absolute inset-x-0 bottom-0 p-4">
-                          <h5 className="text-white text-[2rem] leading-[1.02] font-rajdhani font-bold uppercase line-clamp-2 mb-2">
+                          <h5 className="text-shadow-overlay text-white text-[2rem] leading-[1.02] font-rajdhani font-bold uppercase line-clamp-2 mb-2">
                             {mainPost?.title || 'Ranking em atualização'}
                           </h5>
-                          <p className="text-white/85 text-[15px] leading-[1.5] font-exo line-clamp-2">
+                          <p className="text-shadow-overlay text-white/75 text-[15px] leading-[1.5] font-exo line-clamp-2">
                             {mainPost?.excerpt || 'Novos comparativos e listas especiais chegando em breve.'}
                           </p>
                         </div>
