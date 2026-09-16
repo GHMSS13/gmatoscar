@@ -159,8 +159,19 @@ export async function GET(request: Request) {
       .order('id', { ascending: false });
 
     if (query) {
-      queryBuilder = queryBuilder.ilike('file_name', `%${query}%`);
+      // Quebra em palavras para achar o arquivo mesmo com separadores/ordem diferentes do nome digitado
+      const tokens = query
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .split(/[^a-z0-9]+/i)
+        .map((token) => token.trim())
+        .filter(Boolean);
+
+      for (const token of tokens.length > 0 ? tokens : [query]) {
+        queryBuilder = queryBuilder.ilike('file_name', `%${token}%`);
+      }
     }
+
 
     const { data, error, count } = await queryBuilder.range(start, end);
 
