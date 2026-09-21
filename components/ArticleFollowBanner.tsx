@@ -52,7 +52,7 @@ export default function ArticleFollowBanner() {
           </div>
 
           <p className="text-[#111827] font-rajdhani font-bold uppercase tracking-[0.12em] text-sm sm:text-base">
-            Siga o GMATOSCAR
+            SIGA GMATOSCAR
           </p>
         </div>
 
