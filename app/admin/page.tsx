@@ -90,7 +90,7 @@ const compressImageForUpload = async (file: File) => {
   let compressedBlob: Blob | null = null;
 
   try {
-    while (scale >= 0.25) {
+    while (scale >= 0.1) {
       const canvas = document.createElement('canvas');
       canvas.width = Math.max(1, Math.round(bitmap.width * scale));
       canvas.height = Math.max(1, Math.round(bitmap.height * scale));
@@ -121,7 +121,7 @@ const compressImageForUpload = async (file: File) => {
   }
 
   if (!compressedBlob || compressedBlob.size > MAX_COMPRESSED_IMAGE_BYTES) {
-    throw new Error(`Não foi possível comprimir "${file.name}" para o tamanho máximo de 2 MB.`);
+    throw new Error(`Não foi possível comprimir "${file.name}" para o tamanho máximo de 5 MB.`);
   }
 
   const imageBlob = compressedBlob;
