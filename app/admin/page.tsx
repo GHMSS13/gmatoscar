@@ -80,7 +80,7 @@ const initialFormState: PostFormState = {
 const ADMIN_REDIRECT_STORAGE_KEY = 'gmatoscar-admin-redirect';
 const IMAGE_PAGE_SIZE = 10;
 const IMAGE_URL_PREFIX = '/api/images/';
-const MAX_COMPRESSED_IMAGE_BYTES = 2 * 1024 * 1024;
+const MAX_COMPRESSED_IMAGE_BYTES = 5 * 1024 * 1024;
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
 const compressImageForUpload = async (file: File) => {
