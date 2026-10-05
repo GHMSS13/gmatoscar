@@ -44,7 +44,6 @@ interface LibraryImage {
   file_name: string;
   mime_type: string;
   image_url: string;
-  preview_data_url: string;
   created_at: string;
 }
 
@@ -81,7 +80,64 @@ const initialFormState: PostFormState = {
 const ADMIN_REDIRECT_STORAGE_KEY = 'gmatoscar-admin-redirect';
 const IMAGE_PAGE_SIZE = 10;
 const IMAGE_URL_PREFIX = '/api/images/';
+const MAX_COMPRESSED_IMAGE_BYTES = 2 * 1024 * 1024;
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+
+const compressImageForUpload = async (file: File) => {
+  const bitmap = await createImageBitmap(file);
+  const maxDimension = 1920;
+  let scale = Math.min(1, maxDimension / Math.max(bitmap.width, bitmap.height));
+  let compressedBlob: Blob | null = null;
+
+  try {
+    while (scale >= 0.25) {
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.max(1, Math.round(bitmap.width * scale));
+      canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+
+      const context = canvas.getContext('2d');
+      if (!context) throw new Error('Não foi possível preparar a imagem para compressão.');
+      context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+
+      for (const quality of [0.82, 0.72, 0.62, 0.52]) {
+        const blob = await new Promise<Blob | null>((resolve) =>
+          canvas.toBlob(resolve, 'image/webp', quality)
+        );
+
+        if (blob && (!compressedBlob || blob.size < compressedBlob.size)) {
+          compressedBlob = blob;
+        }
+        if (blob && blob.size <= MAX_COMPRESSED_IMAGE_BYTES) {
+          compressedBlob = blob;
+          break;
+        }
+      }
+
+      if (compressedBlob && compressedBlob.size <= MAX_COMPRESSED_IMAGE_BYTES) break;
+      scale *= 0.8;
+    }
+  } finally {
+    bitmap.close();
+  }
+
+  if (!compressedBlob || compressedBlob.size > MAX_COMPRESSED_IMAGE_BYTES) {
+    throw new Error(`Não foi possível comprimir "${file.name}" para o tamanho máximo de 2 MB.`);
+  }
+
+  const imageBlob = compressedBlob;
+  const dataUrl = await new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result ?? ''));
+    reader.onerror = () => reject(new Error(`Falha ao preparar o arquivo ${file.name}.`));
+    reader.readAsDataURL(imageBlob);
+  });
+
+  return {
+    fileName: file.name,
+    mimeType: imageBlob.type,
+    base64Data: dataUrl.split(',')[1] ?? '',
+  };
+};
 
 const quillModules = {
   toolbar: [
@@ -320,42 +376,30 @@ export default function AdminPage() {
     setMessage(null);
 
     try {
-      // Ler todas as imagens em paralelo para base64
-      const uploadPayloads = await Promise.all(
-        fileList.map((file) => {
-          return new Promise<{ fileName: string; mimeType: string; base64Data: string }>((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => {
-              const result = String(reader.result ?? '');
-              const base64Data = result.includes(',') ? result.split(',')[1] : '';
-              resolve({
-                fileName: file.name,
-                mimeType: file.type,
-                base64Data,
-              });
-            };
-            reader.onerror = () => reject(new Error(`Falha ao ler o arquivo ${file.name}`));
-            reader.readAsDataURL(file);
-          });
-        })
-      );
+      for (let index = 0; index < fileList.length; index += 1) {
+        const uploadPayload = await compressImageForUpload(fileList[index]);
+        const response = await fetch('/api/admin/images', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            accessToken: session.access_token,
+            image: uploadPayload,
+          }),
+        });
 
-      const response = await fetch('/api/admin/images', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          accessToken: session.access_token,
-          images: uploadPayloads,
-        }),
-      });
+        const responseText = await response.text();
+        let data: { error?: string } = {};
+        try {
+          data = JSON.parse(responseText) as { error?: string };
+        } catch {
+          throw new Error(`Falha ao enviar "${fileList[index].name}" (HTTP ${response.status}).`);
+        }
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        setMessage(data.error ?? 'Erro ao salvar imagens.');
-        return;
+        if (!response.ok) {
+          throw new Error(data.error ?? `Erro ao enviar "${fileList[index].name}".`);
+        }
       }
 
       setLibraryPage(1);
@@ -1046,7 +1090,7 @@ export default function AdminPage() {
                           <div>
                             <div className="relative h-24 w-full overflow-hidden rounded-lg bg-[#f3f4f6]">
                               <img
-                                src={image.preview_data_url}
+                                src={image.image_url}
                                 alt={image.file_name}
                                 className="h-full w-full object-cover"
                               />

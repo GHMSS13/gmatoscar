@@ -154,7 +154,7 @@ export async function GET(request: Request) {
 
     let queryBuilder = client.supabase
       .from('post_images')
-      .select('id, file_name, mime_type, base64_data, created_at', { count: 'exact' })
+      .select('id, file_name, mime_type, created_at', { count: 'exact' })
       .order('created_at', { ascending: false })
       .order('id', { ascending: false });
 
@@ -197,7 +197,6 @@ export async function GET(request: Request) {
       mime_type: item.mime_type,
       created_at: item.created_at,
       image_url: `/api/images/${item.id}`,
-      preview_data_url: `data:${item.mime_type};base64,${item.base64_data}`,
     }));
 
     const total = count ?? 0;
