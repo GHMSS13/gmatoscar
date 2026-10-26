@@ -117,7 +117,7 @@ export default function HomeTopNewsSection({
     },
   ];
 
-  const normalizedSidePosts = [...sidePosts.slice(0, 5)];
+  const normalizedSidePosts = [...sidePosts.slice(0, 6)];
 
   while (normalizedSidePosts.length < 5) {
     const fallback = sideFallbackCards[normalizedSidePosts.length % sideFallbackCards.length];
@@ -140,18 +140,13 @@ export default function HomeTopNewsSection({
 
   const normalizedDreamGaragePosts = [...dreamGaragePosts.slice(0, 6)];
 
-  const additionalRecentPosts = heroPosts
-    .slice(2, 6)
-    .filter((post) => !normalizedSidePosts.some((sidePost) => sidePost.id === post.id));
-
-  const desktopNewsRowCandidates = [
-    ...normalizedSidePosts.slice(2, 5),
-    ...additionalRecentPosts,
-    ...heroPosts.slice(2, 7),
-  ];
+  const desktopNewsRowCandidates = normalizedSidePosts.slice(2, 6);
 
   const desktopNewsRowPosts: Post[] = [];
-  const mobileRecentPost = normalizedSidePosts[0];
+  const mobileRecentPost = middlePost ?? normalizedSidePosts[0];
+  const mobileSecondaryPosts = middlePost
+    ? normalizedSidePosts.slice(0, 4)
+    : normalizedSidePosts.slice(1, 5);
 
   for (const post of desktopNewsRowCandidates) {
     if (!desktopNewsRowPosts.some((rowPost) => rowPost.id === post.id)) {
@@ -526,7 +521,7 @@ export default function HomeTopNewsSection({
             </article>
 
             <div className="mt-3 space-y-3">
-              {normalizedSidePosts.slice(1, 5).map((item) => (
+              {mobileSecondaryPosts.map((item) => (
                 <Link
                   key={`${item.id}-mobile-recent-list`}
                   href={item.slug ? `/noticias/${item.slug}` : '/noticias'}

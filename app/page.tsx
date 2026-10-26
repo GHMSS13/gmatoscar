@@ -17,10 +17,12 @@ export const metadata: Metadata = {
 export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
-  const posts = await getPosts();
   const allPublishedPosts = await getPosts({ includePrivateModelPosts: true });
-  const topWeekPosts = posts.slice(0, 5);
-  const curiosityPost = posts[5] ?? posts[0] ?? null;
+  const featuredPostIds = new Set(allPublishedPosts.slice(0, 3).map((post) => post.id));
+  const remainingHomePosts = allPublishedPosts.filter((post) => !featuredPostIds.has(post.id));
+
+  const topWeekPosts = remainingHomePosts.slice(0, 5);
+  const curiosityPost = remainingHomePosts[5] ?? remainingHomePosts[0] ?? null;
 
   return (
     <main className="min-h-screen bg-white">

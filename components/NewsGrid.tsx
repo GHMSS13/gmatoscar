@@ -13,18 +13,16 @@ export default function NewsGrid({ posts, theme = 'dark' }: NewsGridProps) {
   const isDreamGaragePost = (post: Post) => getPostSection(post) === 'Garagem dos Sonhos';
 
   const sourcePosts = posts.length > 0 ? posts : [];
-  const heroEligiblePosts = sourcePosts.filter(
-    (post) => isNewsPost(post) || isRankingPost(post) || isDreamGaragePost(post)
-  );
-  const heroPosts = heroEligiblePosts.slice(0, 3);
+  const heroPosts = sourcePosts.slice(0, 3);
   const heroIds = new Set(heroPosts.map((post) => post.id));
+  const remainingPosts = sourcePosts.filter((post) => !heroIds.has(post.id));
 
-  const newsOnlyPosts = sourcePosts.filter((post) => isNewsPost(post) && !heroIds.has(post.id));
+  const newsOnlyPosts = remainingPosts.filter((post) => isNewsPost(post));
   const middlePost = newsOnlyPosts[0];
-  const sidePosts = newsOnlyPosts.slice(1, 3);
+  const sidePosts = newsOnlyPosts.slice(1, 7);
 
-  const rankingPosts = sourcePosts.filter((post) => isRankingPost(post));
-  const dreamGaragePosts = sourcePosts.filter((post) => isDreamGaragePost(post));
+  const rankingPosts = remainingPosts.filter((post) => isRankingPost(post));
+  const dreamGaragePosts = remainingPosts.filter((post) => isDreamGaragePost(post));
 
   const rankingFallbackCards = [
     {
