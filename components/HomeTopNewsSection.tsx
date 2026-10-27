@@ -12,7 +12,14 @@ import {
   CarouselPrevious,
   type CarouselApi,
 } from '@/components/ui/carousel';
-import type { Post } from '@/lib/posts';
+import { getPostSection, type Post } from '@/lib/posts';
+
+const postSectionPaths = {
+  Noticias: '/noticias',
+  Marcas: '/marcas',
+  Rankings: '/ranking',
+  'Garagem dos Sonhos': '/garagem-dos-sonhos',
+} as const;
 
 interface InfoCard {
   title: string;
@@ -377,7 +384,10 @@ export default function HomeTopNewsSection({
               {heroPosts.map((item) => (
                 <CarouselItem key={item.id} className="pl-0 lg:h-full">
                   <article className="group rounded-none sm:rounded-sm lg:rounded-xl overflow-hidden border-0 sm:border sm:border-[#e5e7eb] bg-white lg:h-full">
-                    <Link href={`/noticias/${item.slug}`} className="block">
+                    <Link
+                      href={`/noticias/${item.slug}?from=${encodeURIComponent(postSectionPaths[getPostSection(item)])}`}
+                      className="block"
+                    >
                       <div className="relative min-h-[420px] bg-[#0a0a0a] sm:min-h-[320px] lg:min-h-0 lg:h-[390px] overflow-hidden">
                         <Image
                           src={item.image_url}
@@ -389,7 +399,7 @@ export default function HomeTopNewsSection({
                         <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a]/80 via-[#0f172a]/20 to-transparent" />
                         <div className="absolute bottom-0 left-0 right-0 p-3.5 sm:p-4 lg:p-4">
                           <p className="inline-flex bg-[#dc2626] text-white text-[10px] font-rajdhani font-bold uppercase tracking-[0.2em] px-2.5 py-1 rounded-sm mb-2.5 sm:mb-3">
-                            Lançamentos
+                            {getPostSection(item)}
                           </p>
                           <h3 className="text-shadow-overlay text-[1.6rem] sm:text-[1.85rem] lg:text-[1.95rem] leading-[1.03] text-white font-serif font-semibold mb-1.5 sm:mb-2 line-clamp-2">
                             {item.title}
