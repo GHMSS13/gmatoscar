@@ -410,7 +410,7 @@ export default function HomeTopNewsSection({
                           src={item.image_url}
                           alt={item.title}
                           fill
-                          className="object-cover object-[center_34%] sm:object-[center_42%] transition-transform duration-500 group-hover:scale-[1.03]"
+                          className="object-cover object-[center_45%] sm:object-[center_42%] transition-transform duration-500 group-hover:scale-[1.03]"
                           sizes="(max-width: 1024px) 100vw, 50vw"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a]/80 via-[#0f172a]/20 to-transparent" />
