@@ -27,6 +27,7 @@ export default async function HomePage() {
 
   return (
     <main className="min-h-screen bg-white">
+      <h1 className="sr-only">Notícias e destaques sobre supercarros</h1>
       <Navbar />
 
       <section className="relative pt-0 sm:pt-10 md:pt-20 lg:pt-10 overflow-hidden">

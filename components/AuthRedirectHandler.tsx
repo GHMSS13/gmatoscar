@@ -2,7 +2,6 @@
 
 import { useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabase';
 
 const ADMIN_REDIRECT_STORAGE_KEY = 'gmatoscar-admin-redirect';
 const ADMIN_REDIRECT_TTL_MS = 10 * 60 * 1000;
@@ -56,23 +55,27 @@ export default function AuthRedirectHandler() {
   const router = useRouter();
 
   useEffect(() => {
+    let cancelled = false;
+    let unsubscribe: (() => void) | undefined;
+
     const syncRedirectWithSession = async () => {
       const pendingRedirect = readPendingRedirect();
 
       if (!pendingRedirect) {
-        // Fallback: if OAuth lands on home (/#...) without pending localStorage,
-        // still push the user to /admin after successful sign-in.
         if (pathname !== '/admin' && hasOAuthTokensInHash()) {
           router.replace('/admin');
         }
         return;
       }
 
+      const { supabase } = await import('@/lib/supabase');
+      if (cancelled) return;
+
       const {
         data: { session },
       } = await supabase.auth.getSession();
 
-      if (!session?.user) {
+      if (cancelled || !session?.user) {
         return;
       }
 
@@ -84,28 +87,42 @@ export default function AuthRedirectHandler() {
       router.replace(pendingRedirect.path);
     };
 
-    syncRedirectWithSession();
+    void syncRedirectWithSession();
 
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      const pendingRedirect = readPendingRedirect();
+    let stopListening = false;
+    const subscribeToAuthChanges = async () => {
+      if (!readPendingRedirect()) return;
 
-      if (!pendingRedirect || !session?.user) {
-        if (pathname !== '/admin' && session?.user && hasOAuthTokensInHash()) {
-          router.replace('/admin');
+      const { supabase } = await import('@/lib/supabase');
+      if (cancelled || stopListening) return;
+
+      const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+        const pendingRedirect = readPendingRedirect();
+
+        if (!pendingRedirect || !session?.user) {
+          if (pathname !== '/admin' && session?.user && hasOAuthTokensInHash()) {
+            router.replace('/admin');
+          }
+          return;
         }
-        return;
-      }
 
-      if (pathname === pendingRedirect.path) {
-        clearPendingRedirect();
-        return;
-      }
+        if (pathname === pendingRedirect.path) {
+          clearPendingRedirect();
+          return;
+        }
 
-      router.replace(pendingRedirect.path);
-    });
+        router.replace(pendingRedirect.path);
+      });
+
+      unsubscribe = () => listener.subscription.unsubscribe();
+    };
+
+    void subscribeToAuthChanges();
 
     return () => {
-      listener.subscription.unsubscribe();
+      cancelled = true;
+      stopListening = true;
+      unsubscribe?.();
     };
   }, [pathname, router]);
 

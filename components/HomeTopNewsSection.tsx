@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, Clock } from 'lucide-react';
+import { ArrowRight, Clock, Pause, Play } from 'lucide-react';
 import {
   Carousel,
   CarouselContent,
@@ -12,7 +12,8 @@ import {
   CarouselPrevious,
   type CarouselApi,
 } from '@/components/ui/carousel';
-import { getPostSection, type Post } from '@/lib/posts';
+import type { Post } from '@/lib/posts';
+import { getEffectivePublicationCategory } from '@/lib/postCategories';
 
 const postSectionPaths = {
   Noticias: '/noticias',
@@ -48,20 +49,28 @@ export default function HomeTopNewsSection({
 }: HomeTopNewsSectionProps) {
   const [api, setApi] = useState<CarouselApi>();
   const [activeSlide, setActiveSlide] = useState(0);
+  const [isCarouselPaused, setIsCarouselPaused] = useState(false);
+  const [isAutoplayManuallyPaused, setIsAutoplayManuallyPaused] = useState(false);
   const placeholderImage =
     'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22320%22 height=%22200%22 viewBox=%220 0 320 200%22%3E%3Crect width=%22320%22 height=%22200%22 fill=%22%23e5e7eb%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%236b7280%22 font-family=%22Arial%22 font-size=%2214%22%3ESem imagem%3C/text%3E%3C/svg%3E';
 
   useEffect(() => {
-    if (!api || heroPosts.length < 2) {
+    if (!api || heroPosts.length < 2 || isCarouselPaused || isAutoplayManuallyPaused) {
+      return;
+    }
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       return;
     }
 
     const timer = setInterval(() => {
-      api.scrollNext();
+      if (document.visibilityState === 'visible') {
+        api.scrollNext();
+      }
     }, 5000);
 
     return () => clearInterval(timer);
-  }, [api, heroPosts.length]);
+  }, [api, heroPosts.length, isCarouselPaused, isAutoplayManuallyPaused]);
 
   useEffect(() => {
     if (!api) {
@@ -395,14 +404,27 @@ export default function HomeTopNewsSection({
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4 lg:gap-4 mb-5 sm:mb-6 lg:mb-8 lg:h-[390px]">
         <div className="-mx-4 sm:mx-0 lg:col-span-6 lg:h-full">
-          <div className="relative pb-5 sm:pb-6 lg:pb-0">
+          <div
+            className="relative pb-5 sm:pb-6 lg:pb-0"
+            role="region"
+            aria-label="Artigos em destaque"
+            aria-roledescription="carrossel"
+            onMouseEnter={() => setIsCarouselPaused(true)}
+            onMouseLeave={() => setIsCarouselPaused(false)}
+            onFocusCapture={() => setIsCarouselPaused(true)}
+            onBlurCapture={(event) => {
+              if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+                setIsCarouselPaused(false);
+              }
+            }}
+          >
             <Carousel setApi={setApi} opts={{ loop: true }} className="w-full">
               <CarouselContent className="ml-0 lg:h-[390px]">
-              {heroPosts.map((item) => (
+              {heroPosts.map((item, index) => (
                 <CarouselItem key={item.id} className="pl-0 lg:h-full">
                   <article className="group rounded-none sm:rounded-sm lg:rounded-xl overflow-hidden border-0 sm:border sm:border-[#e5e7eb] bg-white lg:h-full">
                     <Link
-                      href={`/noticias/${item.slug}?from=${encodeURIComponent(postSectionPaths[getPostSection(item)])}`}
+                      href={`/noticias/${item.slug}?from=${encodeURIComponent(postSectionPaths[getEffectivePublicationCategory(item)])}`}
                       className="block"
                     >
                       <div className="relative min-h-[420px] bg-[#0a0a0a] sm:min-h-[320px] lg:min-h-0 lg:h-[390px] overflow-hidden">
@@ -412,11 +434,13 @@ export default function HomeTopNewsSection({
                           fill
                           className="object-cover object-[center_45%] sm:object-[center_42%] transition-transform duration-500 group-hover:scale-[1.03]"
                           sizes="(max-width: 1024px) 100vw, 50vw"
+                          priority={index === 0}
+                          loading={index === 0 ? 'eager' : 'lazy'}
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a]/80 via-[#0f172a]/20 to-transparent" />
                         <div className="absolute bottom-0 left-0 right-0 p-3.5 sm:p-4 lg:p-4">
                           <p className="inline-flex bg-[#dc2626] text-white text-[10px] font-rajdhani font-bold uppercase tracking-[0.2em] px-2.5 py-1 rounded-sm mb-2.5 sm:mb-3">
-                            {getPostSection(item)}
+                            {getEffectivePublicationCategory(item)}
                           </p>
                           <h3 className="text-shadow-overlay text-[1.6rem] sm:text-[1.85rem] lg:text-[1.95rem] leading-[1.03] text-white font-serif font-semibold mb-1.5 sm:mb-2 line-clamp-2">
                             {item.title}
@@ -445,13 +469,28 @@ export default function HomeTopNewsSection({
                 <button
                   key={`${item.id}-${index}`}
                   type="button"
-                  aria-label={`Ir para slide ${index + 1}`}
+                  aria-label={`Mostrar destaque ${index + 1}: ${item.title}`}
+                  aria-pressed={activeSlide === index}
                   onClick={() => api?.scrollTo(index)}
-                  className={`h-1.5 rounded-full transition-all duration-300 ${
-                    activeSlide === index ? 'w-5 bg-[#dc2626]' : 'w-1.5 bg-[#9ca3af]/60'
-                  }`}
-                />
+                  className="flex h-6 w-6 items-center justify-center rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#dc2626]"
+                >
+                  <span
+                    aria-hidden="true"
+                    className={`h-1.5 rounded-full transition-all duration-300 ${
+                      activeSlide === index ? 'w-5 bg-[#dc2626]' : 'w-1.5 bg-[#9ca3af]/60'
+                    }`}
+                  />
+                </button>
               ))}
+              <button
+                type="button"
+                aria-label={isAutoplayManuallyPaused ? 'Retomar rotação automática' : 'Pausar rotação automática'}
+                aria-pressed={isAutoplayManuallyPaused}
+                onClick={() => setIsAutoplayManuallyPaused((paused) => !paused)}
+                className="flex h-6 w-6 items-center justify-center rounded-full text-[#6b7280] hover:text-[#dc2626] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#dc2626]"
+              >
+                {isAutoplayManuallyPaused ? <Play size={11} aria-hidden="true" /> : <Pause size={11} aria-hidden="true" />}
+              </button>
               </div>
             )}
           </div>

@@ -46,6 +46,7 @@ export default function SearchBar({
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
+            aria-label="Pesquise por marcas, modelos ou categorias"
             placeholder="Pesquise por marcas, modelos, categorias..."
             className="w-full bg-white/5 backdrop-blur-sm border border-white/15 focus:border-[#dc2626]/60 text-white placeholder-white/30 pl-12 pr-4 sm:pr-32 py-4 rounded-sm outline-none transition-all duration-300 font-exo text-sm focus:bg-white/8 focus:shadow-[0_0_20px_rgba(220,38,38,0.15)]"
           />
@@ -53,6 +54,7 @@ export default function SearchBar({
             <button
               type="button"
               onClick={handleClear}
+              aria-label="Limpar pesquisa"
               className="absolute right-3 top-4 sm:top-1/2 sm:-translate-y-1/2 sm:right-24 text-white/30 hover:text-white/70 transition-colors"
             >
               <X size={16} />
@@ -80,6 +82,7 @@ export default function SearchBar({
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
+          aria-label="Pesquisar"
           placeholder="Pesquisar..."
           className="w-full bg-white border border-[#d1d5db] focus:border-[#dc2626]/50 text-[#111827] placeholder-[#9ca3af] pl-10 pr-4 py-2.5 rounded-sm outline-none transition-all duration-300 font-exo text-sm"
         />
@@ -98,6 +101,7 @@ export default function SearchBar({
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
+          aria-label="Pesquisar supercarros"
           placeholder="Pesquisar supercarros..."
           className="w-full bg-white border border-[#d1d5db] focus:border-[#dc2626]/50 text-[#111827] placeholder-[#9ca3af] pl-11 pr-11 sm:pr-28 py-3 lg:py-2.5 rounded-sm outline-none transition-all duration-300 font-exo text-sm"
         />
@@ -105,6 +109,7 @@ export default function SearchBar({
           <button
             type="button"
             onClick={handleClear}
+            aria-label="Limpar pesquisa"
             className="absolute right-3 top-4 sm:right-24 sm:top-1/2 sm:-translate-y-1/2 text-[#9ca3af] hover:text-[#4b5563] transition-colors"
           >
             <X size={15} />
