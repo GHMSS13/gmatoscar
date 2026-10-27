@@ -307,54 +307,68 @@ export default function HomeTopNewsSection({
     return 'center 35%';
   };
 
-  const extractContentImageUrls = (content: string) => {
+  const extractContentImages = (content: string) => {
     if (!content) {
-      return [] as string[];
+      return [] as { url: string; alt: string }[];
     }
 
-    const matches = content.match(/https?:\/\/[^\s)"']+\.(?:png|jpe?g|webp|avif|gif)(?:\?[^\s)"']*)?/gi) ?? [];
-    const uniqueUrls: string[] = [];
+    const images: { url: string; alt: string }[] = [];
+    const addImage = (url: string, alt: string) => {
+      const normalizedUrl = url.trim().replace(/&amp;/g, '&');
+      const isLocalPath = /^\/(?!\/)/.test(normalizedUrl);
+      const isHttpUrl = /^https?:\/\//i.test(normalizedUrl);
 
-    for (const url of matches) {
-      if (!uniqueUrls.includes(url)) {
-        uniqueUrls.push(url);
+      if ((isLocalPath || isHttpUrl) && !images.some((image) => image.url === normalizedUrl)) {
+        images.push({ url: normalizedUrl, alt });
+      }
+    };
+
+    for (const match of content.matchAll(/<img\b[^>]*>/gi)) {
+      const tag = match[0];
+      const srcMatch = tag.match(/\bsrc\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i);
+      const altMatch = tag.match(/\balt\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i);
+      const url = srcMatch?.[1] ?? srcMatch?.[2] ?? srcMatch?.[3];
+      const alt = altMatch?.[1] ?? altMatch?.[2] ?? altMatch?.[3] ?? '';
+
+      if (url) {
+        addImage(url, alt);
       }
     }
 
-    return uniqueUrls;
+    for (const match of content.matchAll(/!\[([^\]]*)\]\(([^)\s]+)(?:\s+["'][^"']*["'])?\)/g)) {
+      addImage(match[2], match[1]);
+    }
+
+    return images;
   };
 
-  const getDreamGarageVisualSet = (post: Post | undefined, seed: number) => {
-    const coverImage = post?.image_url || heroPosts[seed]?.image_url || heroPosts[0]?.image_url || placeholderImage;
-    const contentImages = extractContentImageUrls(post?.content || '');
-
-    const secondaryPool = [
-      ...contentImages,
-      ...heroPosts.map((item) => item.image_url),
-      ...normalizedDreamGaragePosts.map((item) => item.image_url),
-      placeholderImage,
-    ].filter((url) => url && url !== coverImage);
-
-    const interiorImage = secondaryPool[0] || coverImage;
-    const galleryImage = secondaryPool[1] || secondaryPool[0] || coverImage;
+  const getDreamGarageVisualSet = (post: Post | undefined) => {
+    const coverImage = post?.image_url || heroPosts[0]?.image_url || placeholderImage;
+    const contentImages = extractContentImages(post?.content || '').filter(
+      (image) => image.url !== coverImage
+    );
+    const interiorImage =
+      contentImages.find((image) => /interior|interiores|cockpit|painel|cabine/i.test(image.alt)) ??
+      contentImages[0];
+    const galleryImage = contentImages.find((image) => image.url !== interiorImage?.url) ?? interiorImage;
 
     return {
       coverImage,
-      interiorImage,
-      galleryImage,
+      interiorImage: interiorImage?.url || coverImage,
+      galleryImage: galleryImage?.url || coverImage,
     };
   };
 
-  const featuredGarageCards = [normalizedDreamGaragePosts[0]].map((post, idx) => ({
+  const featuredGarageCards = [normalizedDreamGaragePosts[0]].map((post) => ({
     post,
-    href: post?.slug ? `/noticias/${post.slug}` : '/garagem-dos-sonhos',
-    visuals: getDreamGarageVisualSet(post, idx + 1),
+    href: post?.slug ? `/noticias/${post.slug}?from=/garagem-dos-sonhos` : '/garagem-dos-sonhos',
+    visuals: getDreamGarageVisualSet(post),
   }));
 
-  const featuredGarageDesktopCards = normalizedDreamGaragePosts.slice(0, 2).map((post, idx) => ({
+  const featuredGarageDesktopCards = normalizedDreamGaragePosts.slice(0, 2).map((post) => ({
     post,
-    href: post?.slug ? `/noticias/${post.slug}` : '/garagem-dos-sonhos',
-    visuals: getDreamGarageVisualSet(post, idx + 1),
+    href: post?.slug ? `/noticias/${post.slug}?from=/garagem-dos-sonhos` : '/garagem-dos-sonhos',
+    visuals: getDreamGarageVisualSet(post),
   }));
 
   return (
