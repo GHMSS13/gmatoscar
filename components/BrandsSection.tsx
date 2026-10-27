@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
-import { brands } from '@/lib/data';
+import type { Post } from '@/lib/posts';
 import {
   Carousel,
   CarouselContent,
@@ -10,28 +10,11 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 
-const featuredBrands = ['ferrari', 'lamborghini', 'porsche', 'bugatti', 'pagani', 'mclaren', 'koenigsegg'];
-const brandArticleSlugs: Record<string, string> = {
-  ferrari: 'ferrari',
-  lamborghini: 'lamborghini',
-  bugatti: 'bugatti',
-  porsche: 'porsche',
-  pagani: 'pagani',
-  mclaren: 'mclaren',
-  koenigsegg: 'koenigsegg',
-};
-const countryFlags: Record<string, string> = {
-  Italia: 'it',
-  Franca: 'fr',
-  Alemanha: 'de',
-  Suecia: 'se',
-  'Reino Unido': 'gb',
-  Croacia: 'hr',
-};
+interface BrandsSectionProps {
+  posts: Post[];
+}
 
-export default function BrandsSection() {
-  const items = brands.filter((brand) => featuredBrands.includes(brand.id));
-
+export default function BrandsSection({ posts }: BrandsSectionProps) {
   return (
     <section className="pt-1 pb-6 sm:pt-12 sm:pb-16 bg-[#f9fafb] border-y border-[#e5e7eb]">
       <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
@@ -44,7 +27,7 @@ export default function BrandsSection() {
               História das Marcas
             </h2>
             <p className="mt-1.5 text-[#374151] text-[14px] sm:text-[15px] lg:text-[15px] font-exo leading-[1.5] lg:leading-[1.5] max-w-[620px]">
-              Conheça a história das marcas lendárias, com origem, evolução, tecnologia e os modelos que marcaram época.
+              Artigos sobre as marcas lendárias, suas histórias, novidades e os modelos que marcaram época.
             </p>
           </div>
           <Link
@@ -57,20 +40,16 @@ export default function BrandsSection() {
 
         <Carousel opts={{ align: 'start', loop: true }} className="w-full">
           <CarouselContent>
-            {items.map((brand) => (
-              <CarouselItem key={brand.id} className="basis-full sm:basis-1/2 lg:basis-1/4">
+            {posts.map((post) => (
+              <CarouselItem key={post.id} className="basis-full sm:basis-1/2 lg:basis-1/4">
                 <Link
-                  href={
-                    brandArticleSlugs[brand.id]
-                      ? `/noticias/${brandArticleSlugs[brand.id]}?from=/marcas`
-                      : `/marcas/${brand.id}`
-                  }
+                  href={`/noticias/${post.slug}?from=/marcas`}
                   className="group relative block rounded-xl overflow-hidden border border-[#e5e7eb] bg-white hover:border-[#dc2626]/40 transition-all duration-300 h-[300px] sm:h-[320px]"
                 >
                   <div className="absolute inset-0">
                     <Image
-                      src={brand.topModelImage}
-                      alt={brand.name}
+                      src={post.image_url}
+                      alt={post.title}
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
@@ -80,26 +59,18 @@ export default function BrandsSection() {
 
                   <div className="relative h-full p-4 sm:p-5 flex flex-col justify-end">
                     <div className="inline-flex items-center gap-2 mb-2.5">
-                      <img
-                        src={`https://flagcdn.com/24x18/${countryFlags[brand.country] ?? 'un'}.png`}
-                        alt={`Bandeira de ${brand.country}`}
-                        title={brand.country}
-                        width={20}
-                        height={15}
-                        className="rounded-[2px] shadow-sm"
-                      />
                       <p className="text-shadow-overlay text-white/80 text-[10px] font-rajdhani font-bold uppercase tracking-[0.16em]">
-                        {brand.country}
+                        Marcas · {post.date}
                       </p>
                     </div>
-                    <h3 className="text-shadow-overlay text-white font-rajdhani font-bold text-[2rem] sm:text-[2.2rem] leading-none mb-2 group-hover:text-[#dc2626] transition-colors line-clamp-1">
-                      {brand.name}
+                    <h3 className="text-shadow-overlay text-white font-rajdhani font-bold text-[1.7rem] sm:text-[1.9rem] leading-none mb-2 group-hover:text-[#dc2626] transition-colors line-clamp-2">
+                      {post.title}
                     </h3>
                     <p className="text-shadow-overlay text-white/75 text-[14px] sm:text-[15px] lg:text-[15px] leading-[1.5] font-exo line-clamp-2 mb-3.5">
-                      {brand.description}
+                      {post.excerpt}
                     </p>
                     <div className="text-shadow-overlay inline-flex items-center gap-1 text-xs font-rajdhani font-bold uppercase tracking-[0.2em] text-white group-hover:text-[#dc2626] transition-colors duration-300">
-                      {brandArticleSlugs[brand.id] ? 'Ver Artigo' : 'Ver Marca'}
+                      Ver Artigo
                       <ArrowRight size={12} className="transition-transform group-hover:translate-x-1" />
                     </div>
                   </div>

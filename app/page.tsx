@@ -6,7 +6,7 @@ import Navbar from '@/components/Navbar';
 import NewsGrid from '@/components/NewsGrid';
 import BrandsSection from '@/components/BrandsSection';
 import Footer from '@/components/Footer';
-import { getPosts } from '@/lib/posts';
+import { filterPrivateModelPosts, getPostSection, getPosts } from '@/lib/posts';
 
 export const metadata: Metadata = {
   title: 'GMATOSCAR Supercarros - Os Melhores Supercarros do Mundo',
@@ -18,6 +18,7 @@ export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
   const allPublishedPosts = await getPosts({ includePrivateModelPosts: true });
+  const brandPosts = filterPrivateModelPosts(allPublishedPosts).filter((post) => getPostSection(post) === 'Marcas');
   const featuredPostIds = new Set(allPublishedPosts.slice(0, 3).map((post) => post.id));
   const remainingHomePosts = allPublishedPosts.filter((post) => !featuredPostIds.has(post.id));
 
@@ -37,7 +38,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <BrandsSection />
+      <BrandsSection posts={brandPosts} />
 
       <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto pt-3 pb-8 sm:py-10 lg:py-12">
         <div className="rounded-2xl border border-[#e5e7eb] bg-white p-4 sm:p-6">

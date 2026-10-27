@@ -98,7 +98,7 @@ export function isFerrari250GtoPost(post: Post) {
   return title.includes('ferrari') && (title.includes('250 gto') || title.includes('250-gto'));
 }
 
-function filterPrivateModelPosts(posts: Post[]) {
+export function filterPrivateModelPosts(posts: Post[]) {
   return posts.filter((post) => !isFerrari250GtoPost(post) && !isFerrariF80Post(post) && !isFerrari458ItaliaPost(post));
 }
 
