@@ -1,7 +1,11 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import sharp from 'sharp';
 
 export const runtime = 'nodejs';
+
+const MAX_RESPONSIVE_IMAGE_WIDTH = 3840;
+const AVIF_QUALITY = 62;
 
 const createPublicSupabaseClient = () => {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -40,6 +44,7 @@ export async function GET(request: Request, { params }: RouteParams) {
     const { id } = await params;
     const { searchParams } = new URL(request.url);
     const requestedFileName = searchParams.get('filename')?.trim() ?? '';
+    const requestedWidth = searchParams.get('width');
 
     if (!id) {
       return NextResponse.json({ error: 'ID da imagem ausente.' }, { status: 400 });
@@ -66,13 +71,31 @@ export async function GET(request: Request, { params }: RouteParams) {
     }
 
     const binary = Buffer.from(data.base64_data, 'base64');
+    let responseBody = binary;
+    let contentType = data.mime_type;
+
+    if (requestedWidth !== null) {
+      const width = Number(requestedWidth);
+
+      if (!Number.isInteger(width) || width < 1 || width > MAX_RESPONSIVE_IMAGE_WIDTH) {
+        return NextResponse.json({ error: 'Largura da imagem inválida.' }, { status: 400 });
+      }
+
+      responseBody = await sharp(binary)
+        .rotate()
+        .resize(width, undefined, { withoutEnlargement: true })
+        .avif({ quality: AVIF_QUALITY, effort: 4 })
+        .toBuffer();
+      contentType = 'image/avif';
+    }
+
     const fallbackName = sanitizeFileName(data.file_name ?? 'imagem');
     const safeName = sanitizeFileName(requestedFileName) || fallbackName || 'imagem';
 
-    return new NextResponse(binary, {
+    return new NextResponse(responseBody, {
       status: 200,
       headers: {
-        'Content-Type': data.mime_type,
+        'Content-Type': contentType,
         'Cache-Control': 'public, max-age=31536000, immutable',
         'Content-Disposition': `inline; filename="${safeName}"`,
       },

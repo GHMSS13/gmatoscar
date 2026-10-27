@@ -1,8 +1,24 @@
 import type { Metadata } from 'next';
+import { Exo_2, Rajdhani } from 'next/font/google';
 import './globals.css';
 import AuthRedirectHandler from '@/components/AuthRedirectHandler';
 import CookieConsentBanner from '@/components/CookieConsentBanner';
 import AdsenseScript from '@/components/AdsenseScript';
+
+const exo = Exo_2({
+  weight: 'variable',
+  subsets: ['latin'],
+  variable: '--font-exo-2',
+  display: 'swap',
+});
+
+const rajdhani = Rajdhani({
+  weight: ['400', '500', '600', '700'],
+  subsets: ['latin'],
+  variable: '--font-rajdhani',
+  display: 'swap',
+  preload: false,
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://gmatoscar.com.br'),
@@ -96,18 +112,12 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Exo+2:wght@300;400;500;600;700;800;900&display=swap"
-          rel="stylesheet"
-        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaOrg) }}
         />
       </head>
-      <body className="bg-white text-[#111] antialiased font-exo">
+      <body className={`${exo.variable} ${rajdhani.variable} bg-white text-[#111] antialiased font-exo`}>
         <AuthRedirectHandler />
         <AdsenseScript />
         {children}

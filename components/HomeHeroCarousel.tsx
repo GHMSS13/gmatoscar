@@ -25,6 +25,23 @@ interface HomeHeroCarouselProps {
   slides: HeroSlide[];
 }
 
+const heroImageLoader = ({
+  src,
+  width,
+  quality,
+}: {
+  src: string;
+  width: number;
+  quality?: number;
+}) => {
+  if (src.startsWith('/api/images/')) {
+    const separator = src.includes('?') ? '&' : '?';
+    return `${src}${separator}width=${width}`;
+  }
+
+  return `/_next/image?url=${encodeURIComponent(src)}&w=${width}&q=${quality ?? 75}`;
+};
+
 export default function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
   const [api, setApi] = useState<CarouselApi>();
   const [activeSlide, setActiveSlide] = useState(0);
@@ -91,6 +108,7 @@ export default function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
                     <div className="relative min-h-[420px] bg-[#0a0a0a] sm:min-h-[320px] lg:min-h-0 lg:h-[390px] overflow-hidden">
                       <Image
                         src={slide.imageUrl}
+                        loader={heroImageLoader}
                         alt={slide.title}
                         fill
                         className="object-cover object-[center_45%] sm:object-[center_42%] transition-transform duration-500 group-hover:scale-[1.03]"

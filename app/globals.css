@@ -31,14 +31,14 @@
   }
   body {
     @apply bg-white text-[#111827];
-    font-family: 'Exo 2', sans-serif;
+    font-family: var(--font-exo-2), sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
     -webkit-text-size-adjust: 100%;
   }
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Rajdhani', sans-serif;
+    font-family: var(--font-rajdhani), sans-serif;
     font-weight: 700;
     letter-spacing: 0.02em;
   }
@@ -54,10 +54,10 @@ svg {
 
 @layer utilities {
   .font-rajdhani {
-    font-family: 'Rajdhani', sans-serif;
+    font-family: var(--font-rajdhani), sans-serif;
   }
   .font-exo {
-    font-family: 'Exo 2', sans-serif;
+    font-family: var(--font-exo-2), sans-serif;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -297,6 +297,6 @@ main p.font-exo[class~="text-[#6b7280]"][class~="text-base"] {
 /* Tag badge */
 .tag-badge {
   @apply inline-block px-2 py-0.5 text-xs font-bold uppercase tracking-wider rounded-sm;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-rajdhani), sans-serif;
   letter-spacing: 0.1em;
 }
