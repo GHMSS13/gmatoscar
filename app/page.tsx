@@ -7,6 +7,7 @@ import NewsGrid from '@/components/NewsGrid';
 import BrandsSection from '@/components/BrandsSection';
 import Footer from '@/components/Footer';
 import { filterPrivateModelPosts, getPostSection, getPosts } from '@/lib/posts';
+import { getPostArticleHref } from '@/lib/postCategories';
 
 export const metadata: Metadata = {
   title: 'GMATOSCAR Supercarros - Os Melhores Supercarros do Mundo',
@@ -66,7 +67,7 @@ export default async function HomePage() {
                 {topWeekPosts.map((post, idx) => (
                   <Link
                     key={`${post.id}-week-${idx}`}
-                    href={`/noticias/${post.slug}`}
+                    href={getPostArticleHref(post)}
                     className="group flex items-start gap-3 rounded-xl border border-[#e5e7eb] bg-[#fafafa] p-3 hover:border-[#dc2626]/35 hover:bg-white transition-colors duration-300"
                   >
                     <span className="inline-flex w-7 h-7 sm:w-8 sm:h-8 flex-shrink-0 items-center justify-center rounded-lg bg-[#dc2626]/10 text-[#dc2626] text-[11px] sm:text-[12px] font-rajdhani font-bold">
@@ -99,7 +100,7 @@ export default async function HomePage() {
                       {curiosityPost.excerpt}
                     </p>
                     <Link
-                      href={`/noticias/${curiosityPost.slug}`}
+                      href={getPostArticleHref(curiosityPost)}
                       className="hidden lg:block mt-4 flex-1 min-h-[180px] rounded-xl overflow-hidden border border-[#e5e7eb]"
                     >
                       <div className="relative w-full h-full min-h-[180px]">
@@ -115,7 +116,7 @@ export default async function HomePage() {
                     </Link>
                     <div className="mt-auto pt-4">
                       <Link
-                        href={`/noticias/${curiosityPost.slug}`}
+                        href={getPostArticleHref(curiosityPost)}
                         className="inline-flex items-center gap-2 text-[12px] sm:text-[13px] font-rajdhani font-bold uppercase tracking-[0.16em] text-[#111827] hover:text-[#dc2626] transition-colors duration-300"
                       >
                         Ler curiosidade <ArrowRight size={14} />

@@ -2,6 +2,12 @@ export const PUBLICATION_OPTIONS = ['Noticias', 'Rankings', 'Garagem dos Sonhos'
 export const ADMIN_POST_FILTER_OPTIONS = ['Todos', ...PUBLICATION_OPTIONS, 'Rascunho'] as const;
 export const LEGACY_DREAM_GARAGE_CUTOFF = '2026-07-10';
 const BRAND_OVERVIEW_SLUGS = new Set(['ferrari', 'lamborghini', 'bugatti']);
+const PUBLICATION_CATEGORY_PATHS: Record<PublicationCategory, string> = {
+  Noticias: '/noticias',
+  Rankings: '/ranking',
+  'Garagem dos Sonhos': '/garagem-dos-sonhos',
+  Marcas: '/marcas',
+};
 
 export type PublicationCategory = (typeof PUBLICATION_OPTIONS)[number];
 export type AdminPostFilterOption = (typeof ADMIN_POST_FILTER_OPTIONS)[number];
@@ -76,4 +82,14 @@ export function getEffectivePublicationCategory(source: PublicationCategorySourc
   }
 
   return categoryMatch ?? inferredMatch ?? 'Noticias';
+}
+
+export function getPostArticleHref(
+  source: PublicationCategorySource,
+  section: PublicationCategory = getEffectivePublicationCategory(source)
+) {
+  const sectionPath = PUBLICATION_CATEGORY_PATHS[section];
+  return source.slug
+    ? `/noticias/${source.slug}?from=${encodeURIComponent(sectionPath)}`
+    : sectionPath;
 }

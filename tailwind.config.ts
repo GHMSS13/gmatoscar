@@ -55,8 +55,9 @@ const config: Config = {
         'brand-gray': '#888888',
       },
       fontFamily: {
-        rajdhani: ['var(--font-rajdhani)', 'sans-serif'],
-        exo: ['var(--font-exo-2)', 'sans-serif'],
+        sans: ['"Exo 2"', 'sans-serif'],
+        rajdhani: ['Rajdhani', 'sans-serif'],
+        exo: ['"Exo 2"', 'sans-serif'],
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

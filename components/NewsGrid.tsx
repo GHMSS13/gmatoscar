@@ -1,6 +1,7 @@
 import HomeTopNewsSection from './HomeTopNewsSection';
 import NewsCard from './NewsCard';
 import { getPostSection, type Post } from '@/lib/posts';
+import { getPostArticleHref } from '@/lib/postCategories';
 
 interface NewsGridProps {
   posts: Post[];
@@ -63,7 +64,7 @@ export default function NewsGrid({ posts, theme = 'dark' }: NewsGridProps) {
     value: post.title,
     description: post.excerpt,
     imageUrl: post.image_url,
-    href: `/noticias/${post.slug}`,
+    href: getPostArticleHref(post, 'Rankings'),
   }));
 
   const dreamGarageInfoCards = dreamGaragePosts.slice(0, 2).map((post) => ({
@@ -71,7 +72,7 @@ export default function NewsGrid({ posts, theme = 'dark' }: NewsGridProps) {
     value: post.title,
     description: post.excerpt,
     imageUrl: post.image_url,
-    href: `/noticias/${post.slug}`,
+    href: getPostArticleHref(post, 'Garagem dos Sonhos'),
   }));
 
   while (rankingInfoCards.length < 2) {

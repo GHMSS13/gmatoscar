@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Clock, ArrowRight } from 'lucide-react';
 import type { Post } from '@/lib/posts';
+import { getPostArticleHref } from '@/lib/postCategories';
 
 interface NewsCardProps {
   item: Post;
@@ -14,7 +15,7 @@ export default function NewsCard({ item, variant = 'default', theme = 'dark', so
   const isLight = theme === 'light';
   const articleHref = sourcePath
     ? `/noticias/${item.slug}?from=${encodeURIComponent(sourcePath)}`
-    : `/noticias/${item.slug}`;
+    : getPostArticleHref(item);
 
   if (variant === 'featured') {
     if (isLight) {

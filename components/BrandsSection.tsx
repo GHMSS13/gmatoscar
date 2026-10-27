@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import type { Post } from '@/lib/posts';
+import { getPostArticleHref } from '@/lib/postCategories';
 import {
   Carousel,
   CarouselContent,
@@ -16,7 +17,7 @@ interface BrandsSectionProps {
 
 export default function BrandsSection({ posts }: BrandsSectionProps) {
   return (
-    <section className="pt-1 pb-6 sm:pt-12 sm:pb-16 bg-[#f9fafb] border-y border-[#e5e7eb]">
+    <section className="pt-1 pb-3 sm:pt-12 sm:pb-16 bg-[#f9fafb] border-y border-[#e5e7eb]">
       <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-2.5 mb-6 sm:mb-9">
           <div>
@@ -43,7 +44,7 @@ export default function BrandsSection({ posts }: BrandsSectionProps) {
             {posts.map((post) => (
               <CarouselItem key={post.id} className="basis-full sm:basis-1/2 lg:basis-1/4">
                 <Link
-                  href={`/noticias/${post.slug}?from=/marcas`}
+                  href={getPostArticleHref(post, 'Marcas')}
                   className="group relative block rounded-xl overflow-hidden border border-[#e5e7eb] bg-white hover:border-[#dc2626]/40 transition-all duration-300 h-[300px] sm:h-[320px]"
                 >
                   <div className="absolute inset-0">

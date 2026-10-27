@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, Clock, Pause, Play } from 'lucide-react';
+import { ArrowRight, Clock } from 'lucide-react';
 import {
   Carousel,
   CarouselContent,
@@ -13,14 +13,7 @@ import {
   type CarouselApi,
 } from '@/components/ui/carousel';
 import type { Post } from '@/lib/posts';
-import { getEffectivePublicationCategory } from '@/lib/postCategories';
-
-const postSectionPaths = {
-  Noticias: '/noticias',
-  Marcas: '/marcas',
-  Rankings: '/ranking',
-  'Garagem dos Sonhos': '/garagem-dos-sonhos',
-} as const;
+import { getEffectivePublicationCategory, getPostArticleHref } from '@/lib/postCategories';
 
 interface InfoCard {
   title: string;
@@ -50,16 +43,11 @@ export default function HomeTopNewsSection({
   const [api, setApi] = useState<CarouselApi>();
   const [activeSlide, setActiveSlide] = useState(0);
   const [isCarouselPaused, setIsCarouselPaused] = useState(false);
-  const [isAutoplayManuallyPaused, setIsAutoplayManuallyPaused] = useState(false);
   const placeholderImage =
     'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22320%22 height=%22200%22 viewBox=%220 0 320 200%22%3E%3Crect width=%22320%22 height=%22200%22 fill=%22%23e5e7eb%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%236b7280%22 font-family=%22Arial%22 font-size=%2214%22%3ESem imagem%3C/text%3E%3C/svg%3E';
 
   useEffect(() => {
-    if (!api || heroPosts.length < 2 || isCarouselPaused || isAutoplayManuallyPaused) {
-      return;
-    }
-
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (!api || heroPosts.length < 2 || isCarouselPaused) {
       return;
     }
 
@@ -70,7 +58,7 @@ export default function HomeTopNewsSection({
     }, 5000);
 
     return () => clearInterval(timer);
-  }, [api, heroPosts.length, isCarouselPaused, isAutoplayManuallyPaused]);
+  }, [api, heroPosts.length, isCarouselPaused]);
 
   useEffect(() => {
     if (!api) {
@@ -373,13 +361,13 @@ export default function HomeTopNewsSection({
 
   const featuredGarageCards = [normalizedDreamGaragePosts[0]].map((post) => ({
     post,
-    href: post?.slug ? `/noticias/${post.slug}?from=/garagem-dos-sonhos` : '/garagem-dos-sonhos',
+    href: post ? getPostArticleHref(post, 'Garagem dos Sonhos') : '/garagem-dos-sonhos',
     visuals: getDreamGarageVisualSet(post),
   }));
 
   const featuredGarageDesktopCards = normalizedDreamGaragePosts.slice(0, 2).map((post) => ({
     post,
-    href: post?.slug ? `/noticias/${post.slug}?from=/garagem-dos-sonhos` : '/garagem-dos-sonhos',
+    href: post ? getPostArticleHref(post, 'Garagem dos Sonhos') : '/garagem-dos-sonhos',
     visuals: getDreamGarageVisualSet(post),
   }));
 
@@ -411,6 +399,9 @@ export default function HomeTopNewsSection({
             aria-roledescription="carrossel"
             onMouseEnter={() => setIsCarouselPaused(true)}
             onMouseLeave={() => setIsCarouselPaused(false)}
+            onTouchStart={() => setIsCarouselPaused(true)}
+            onTouchEnd={() => setIsCarouselPaused(false)}
+            onTouchCancel={() => setIsCarouselPaused(false)}
             onFocusCapture={() => setIsCarouselPaused(true)}
             onBlurCapture={(event) => {
               if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
@@ -424,7 +415,7 @@ export default function HomeTopNewsSection({
                 <CarouselItem key={item.id} className="pl-0 lg:h-full">
                   <article className="group rounded-none sm:rounded-sm lg:rounded-xl overflow-hidden border-0 sm:border sm:border-[#e5e7eb] bg-white lg:h-full">
                     <Link
-                      href={`/noticias/${item.slug}?from=${encodeURIComponent(postSectionPaths[getEffectivePublicationCategory(item)])}`}
+                      href={getPostArticleHref(item)}
                       className="block"
                     >
                       <div className="relative min-h-[420px] bg-[#0a0a0a] sm:min-h-[320px] lg:min-h-0 lg:h-[390px] overflow-hidden">
@@ -440,7 +431,7 @@ export default function HomeTopNewsSection({
                         <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a]/80 via-[#0f172a]/20 to-transparent" />
                         <div className="absolute bottom-0 left-0 right-0 p-3.5 sm:p-4 lg:p-4">
                           <p className="inline-flex bg-[#dc2626] text-white text-[10px] font-rajdhani font-bold uppercase tracking-[0.2em] px-2.5 py-1 rounded-sm mb-2.5 sm:mb-3">
-                            {getEffectivePublicationCategory(item)}
+                            Lançamento
                           </p>
                           <h3 className="text-shadow-overlay text-[1.6rem] sm:text-[1.85rem] lg:text-[1.95rem] leading-[1.03] text-white font-serif font-semibold mb-1.5 sm:mb-2 line-clamp-2">
                             {item.title}
@@ -464,7 +455,7 @@ export default function HomeTopNewsSection({
             </Carousel>
 
             {heroPosts.length > 1 && (
-              <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 z-20 flex items-center justify-center gap-1.5 sm:bottom-2">
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 z-20 flex items-center justify-center gap-1.5 lg:bottom-2">
               {heroPosts.map((item, index) => (
                 <button
                   key={`${item.id}-${index}`}
@@ -482,15 +473,6 @@ export default function HomeTopNewsSection({
                   />
                 </button>
               ))}
-              <button
-                type="button"
-                aria-label={isAutoplayManuallyPaused ? 'Retomar rotação automática' : 'Pausar rotação automática'}
-                aria-pressed={isAutoplayManuallyPaused}
-                onClick={() => setIsAutoplayManuallyPaused((paused) => !paused)}
-                className="flex h-6 w-6 items-center justify-center rounded-full text-[#6b7280] hover:text-[#dc2626] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#dc2626]"
-              >
-                {isAutoplayManuallyPaused ? <Play size={11} aria-hidden="true" /> : <Pause size={11} aria-hidden="true" />}
-              </button>
               </div>
             )}
           </div>
@@ -499,7 +481,7 @@ export default function HomeTopNewsSection({
         <div className="hidden lg:block lg:col-span-3 lg:h-full">
           {middlePost ? (
             <article className="group rounded-xl overflow-hidden border border-[#e5e7eb] bg-white h-full">
-              <Link href={`/noticias/${middlePost.slug}`} className="block h-full">
+              <Link href={getPostArticleHref(middlePost)} className="block h-full">
                 <div className="h-full flex flex-col">
                   <div className="relative h-2/3 overflow-hidden bg-[#0a0a0a]">
                     <Image
@@ -560,7 +542,7 @@ export default function HomeTopNewsSection({
 
           <div className="sm:hidden">
             <article className="group rounded-xl overflow-hidden border border-[#e5e7eb] bg-white">
-              <Link href={mobileRecentPost?.slug ? `/noticias/${mobileRecentPost.slug}` : '/noticias'} className="block">
+              <Link href={mobileRecentPost ? getPostArticleHref(mobileRecentPost) : '/noticias'} className="block">
                 <div className="relative h-[220px] overflow-hidden">
                   <Image
                     src={mobileRecentPost?.image_url || heroPosts[0]?.image_url || placeholderImage}
@@ -590,7 +572,7 @@ export default function HomeTopNewsSection({
               {mobileSecondaryPosts.map((item) => (
                 <Link
                   key={`${item.id}-mobile-recent-list`}
-                  href={item.slug ? `/noticias/${item.slug}` : '/noticias'}
+                  href={getPostArticleHref(item)}
                   className="group flex gap-4 rounded-xl overflow-hidden border border-[#e5e7eb] bg-white p-4 min-h-[128px]"
                 >
                   <div className="relative w-[156px] h-[114px] flex-shrink-0 rounded-lg overflow-hidden">
@@ -621,7 +603,7 @@ export default function HomeTopNewsSection({
 
           <div className="hidden lg:grid lg:grid-cols-1 lg:grid-rows-2 lg:gap-4 lg:h-full">
             {normalizedSidePosts.slice(0, 2).map((item, idx) => {
-              const href = item.slug ? `/noticias/${item.slug}` : '/noticias';
+              const href = getPostArticleHref(item);
 
               return (
                 <article
@@ -684,7 +666,7 @@ export default function HomeTopNewsSection({
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {desktopNewsRowPosts.map((post, idx) => {
-            const href = post.slug ? `/noticias/${post.slug}` : '/noticias';
+            const href = getPostArticleHref(post);
 
             return (
               <article
@@ -738,7 +720,7 @@ export default function HomeTopNewsSection({
 
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 xl:gap-5">
           {desktopNewsRowPosts.map((post, idx) => {
-            const href = post.slug ? `/noticias/${post.slug}` : '/noticias';
+            const href = getPostArticleHref(post);
 
             return (
               <Link
@@ -886,9 +868,6 @@ export default function HomeTopNewsSection({
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
                   <div className="absolute inset-x-0 bottom-0 p-3.5">
-                    <p className="inline-flex bg-[#dc2626] text-white text-[9px] font-rajdhani font-bold uppercase tracking-[0.16em] px-2 py-0.5 rounded-sm mb-1.5">
-                      Garagem dos Sonhos
-                    </p>
                     <h4 className="text-shadow-overlay text-white text-[1.2rem] xl:text-[1.28rem] font-rajdhani font-bold leading-[1.04] line-clamp-2 uppercase">
                       {item.post?.title || 'Garagem dos Sonhos em atualização'}
                     </h4>
@@ -946,7 +925,7 @@ export default function HomeTopNewsSection({
 
         <div className="flex gap-2.5 overflow-x-auto pb-1 snap-x snap-mandatory sm:hidden">
           {normalizedDreamGaragePosts.slice(1, 7).map((post, idx) => {
-            const href = post.slug ? `/noticias/${post.slug}` : '/garagem-dos-sonhos';
+            const href = getPostArticleHref(post, 'Garagem dos Sonhos');
 
             return (
               <Link
@@ -995,7 +974,7 @@ export default function HomeTopNewsSection({
 
         <div className="hidden sm:grid sm:grid-cols-4 sm:gap-3">
           {normalizedDreamGaragePosts.slice(2, 6).map((post, idx) => {
-            const href = post.slug ? `/noticias/${post.slug}` : '/garagem-dos-sonhos';
+            const href = getPostArticleHref(post, 'Garagem dos Sonhos');
 
             return (
               <Link
@@ -1093,7 +1072,10 @@ export default function HomeTopNewsSection({
 
         <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-4">
           <article className="sm:col-span-7 group rounded-xl overflow-hidden border border-[#e5e7eb] bg-white">
-            <Link href={normalizedRankingPosts[0]?.slug ? `/noticias/${normalizedRankingPosts[0].slug}` : '/ranking'} className="block h-full">
+            <Link
+              href={normalizedRankingPosts[0] ? getPostArticleHref(normalizedRankingPosts[0], 'Rankings') : '/ranking'}
+              className="block h-full"
+            >
               <div className="relative h-[220px] sm:h-full sm:min-h-[336px] overflow-hidden">
                 <Image
                   src={normalizedRankingPosts[0]?.image_url || heroPosts[0]?.image_url || placeholderImage}
@@ -1124,7 +1106,7 @@ export default function HomeTopNewsSection({
 
           <div className="sm:col-span-5 grid grid-cols-1 gap-2.5">
             {normalizedRankingPosts.slice(1, 5).map((post, idx) => {
-              const href = post.slug ? `/noticias/${post.slug}` : '/ranking';
+              const href = getPostArticleHref(post, 'Rankings');
               const rank = String(idx + 2).padStart(2, '0');
 
               return (
@@ -1163,7 +1145,7 @@ export default function HomeTopNewsSection({
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 lg:hidden">
             {normalizedRankingPosts.slice(5, 7).map((post, idx) => {
-              const href = post.slug ? `/noticias/${post.slug}` : '/ranking';
+              const href = getPostArticleHref(post, 'Rankings');
               const rank = String(idx + 6).padStart(2, '0');
 
               return (
@@ -1225,7 +1207,7 @@ export default function HomeTopNewsSection({
             {(() => {
               const mainPost = normalizedRankingPosts[5];
               const sidePosts = normalizedRankingPosts.slice(6, 8);
-              const mainHref = mainPost?.slug ? `/noticias/${mainPost.slug}` : '/ranking';
+              const mainHref = mainPost ? getPostArticleHref(mainPost, 'Rankings') : '/ranking';
 
               return (
                 <>
@@ -1254,7 +1236,7 @@ export default function HomeTopNewsSection({
                   </article>
 
                   {sidePosts.map((post, idx) => {
-                    const href = post.slug ? `/noticias/${post.slug}` : '/ranking';
+                    const href = getPostArticleHref(post, 'Rankings');
 
                     return (
                       <article key={`${post.id}-ranking-desktop-side-${idx}`} className="group lg:col-span-3 rounded-xl overflow-hidden border border-[#e5e7eb] bg-white">

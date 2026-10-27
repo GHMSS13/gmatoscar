@@ -3,21 +3,6 @@ import './globals.css';
 import AuthRedirectHandler from '@/components/AuthRedirectHandler';
 import CookieConsentBanner from '@/components/CookieConsentBanner';
 import AdsenseScript from '@/components/AdsenseScript';
-import { Exo_2, Rajdhani } from 'next/font/google';
-
-const exo2 = Exo_2({
-  subsets: ['latin', 'latin-ext'],
-  weight: ['300', '400', '500', '600', '700', '800', '900'],
-  display: 'swap',
-  variable: '--font-exo-2',
-});
-
-const rajdhani = Rajdhani({
-  subsets: ['latin', 'latin-ext'],
-  weight: ['400', '500', '600', '700'],
-  display: 'swap',
-  variable: '--font-rajdhani',
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://gmatoscar.com.br'),
@@ -109,8 +94,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pt-BR" className={`${exo2.variable} ${rajdhani.variable}`}>
+    <html lang="pt-BR">
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Exo+2:wght@300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet"
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaOrg) }}
