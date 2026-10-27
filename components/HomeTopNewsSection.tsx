@@ -323,7 +323,9 @@ export default function HomeTopNewsSection({
       }
     };
 
-    for (const match of content.matchAll(/<img\b[^>]*>/gi)) {
+    const htmlImageRegex = /<img\b[^>]*>/gi;
+    let match: RegExpExecArray | null;
+    while ((match = htmlImageRegex.exec(content)) !== null) {
       const tag = match[0];
       const srcMatch = tag.match(/\bsrc\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i);
       const altMatch = tag.match(/\balt\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i);
@@ -335,7 +337,8 @@ export default function HomeTopNewsSection({
       }
     }
 
-    for (const match of content.matchAll(/!\[([^\]]*)\]\(([^)\s]+)(?:\s+["'][^"']*["'])?\)/g)) {
+    const markdownImageRegex = /!\[([^\]]*)\]\(([^)\s]+)(?:\s+["'][^"']*["'])?\)/g;
+    while ((match = markdownImageRegex.exec(content)) !== null) {
       addImage(match[2], match[1]);
     }
 
