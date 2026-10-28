@@ -5,6 +5,9 @@ import Footer from '@/components/Footer';
 export const metadata: Metadata = {
   title: 'Isenção de Responsabilidade',
   description: 'Isenção de responsabilidade do GMATOSCAR sobre conteúdo editorial, links externos e publicidade.',
+  alternates: {
+    canonical: '/isencao-de-responsabilidade',
+  },
 };
 
 export default function IsencaoDeResponsabilidadePage() {

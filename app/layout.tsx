@@ -21,7 +21,7 @@ const rajdhani = Rajdhani({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://gmatoscar.com.br'),
+  metadataBase: new URL('https://www.gmatoscar.com.br'),
   title: {
     default: 'GMATOSCAR Supercarros - Os Melhores Supercarros do Mundo',
     template: '%s | GMATOSCAR Supercarros',
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'pt_BR',
-    url: 'https://gmatoscar.com.br',
+    url: 'https://www.gmatoscar.com.br',
     siteName: 'GMATOSCAR Supercarros',
     title: 'GMATOSCAR Supercarros - Os Melhores Supercarros do Mundo',
     description:
@@ -88,12 +88,12 @@ const schemaOrg = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   name: 'GMATOSCAR Supercarros',
-  url: 'https://gmatoscar.com.br',
+  url: 'https://www.gmatoscar.com.br',
   description:
     'O melhor canal sobre supercarros, hypercars e carros de luxo do Brasil.',
   potentialAction: {
     '@type': 'SearchAction',
-    target: 'https://gmatoscar.com.br/pesquisa?q={search_term_string}',
+    target: 'https://www.gmatoscar.com.br/pesquisa?q={search_term_string}',
     'query-input': 'required name=search_term_string',
   },
   sameAs: [

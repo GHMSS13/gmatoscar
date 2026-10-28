@@ -13,6 +13,9 @@ export const metadata: Metadata = {
   title: 'GMATOSCAR Supercarros - Os Melhores Supercarros do Mundo',
   description:
     'Notícias atualizadas, rankings e tudo sobre supercarros, hypercars e carros de luxo. O maior canal brasileiro sobre automóveis de alta performance.',
+  alternates: {
+    canonical: '/',
+  },
 };
 
 export const dynamic = 'force-dynamic';

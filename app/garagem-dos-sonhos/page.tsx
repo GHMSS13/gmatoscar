@@ -8,8 +8,11 @@ import { getPostSection, getPosts } from '@/lib/posts';
 import { SlidersHorizontal } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Garagem dos Sonhos | GMATOSCAR',
+  title: 'Garagem dos Sonhos',
   description: 'Descubra seleções especiais com os carros dos sonhos para todo apaixonado por supercarros.',
+  alternates: {
+    canonical: '/garagem-dos-sonhos',
+  },
 };
 
 export const dynamic = 'force-dynamic';

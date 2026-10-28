@@ -5,6 +5,9 @@ import Footer from '@/components/Footer';
 export const metadata: Metadata = {
   title: 'Termos de Uso',
   description: 'Termos de uso do site GMATOSCAR.',
+  alternates: {
+    canonical: '/termos-de-uso',
+  },
 };
 
 export default function TermosDeUsoPage() {

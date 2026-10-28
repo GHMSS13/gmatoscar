@@ -6,8 +6,11 @@ import NewsCard from '@/components/NewsCard';
 import { getPostSection, getPosts } from '@/lib/posts';
 
 export const metadata: Metadata = {
-  title: 'Notícias | GMATOSCAR',
+  title: 'Notícias',
   description: 'Acompanhe as principais notícias do universo dos supercarros no GMATOSCAR.',
+  alternates: {
+    canonical: '/noticias',
+  },
 };
 
 export const dynamic = 'force-dynamic';

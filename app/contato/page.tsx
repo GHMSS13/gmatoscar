@@ -6,6 +6,9 @@ import Footer from '@/components/Footer';
 export const metadata: Metadata = {
   title: 'Contato',
   description: 'Entre em contato com o GMATOSCAR para dúvidas, parcerias e assuntos editoriais.',
+  alternates: {
+    canonical: '/contato',
+  },
 };
 
 const contacts = [

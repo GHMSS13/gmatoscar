@@ -5,6 +5,9 @@ import Footer from '@/components/Footer';
 export const metadata: Metadata = {
   title: 'Política de Privacidade',
   description: 'Política de privacidade do GMATOSCAR, com informações sobre coleta, uso e proteção de dados.',
+  alternates: {
+    canonical: '/politica-de-privacidade',
+  },
 };
 
 export default function PoliticaDePrivacidadePage() {

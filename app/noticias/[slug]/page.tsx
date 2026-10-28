@@ -73,9 +73,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: item.title,
     description: item.excerpt,
+    alternates: {
+      canonical: `/noticias/${item.slug}`,
+    },
     openGraph: {
       title: item.title,
       description: item.excerpt,
+      url: `https://www.gmatoscar.com.br/noticias/${item.slug}`,
       images: [{ url: item.image_url, alt: item.title }],
     },
   };

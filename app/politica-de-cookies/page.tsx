@@ -5,6 +5,9 @@ import Footer from '@/components/Footer';
 export const metadata: Metadata = {
   title: 'Política de Cookies',
   description: 'Política de cookies do GMATOSCAR, com categorias e finalidades de uso.',
+  alternates: {
+    canonical: '/politica-de-cookies',
+  },
 };
 
 export default function PoliticaDeCookiesPage() {

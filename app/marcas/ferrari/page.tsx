@@ -8,7 +8,7 @@ import { brands, modelPages } from '@/lib/data';
 import { getPosts, type Post } from '@/lib/posts';
 
 export const metadata: Metadata = {
-  title: 'Ferrari: história completa, modelos e notícias | GMATOSCAR',
+  title: 'Ferrari: história completa, modelos e notícias',
   description:
     'Enciclopédia da Ferrari com história completa, fundação, país de origem, logotipo, linha do tempo detalhada, curiosidades, modelos, artigos relacionados e últimas notícias.',
   keywords: [
@@ -27,16 +27,16 @@ export const metadata: Metadata = {
     canonical: '/marcas/ferrari',
   },
   openGraph: {
-    title: 'Ferrari: história completa, modelos e notícias | GMATOSCAR',
+    title: 'Ferrari: história completa, modelos e notícias',
     description:
       'Página enciclopédica da Ferrari com contexto histórico, técnico e cultural para quem quer entender a marca em profundidade.',
-    url: 'https://gmatoscar.com.br/marcas/ferrari',
+    url: 'https://www.gmatoscar.com.br/marcas/ferrari',
     siteName: 'GMATOSCAR',
     type: 'article',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Ferrari: história completa, modelos e notícias | GMATOSCAR',
+    title: 'Ferrari: história completa, modelos e notícias',
     description:
       'Tudo sobre a Ferrari em uma página completa: origem, evolução, modelos icônicos e notícias recentes.',
   },

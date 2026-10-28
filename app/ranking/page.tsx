@@ -6,8 +6,11 @@ import NewsCard from '@/components/NewsCard';
 import { getPostSection, getPosts } from '@/lib/posts';
 
 export const metadata: Metadata = {
-  title: 'Rankings | GMATOSCAR',
+  title: 'Rankings',
   description: 'Explore os rankings de velocidade, preço e exclusividade dos supercarros.',
+  alternates: {
+    canonical: '/ranking',
+  },
 };
 
 export const dynamic = 'force-dynamic';
