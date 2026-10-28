@@ -79,7 +79,7 @@ export const metadata: Metadata = {
     images: ['/images/gmatoscar_canal_youtube_carros.png'],
   },
   icons: {
-    icon: '/favicon.ico',
+    icon: '/favicon.svg',
     apple: '/apple-touch-icon.png',
   },
 };
