@@ -97,7 +97,6 @@ export default function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
                         sizes="(max-width: 1024px) 100vw, 50vw"
                         priority={index === 0}
                         loading={index === 0 ? 'eager' : 'lazy'}
-                        unoptimized={index === 0}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a]/80 via-[#0f172a]/20 to-transparent" />
                       <div className="absolute bottom-0 left-0 right-0 p-3.5 sm:p-4 lg:p-4">
