@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import { Exo_2, Rajdhani } from 'next/font/google';
 import './globals.css';
 import AuthRedirectHandler from '@/components/AuthRedirectHandler';
 import CookieConsentBanner from '@/components/CookieConsentBanner';
 import AdsenseScript from '@/components/AdsenseScript';
+import GoogleAnalytics from '@/components/GoogleAnalytics';
 
 const exo = Exo_2({
   weight: 'variable',
@@ -120,6 +122,9 @@ export default function RootLayout({
       <body className={`${exo.variable} ${rajdhani.variable} bg-white text-[#111] antialiased font-exo`}>
         <AuthRedirectHandler />
         <AdsenseScript />
+        <Suspense fallback={null}>
+          <GoogleAnalytics />
+        </Suspense>
         {children}
         <CookieConsentBanner />
       </body>
