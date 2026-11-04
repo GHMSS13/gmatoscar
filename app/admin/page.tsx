@@ -205,7 +205,8 @@ const extractPastedTextWithLinks = (html: string) => {
       try {
         const url = new URL(node.href);
         if (['http:', 'https:'].includes(url.protocol)) {
-          return `${node.textContent ?? ''} (${url.href})`;
+          const label = (node.textContent ?? '').replace(/\\/g, '\\\\').replace(/\]/g, '\\]');
+          return `[${label}](<${url.href}>)`;
         }
       } catch {
         return node.textContent ?? '';

@@ -43,19 +43,30 @@ function normalizeMarkdownContent(content: string) {
 }
 
 function renderImageOrigin(origin: string): ReactNode {
-  const parts = origin.split(/(https?:\/\/[^\s<>"']+)/gi);
+  const linkPattern = /\[((?:\\.|[^\]])+)\]\(\s*(?:<(https?:\/\/[^>\s]+)>|(https?:\/\/[^)\s]+))\s*\)|(https?:\/\/[^\s<>"']+)/gi;
+  const parts: ReactNode[] = [];
+  let lastIndex = 0;
 
-  return parts.map((part, index) => {
-    if (!/^https?:\/\//i.test(part)) return part;
+  for (const [index, match] of Array.from(origin.matchAll(linkPattern)).entries()) {
+    const [fullMatch, markdownLabel, angledMarkdownUrl, markdownUrl, plainUrl] = match;
+    const matchIndex = match.index ?? 0;
+    if (matchIndex > lastIndex) {
+      parts.push(origin.slice(lastIndex, matchIndex));
+    }
 
-    const url = part.replace(/[),.!?;:]+$/, '');
-    const trailingText = part.slice(url.length);
-
+    const markdownHref = angledMarkdownUrl ?? markdownUrl;
+    const rawUrl = markdownHref ?? plainUrl ?? '';
+    const url = markdownHref ? rawUrl : rawUrl.replace(/[),.!?;:]+$/, '');
+    const trailingText = markdownHref ? '' : rawUrl.slice(url.length);
     try {
       const parsedUrl = new URL(url);
-      if (!['http:', 'https:'].includes(parsedUrl.protocol)) return part;
+      if (!['http:', 'https:'].includes(parsedUrl.protocol)) {
+        parts.push(fullMatch);
+        lastIndex = matchIndex + fullMatch.length;
+        continue;
+      }
 
-      return (
+      parts.push(
         <span key={index}>
           <a
             href={parsedUrl.href}
@@ -63,15 +74,20 @@ function renderImageOrigin(origin: string): ReactNode {
             rel="noopener noreferrer"
             className="text-[#dc2626] underline underline-offset-2 hover:text-[#b91c1c] break-all"
           >
-            {url}
+            {markdownLabel ? markdownLabel.replace(/\\([\\\]])/g, '$1') : url}
           </a>
           {trailingText}
         </span>
       );
     } catch {
-      return part;
+      parts.push(fullMatch);
     }
-  });
+
+    lastIndex = matchIndex + fullMatch.length;
+  }
+
+  if (lastIndex < origin.length) parts.push(origin.slice(lastIndex));
+  return parts;
 }
 
 function SmartFramedImage({
