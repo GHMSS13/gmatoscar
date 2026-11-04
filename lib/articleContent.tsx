@@ -42,6 +42,38 @@ function normalizeMarkdownContent(content: string) {
     .join('\n');
 }
 
+function renderImageOrigin(origin: string): ReactNode {
+  const parts = origin.split(/(https?:\/\/[^\s<>"']+)/gi);
+
+  return parts.map((part, index) => {
+    if (!/^https?:\/\//i.test(part)) return part;
+
+    const url = part.replace(/[),.!?;:]+$/, '');
+    const trailingText = part.slice(url.length);
+
+    try {
+      const parsedUrl = new URL(url);
+      if (!['http:', 'https:'].includes(parsedUrl.protocol)) return part;
+
+      return (
+        <span key={index}>
+          <a
+            href={parsedUrl.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[#dc2626] underline underline-offset-2 hover:text-[#b91c1c] break-all"
+          >
+            {url}
+          </a>
+          {trailingText}
+        </span>
+      );
+    } catch {
+      return part;
+    }
+  });
+}
+
 function SmartFramedImage({
   src,
   alt,
@@ -173,8 +205,16 @@ export default function MarkdownContent({ content }: { content: string }): React
           </th>
         ),
         td: ({ children }: ComponentProps) => <td className="border border-[#d1d5db] px-2.5 sm:px-4 py-2 text-[#1f2937] break-words">{children}</td>,
-        img: ({ src, alt, width, height, style }: any) => {
+        img: ({ src, alt, width, height, style, ...props }: any) => {
           const imageAlt = alt || 'Imagem do artigo';
+          let imageOrigin = '';
+          if (typeof props['data-origin'] === 'string') {
+            try {
+              imageOrigin = decodeURIComponent(props['data-origin']).trim();
+            } catch {
+              imageOrigin = props['data-origin'];
+            }
+          }
           const hasCustomSize = !!(width || height || (style && (style.width || style.height)));
           const rawWidth = width || (style && style.width);
           const rawHeight = height || (style && style.height);
@@ -220,6 +260,11 @@ export default function MarkdownContent({ content }: { content: string }): React
                   style={responsiveCustomStyle}
                   loading="lazy"
                 />
+              )}
+              {imageOrigin && (
+                <figcaption className="px-3 py-2 text-left text-xs leading-relaxed text-[#6b7280]">
+                  {renderImageOrigin(imageOrigin)}
+                </figcaption>
               )}
             </figure>
           );

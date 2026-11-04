@@ -195,6 +195,42 @@ const sanitizeSeoFileName = (value: string) =>
 
 const stripFileExtension = (value: string) => value.replace(/\.[a-z0-9]+$/i, '');
 
+const extractPastedTextWithLinks = (html: string) => {
+  const pastedDocument = new DOMParser().parseFromString(html, 'text/html');
+  const getText = (node: Node): string => {
+    if (node.nodeType === Node.TEXT_NODE) return node.textContent ?? '';
+    if (!(node instanceof HTMLElement)) return '';
+
+    if (node instanceof HTMLAnchorElement) {
+      try {
+        const url = new URL(node.href);
+        if (['http:', 'https:'].includes(url.protocol)) {
+          return `${node.textContent ?? ''} (${url.href})`;
+        }
+      } catch {
+        return node.textContent ?? '';
+      }
+    }
+
+    return Array.from(node.childNodes).map(getText).join('');
+  };
+  const hasValidLink = Array.from(pastedDocument.querySelectorAll<HTMLAnchorElement>('a[href]')).some((link) => {
+    try {
+      return ['http:', 'https:'].includes(new URL(link.href).protocol);
+    } catch {
+      return false;
+    }
+  });
+
+  if (!hasValidLink) return null;
+
+  return Array.from(pastedDocument.body.childNodes)
+    .map(getText)
+    .join(' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+};
+
 const normalizeDimension = (value: string, fallback: string) => {
   const trimmed = value.trim();
   if (!trimmed) return fallback;
@@ -244,13 +280,15 @@ export default function AdminPage() {
   const [editorTab, setEditorTab] = useState<'write' | 'preview'>('write');
   const [insertImageMetadata, setInsertImageMetadata] = useState<{
     url: string;
-    seoFileName: string;
+    imageFileName: string;
+    imageOrigin: string;
     width: string;
     height: string;
     isOpen: boolean;
   }>({
     url: '',
-    seoFileName: '',
+    imageFileName: '',
+    imageOrigin: '',
     width: '1600px',
     height: '1067px',
     isOpen: false,
@@ -523,12 +561,12 @@ export default function AdminPage() {
 
   // Confirmação de inserção da imagem do banco no post
   const handleConfirmInsertImage = () => {
-    const { url, seoFileName, width, height } = insertImageMetadata;
-    const normalizedSeoName = sanitizeSeoFileName(stripFileExtension(seoFileName)) || 'imagem-artigo';
+    const { url, imageFileName, imageOrigin, width, height } = insertImageMetadata;
+    const normalizedSeoName = sanitizeSeoFileName(stripFileExtension(imageFileName)) || 'imagem-artigo';
     const imageUrlWithFileName = `${url}${url.includes('?') ? '&' : '?'}filename=${encodeURIComponent(normalizedSeoName)}`;
+    const encodedImageOrigin = encodeURIComponent(imageOrigin.trim());
 
-    // Keep alt hidden in UI by not rendering figcaption, while preserving accessibility text.
-    const tag = `<img src="${imageUrlWithFileName}" alt="${normalizedSeoName}" style="width: ${normalizeDimension(width, '1600px')}; height: ${normalizeDimension(height, '1067px')};" />`;
+    const tag = `<img src="${imageUrlWithFileName}" alt="${normalizedSeoName}" data-origin="${encodedImageOrigin}" style="width: ${normalizeDimension(width, '1600px')}; height: ${normalizeDimension(height, '1067px')};" />`;
 
     insertTextAtCursor(tag);
     setInsertImageMetadata((prev) => ({ ...prev, isOpen: false }));
@@ -1121,7 +1159,8 @@ export default function AdminPage() {
                               type="button"
                               onClick={() => setInsertImageMetadata({
                                 url: image.image_url,
-                                seoFileName: stripFileExtension(image.file_name) || 'imagem-artigo',
+                                imageFileName: stripFileExtension(image.file_name) || 'imagem-artigo',
+                                imageOrigin: '',
                                 width: '1600px',
                                 height: '1067px',
                                 isOpen: true
@@ -1806,11 +1845,45 @@ export default function AdminPage() {
                 </span>
                 <input
                   type="text"
-                  value={insertImageMetadata.seoFileName}
-                  onChange={(e) => setInsertImageMetadata(prev => ({ ...prev, seoFileName: e.target.value }))}
+                  value={insertImageMetadata.imageFileName}
+                  onChange={(e) => setInsertImageMetadata(prev => ({ ...prev, imageFileName: e.target.value }))}
                   className="mt-1 w-full rounded-xl border border-[#d1d5db] bg-white px-3 py-2 text-sm text-[#111827] outline-none focus:border-[#dc2626]"
                   placeholder="Ex: ferrari-f80-supercar"
                 />
+              </label>
+
+              <label className="block">
+                <span className="text-[#374151] text-xs font-bold uppercase tracking-wider font-rajdhani">
+                  Origem da imagem
+                </span>
+                <textarea
+                  value={insertImageMetadata.imageOrigin}
+                  onChange={(e) => setInsertImageMetadata(prev => ({ ...prev, imageOrigin: e.target.value }))}
+                  onPaste={(event) => {
+                    const html = event.clipboardData.getData('text/html');
+                    if (!html || !/<a\b/i.test(html)) return;
+                    const pastedText = extractPastedTextWithLinks(html);
+                    if (pastedText === null) return;
+
+                    event.preventDefault();
+                    const textarea = event.currentTarget;
+                    const start = textarea.selectionStart;
+                    const end = textarea.selectionEnd;
+                    const nextValue =
+                      textarea.value.slice(0, start) + pastedText + textarea.value.slice(end);
+                    setInsertImageMetadata((prev) => ({ ...prev, imageOrigin: nextValue }));
+                    requestAnimationFrame(() => {
+                      textarea.focus();
+                      textarea.setSelectionRange(start + pastedText.length, start + pastedText.length);
+                    });
+                  }}
+                  rows={3}
+                  className="mt-1 w-full resize-y rounded-xl border border-[#d1d5db] bg-white px-3 py-2 text-sm text-[#111827] outline-none focus:border-[#dc2626]"
+                  placeholder="Ex: Foto por João Silva — cole aqui o link da fonte, se houver"
+                />
+                <span className="mt-1 block text-xs text-[#6b7280]">
+                  O autor e a origem aparecerão em letras menores abaixo da imagem. Links colados ou URLs serão clicáveis.
+                </span>
               </label>
 
               <div className="grid grid-cols-2 gap-4">
@@ -1863,4 +1936,3 @@ export default function AdminPage() {
     </main>
   );
 }
-
