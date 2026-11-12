@@ -154,8 +154,12 @@ export default async function NoticiaPage({ params, searchParams }: Props) {
         {/* Meta */}
         <div className="flex flex-wrap items-center gap-5 mb-8 pb-8 border-b border-[#e5e7eb]">
           <div className="flex items-center gap-2 text-[#6b7280] text-sm font-exo">
+            <span className="text-[#6b7280]">Por</span>
+            <span className="font-semibold text-[#111827]">GMATOSCAR</span>
+          </div>
+          <div className="flex items-center gap-2 text-[#6b7280] text-sm font-exo">
             <Calendar size={14} className="text-[#dc2626]" />
-            {item.date}
+            <time dateTime={item.date}>{item.date}</time>
           </div>
           <div className="flex items-center gap-2 text-[#6b7280] text-sm font-exo">
             <Clock size={14} className="text-[#dc2626]" />

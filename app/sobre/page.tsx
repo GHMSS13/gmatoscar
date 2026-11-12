@@ -5,7 +5,7 @@ import Footer from '@/components/Footer';
 export const metadata: Metadata = {
   title: 'Sobre o GMATOSCAR',
   description:
-    'Conheça o GMATOSCAR, o maior canal brasileiro sobre supercarros, hypercars e automóveis de alto desempenho.',
+    'Conheça o GMATOSCAR, portal brasileiro sobre supercarros, hypercars e automóveis de alto desempenho.',
   alternates: {
     canonical: '/sobre',
   },

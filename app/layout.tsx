@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     template: '%s | GMATOSCAR Supercarros',
   },
   description:
-    'GMATOSCAR é o seu canal de referência para supercarros, hypercars e carros de luxo. Notícias, rankings, marcas e tudo sobre o mundo dos carros mais incríveis do mundo.',
+    'GMATOSCAR é um portal brasileiro sobre supercarros, hypercars e carros de luxo, com notícias, rankings, histórias e informações sobre marcas.',
   keywords: [
     'supercarros',
     'hypercars',
@@ -92,7 +92,7 @@ const schemaOrg = {
   name: 'GMATOSCAR Supercarros',
   url: 'https://www.gmatoscar.com.br',
   description:
-    'O melhor canal sobre supercarros, hypercars e carros de luxo do Brasil.',
+    'Portal brasileiro sobre supercarros, hypercars e carros de luxo.',
   potentialAction: {
     '@type': 'SearchAction',
     target: 'https://www.gmatoscar.com.br/pesquisa?q={search_term_string}',

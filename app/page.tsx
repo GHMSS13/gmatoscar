@@ -12,7 +12,7 @@ import { getPostArticleHref } from '@/lib/postCategories';
 export const metadata: Metadata = {
   title: 'GMATOSCAR Supercarros - Os Melhores Supercarros do Mundo',
   description:
-    'Notícias atualizadas, rankings e tudo sobre supercarros, hypercars e carros de luxo. O maior canal brasileiro sobre automóveis de alta performance.',
+    'Notícias, rankings e histórias sobre supercarros, hypercars e carros de luxo no GMATOSCAR.',
   alternates: {
     canonical: '/',
   },
@@ -52,10 +52,10 @@ export default async function HomePage() {
               <div className="flex items-end justify-between gap-3 mb-3 sm:mb-4">
                 <div>
                   <p className="text-[#dc2626] text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.26em] font-rajdhani mb-1">
-                    Fechamento da Home
+                    Mais para ler
                   </p>
                   <h3 className="text-[#111827] text-[1.45rem] sm:text-[2rem] font-rajdhani font-bold leading-[1.02]">
-                    Top 5 da Semana
+                    Mais leituras
                   </h3>
                 </div>
                 <Link
@@ -92,7 +92,7 @@ export default async function HomePage() {
             <div className="lg:col-span-5">
               <div className="rounded-xl border border-[#e5e7eb] bg-[#fafafa] p-3.5 sm:p-4 h-full flex flex-col">
                 <p className="text-[#dc2626] text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.24em] font-rajdhani mb-2">
-                  Curiosidade do Dia
+                  Mais conteúdo
                 </p>
                 {curiosityPost ? (
                   <>
@@ -122,7 +122,7 @@ export default async function HomePage() {
                         href={getPostArticleHref(curiosityPost)}
                         className="inline-flex items-center gap-2 text-[12px] sm:text-[13px] font-rajdhani font-bold uppercase tracking-[0.16em] text-[#111827] hover:text-[#dc2626] transition-colors duration-300"
                       >
-                        Ler curiosidade <ArrowRight size={14} />
+                        Ler matéria <ArrowRight size={14} />
                       </Link>
                     </div>
                   </>
