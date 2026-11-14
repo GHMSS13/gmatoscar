@@ -122,7 +122,7 @@ export default async function NoticiaPage({ params, searchParams }: Props) {
 
   return (
     <main className="min-h-screen bg-white">
-      <Navbar activeSection={articleSection} />
+      <Navbar />
       <ArticleBackButton fallbackHref={fallbackHref} compact floating />
 
       {/* Hero image */}

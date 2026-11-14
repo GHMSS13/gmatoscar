@@ -333,7 +333,7 @@ export default function HomeTopNewsSection({
   }));
 
   return (
-    <section className="pt-0 sm:pt-9 lg:pt-14 pb-7 sm:pb-10 lg:pb-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <section className="pt-0 sm:pt-9 lg:pt-8 pb-7 sm:pb-10 lg:pb-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <div className="hidden sm:flex sm:flex-row items-start sm:items-end justify-between gap-2 sm:gap-4 mb-4 sm:mb-5 lg:mb-3">
         <div>
           <p className="text-[#dc2626] text-[11px] font-bold uppercase tracking-[0.28em] font-rajdhani mb-1.5">

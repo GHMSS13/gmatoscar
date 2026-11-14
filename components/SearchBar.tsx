@@ -7,12 +7,14 @@ import { Search, X } from 'lucide-react';
 interface SearchBarProps {
   variant?: 'hero' | 'default' | 'inline';
   defaultValue?: string;
+  autoFocus?: boolean;
   onSearch?: (query: string) => void;
 }
 
 export default function SearchBar({
   variant = 'default',
   defaultValue = '',
+  autoFocus = false,
   onSearch,
 }: SearchBarProps) {
   const [query, setQuery] = useState(defaultValue);
@@ -46,6 +48,7 @@ export default function SearchBar({
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
+            autoFocus={autoFocus}
             aria-label="Pesquise por marcas, modelos ou categorias"
             placeholder="Pesquise por marcas, modelos, categorias..."
             className="w-full bg-white/5 backdrop-blur-sm border border-white/15 focus:border-[#dc2626]/60 text-white placeholder-white/30 pl-12 pr-4 sm:pr-32 py-4 rounded-sm outline-none transition-all duration-300 font-exo text-sm focus:bg-white/8 focus:shadow-[0_0_20px_rgba(220,38,38,0.15)]"
@@ -82,6 +85,7 @@ export default function SearchBar({
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
+          autoFocus={autoFocus}
           aria-label="Pesquisar"
           placeholder="Pesquisar..."
           className="w-full bg-white border border-[#d1d5db] focus:border-[#dc2626]/50 text-[#111827] placeholder-[#9ca3af] pl-10 pr-4 py-2.5 rounded-sm outline-none transition-all duration-300 font-exo text-sm"
@@ -101,6 +105,7 @@ export default function SearchBar({
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
+          autoFocus={autoFocus}
           aria-label="Pesquisar supercarros"
           placeholder="Pesquisar supercarros..."
           className="w-full bg-white border border-[#d1d5db] focus:border-[#dc2626]/50 text-[#111827] placeholder-[#9ca3af] pl-11 pr-11 sm:pr-28 py-3 lg:py-2.5 rounded-sm outline-none transition-all duration-300 font-exo text-sm"

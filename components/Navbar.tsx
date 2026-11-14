@@ -4,22 +4,17 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu, X, Search } from 'lucide-react';
+import SearchBar from './SearchBar';
 
 const navLinks = [
-  { label: 'Home', href: '/' },
-  { label: 'Notícias', href: '/noticias' },
-  { label: 'Marcas', href: '/marcas' },
-  { label: 'Rankings', href: '/ranking' },
-  { label: 'Garagem dos Sonhos', href: '/garagem-dos-sonhos' },
+  { label: 'Início', href: '/' },
+  { label: 'Artigos', href: '/noticias' },
   { label: 'Sobre', href: '/sobre' },
 ];
 
-interface NavbarProps {
-  activeSection?: string;
-}
-
-export default function Navbar({ activeSection }: NavbarProps) {
+export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
 
@@ -36,6 +31,7 @@ export default function Navbar({ activeSection }: NavbarProps) {
 
   useEffect(() => {
     setIsOpen(false);
+    setIsSearchOpen(false);
   }, [pathname]);
 
   return (
@@ -47,9 +43,9 @@ export default function Navbar({ activeSection }: NavbarProps) {
             <span className="text-[#dc2626]">CAR</span>
           </Link>
 
-          <nav className="hidden md:flex flex-1 items-center justify-center md:px-6 lg:px-0 gap-4 lg:gap-10 text-[10px] lg:text-sm font-semibold uppercase tracking-[0.12em] lg:tracking-[0.28em] font-rajdhani">
+          <nav className="hidden md:flex flex-1 items-center justify-end md:px-6 lg:pl-0 lg:pr-10 gap-4 lg:gap-10 text-[10px] lg:text-sm font-semibold uppercase tracking-[0.12em] lg:tracking-[0.28em] font-rajdhani">
             {navLinks.map((link) => {
-              const isActive = activeSection ? link.label === activeSection : isActiveLink(link.href);
+              const isActive = isActiveLink(link.href);
               return (
                 <Link
                   key={link.href}
@@ -70,17 +66,23 @@ export default function Navbar({ activeSection }: NavbarProps) {
           </nav>
 
           <div className="flex items-center gap-2 sm:gap-3 relative">
-            <Link
-              href="/pesquisa"
+            <button
+              type="button"
+              onClick={() => {
+                setIsSearchOpen((open) => !open);
+                setIsOpen(false);
+              }}
               className={`inline-flex items-center justify-center rounded-full border bg-white/5 p-1.5 sm:p-2 transition-colors ${
-                isActiveLink('/pesquisa')
+                isSearchOpen || isActiveLink('/pesquisa')
                   ? 'border-[#dc2626] text-white/80'
                   : 'border-white/10 text-white/80 hover:bg-white/10'
               }`}
-              aria-label="Ir para pesquisa"
+              aria-label={isSearchOpen ? 'Fechar pesquisa' : 'Abrir pesquisa'}
+              aria-expanded={isSearchOpen}
+              aria-controls="header-search"
             >
-              <Search size={18} />
-            </Link>
+              {isSearchOpen ? <X size={18} /> : <Search size={18} />}
+            </button>
 
             <button
               onClick={() => setIsOpen(!isOpen)}
@@ -93,6 +95,15 @@ export default function Navbar({ activeSection }: NavbarProps) {
         </div>
       </div>
 
+      {isSearchOpen && (
+        <div
+          id="header-search"
+          className="absolute right-4 top-full z-[60] mt-2 w-[calc(100vw-2rem)] rounded-xl border border-white/10 bg-[#050505] p-3 shadow-[0_16px_40px_rgba(0,0,0,0.35)] sm:right-6 sm:w-96 lg:right-8"
+        >
+          <SearchBar variant="default" autoFocus />
+        </div>
+      )}
+
       {/* Mobile Menu */}
       <div
         className={`md:hidden transition-all duration-300 overflow-hidden ${
@@ -101,7 +112,7 @@ export default function Navbar({ activeSection }: NavbarProps) {
       >
         <nav className="bg-[#050505]/98 border-t border-white/10 px-3 sm:px-4 py-3 sm:py-4 flex flex-col gap-1.5 sm:gap-2">
           {navLinks.map((link) => {
-            const isActive = activeSection ? link.label === activeSection : isActiveLink(link.href);
+            const isActive = isActiveLink(link.href);
             return (
               <Link
                 key={link.href}
@@ -116,12 +127,6 @@ export default function Navbar({ activeSection }: NavbarProps) {
               </Link>
             );
           })}
-          <Link
-            href="/pesquisa"
-            className="mt-2 inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 px-4 py-3 text-sm uppercase tracking-[0.3em] font-semibold text-white/80 hover:border-[#dc2626] hover:text-white hover:bg-[#dc2626]/10 transition-all duration-200"
-          >
-            Buscar
-          </Link>
         </nav>
       </div>
     </header>
